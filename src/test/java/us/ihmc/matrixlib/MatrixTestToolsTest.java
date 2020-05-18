@@ -43,7 +43,7 @@ public class MatrixTestToolsTest
 
       Random random = new Random(4276L);
 
-      for(int i = 0; i < ITERATIONS; i++)
+      for (int i = 0; i < ITERATIONS; i++)
       {
          DenseMatrix64F matrix = new DenseMatrix64F(random.nextInt(MATRIX_SIZE_BOUND), random.nextInt(MATRIX_SIZE_BOUND));
 

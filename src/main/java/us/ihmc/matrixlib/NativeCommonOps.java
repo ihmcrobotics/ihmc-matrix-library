@@ -20,6 +20,7 @@ public class NativeCommonOps
    /**
     * Computes the matrix multiplication</br>
     * c = a * b
+    * 
     * @param a matrix in multiplication
     * @param b matrix in multiplication
     * @param c where the result is stored (modified)
@@ -38,6 +39,7 @@ public class NativeCommonOps
    /**
     * Computes the quadratic form</br>
     * c = a' * b * a
+    * 
     * @param a matrix in multiplication
     * @param b matrix in multiplication
     * @param c where the result is stored (modified)
@@ -56,7 +58,8 @@ public class NativeCommonOps
    /**
     * Inverts a matrix.</br>
     * This method requires that the matrix is square and invertible and uses a LU decomposition.
-    * @param a matrix to invert
+    * 
+    * @param a   matrix to invert
     * @param inv where the result is stored (modified)
     * @throws IllegalArgumentException if the matrix dimensions are incompatible.
     */
@@ -78,6 +81,7 @@ public class NativeCommonOps
     * Computes the solution to the linear equation</br>
     * a * x == b</br>
     * This method requires that the matrix a is square and invertible and uses a LU decomposition.
+    * 
     * @param a matrix in equation
     * @param b matrix in equation
     * @param x where the result is stored (modified)
@@ -96,7 +100,9 @@ public class NativeCommonOps
    /**
     * Computes the solution to the linear equation</br>
     * a * x == b</br>
-    * This method requires that {@code a} is square. It will check the invertability of {@code a} and will return false if it is not invertible.
+    * This method requires that {@code a} is square. It will check the invertability of {@code a} and
+    * will return false if it is not invertible.
+    * 
     * @param a matrix in equation
     * @param b matrix in equation
     * @param x where the result is stored (modified)
@@ -121,7 +127,9 @@ public class NativeCommonOps
    /**
     * Computes the solution to the linear equation</br>
     * a * x == b</br>
-    * This method does not require that the matrix a is square and invertible and can be used to solve a least square problem. It uses a householder QR decomposition.
+    * This method does not require that the matrix a is square and invertible and can be used to solve
+    * a least square problem. It uses a householder QR decomposition.
+    * 
     * @param a matrix in equation
     * @param b matrix in equation
     * @param x where the result is stored (modified)
@@ -142,10 +150,11 @@ public class NativeCommonOps
     * a * x == b</br>
     * This method uses a damped least square approach and a Cholesky decomposition of</br>
     * a * a' + diag(alpha * alpha)
-    * @param a matrix in equation
-    * @param b matrix in equation
+    * 
+    * @param a     matrix in equation
+    * @param b     matrix in equation
     * @param alpha damping value
-    * @param x where the result is stored (modified)
+    * @param x     where the result is stored (modified)
     * @throws IllegalArgumentException if the matrix dimensions are incompatible.
     */
    public static void solveDamped(RowD1Matrix64F a, RowD1Matrix64F b, double alpha, RowD1Matrix64F x)
@@ -159,12 +168,14 @@ public class NativeCommonOps
    }
 
    /**
-    * Projects the matrix {@code a} onto the null-space of {@code b} and stores the result in {@code c} such that</br>
+    * Projects the matrix {@code a} onto the null-space of {@code b} and stores the result in {@code c}
+    * such that</br>
     * b * c == 0</br>
     * This method uses a damped least square approach causing the null-space to grow gradually.
-    * @param a matrix to project
-    * @param b matrix to compute the null-space of
-    * @param c where the result is stored (modified)
+    * 
+    * @param a     matrix to project
+    * @param b     matrix to compute the null-space of
+    * @param c     where the result is stored (modified)
     * @param alpha damping value
     * @throws IllegalArgumentException if the matrix dimensions are incompatible.
     */

@@ -1335,4 +1335,3 @@ public class DiagonalMatrixToolsTest
       }
    }
 }
-

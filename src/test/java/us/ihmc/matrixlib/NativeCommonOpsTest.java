@@ -63,8 +63,8 @@ public class NativeCommonOpsTest
 
       System.out.println("Native took " + Conversions.nanosecondsToMilliseconds((double) (nativeTime / iterations)) + " ms on average");
       System.out.println("EJML took " + Conversions.nanosecondsToMilliseconds((double) (ejmlTime / iterations)) + " ms on average");
-      System.out.println("Average matrix size was " + (matrixSizes / iterations));
-      System.out.println("Native takes " + (100.0 * nativeTime / ejmlTime) + "% of EJML time.\n");
+      System.out.println("Average matrix size was " + matrixSizes / iterations);
+      System.out.println("Native takes " + 100.0 * nativeTime / ejmlTime + "% of EJML time.\n");
    }
 
    @Test
@@ -113,10 +113,10 @@ public class NativeCommonOpsTest
          MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
       }
 
-      System.out.println("Native took " + (Conversions.nanosecondsToMilliseconds((double) (nativeTime / iterations))) + " ms on average");
-      System.out.println("EJML took " + (Conversions.nanosecondsToMilliseconds((double) (ejmlTime / iterations))) + " ms on average");
-      System.out.println("Average matrix size was " + (matrixSizes / iterations));
-      System.out.println("Native takes " + ((100.0 * nativeTime / ejmlTime)) + "% of EJML time.\n");
+      System.out.println("Native took " + Conversions.nanosecondsToMilliseconds((double) (nativeTime / iterations)) + " ms on average");
+      System.out.println("EJML took " + Conversions.nanosecondsToMilliseconds((double) (ejmlTime / iterations)) + " ms on average");
+      System.out.println("Average matrix size was " + matrixSizes / iterations);
+      System.out.println("Native takes " + 100.0 * nativeTime / ejmlTime + "% of EJML time.\n");
    }
 
    @Test
@@ -161,10 +161,10 @@ public class NativeCommonOpsTest
          MatrixTestTools.assertMatrixEquals(ejmlResult, nativeResult, epsilon);
       }
 
-      System.out.println("Native took " + (Conversions.nanosecondsToMilliseconds((double) (nativeTime / iterations))) + " ms on average");
-      System.out.println("EJML took " + (Conversions.nanosecondsToMilliseconds((double) (ejmlTime / iterations))) + " ms on average");
-      System.out.println("Average matrix size was " + (matrixSizes / iterations));
-      System.out.println("Native takes " + ((100.0 * nativeTime / ejmlTime)) + "% of EJML time.\n");
+      System.out.println("Native took " + Conversions.nanosecondsToMilliseconds((double) (nativeTime / iterations)) + " ms on average");
+      System.out.println("EJML took " + Conversions.nanosecondsToMilliseconds((double) (ejmlTime / iterations)) + " ms on average");
+      System.out.println("Average matrix size was " + matrixSizes / iterations);
+      System.out.println("Native takes " + 100.0 * nativeTime / ejmlTime + "% of EJML time.\n");
    }
 
    @Test
@@ -216,10 +216,10 @@ public class NativeCommonOpsTest
          MatrixTestTools.assertMatrixEquals(x, ejmlResult, epsilon);
       }
 
-      System.out.println("Native took " + (Conversions.nanosecondsToMilliseconds((double) (nativeTime / iterations))) + " ms on average");
-      System.out.println("EJML took " + (Conversions.nanosecondsToMilliseconds((double) (ejmlTime / iterations))) + " ms on average");
-      System.out.println("Average matrix size was " + (matrixSizes / iterations));
-      System.out.println("Native takes " + ((100.0 * nativeTime / ejmlTime)) + "% of EJML time.\n");
+      System.out.println("Native took " + Conversions.nanosecondsToMilliseconds((double) (nativeTime / iterations)) + " ms on average");
+      System.out.println("EJML took " + Conversions.nanosecondsToMilliseconds((double) (ejmlTime / iterations)) + " ms on average");
+      System.out.println("Average matrix size was " + matrixSizes / iterations);
+      System.out.println("Native takes " + 100.0 * nativeTime / ejmlTime + "% of EJML time.\n");
    }
 
    public static void main(String[] args)
