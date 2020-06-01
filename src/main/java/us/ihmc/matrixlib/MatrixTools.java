@@ -1081,6 +1081,58 @@ public class MatrixTools
    }
 
    /**
+    * Swaps the rows <tt>i</tt> and <tt>j</tt> in the given matrix.
+    * 
+    * @param i              the index of the first row to swap.
+    * @param j              the index of the second row to swap.
+    * @param matrixToModify the matrix to
+    */
+   public static void swapRows(int i, int j, RowD1Matrix64F matrixToModify)
+   {
+      if (i < 0 || j < 0 || i >= matrixToModify.getNumRows() || j >= matrixToModify.getNumRows())
+         throw new IllegalArgumentException(String.format("Specified row indices are out of bound: [i= %d, j=%d], number of rows= %d",
+                                                          i,
+                                                          j,
+                                                          matrixToModify.getNumRows()));
+
+      for (int col = 0; col < matrixToModify.getNumCols(); col++)
+      {
+         int iIndex = matrixToModify.getIndex(i, col);
+         int jIndex = matrixToModify.getIndex(j, col);
+         double iValue = matrixToModify.get(iIndex);
+         double jValue = matrixToModify.get(jIndex);
+         matrixToModify.set(iIndex, jValue);
+         matrixToModify.set(jIndex, iValue);
+      }
+   }
+
+   /**
+    * Swaps the columns <tt>i</tt> and <tt>j</tt> in the given matrix.
+    * 
+    * @param i              the index of the first column to swap.
+    * @param j              the index of the second column to swap.
+    * @param matrixToModify the matrix to
+    */
+   public static void swapColumns(int i, int j, RowD1Matrix64F matrixToModify)
+   {
+      if (i < 0 || j < 0 || i >= matrixToModify.getNumCols() || j >= matrixToModify.getNumCols())
+         throw new IllegalArgumentException(String.format("Specified column indices are out of bound: [i= %d, j=%d], number of columns= %d",
+                                                          i,
+                                                          j,
+                                                          matrixToModify.getNumCols()));
+
+      for (int row = 0; row < matrixToModify.getNumRows(); row++)
+      {
+         int iIndex = matrixToModify.getIndex(row, i);
+         int jIndex = matrixToModify.getIndex(row, j);
+         double iValue = matrixToModify.get(iIndex);
+         double jValue = matrixToModify.get(jIndex);
+         matrixToModify.set(iIndex, jValue);
+         matrixToModify.set(jIndex, iValue);
+      }
+   }
+
+   /**
     * <p>
     * Zeros the elements of {@param column} of {@param matrix}.
     * </p>

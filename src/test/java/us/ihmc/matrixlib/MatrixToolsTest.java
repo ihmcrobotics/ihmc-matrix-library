@@ -1,6 +1,7 @@
 package us.ihmc.matrixlib;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -673,6 +674,62 @@ public class MatrixToolsTest
          MatrixTools.multAddInner(scale, randomMatrix, solution);
 
          MatrixTestTools.assertMatrixEquals(expectedSolution, solution, 1e-6);
+      }
+   }
+
+   @Test
+   public void testSwapRows()
+   {
+      Random random = new Random(46357);
+
+      for (int iteration = 0; iteration < 1000; iteration++)
+      {
+         int numRow = random.nextInt(50) + 1;
+         int numCol = random.nextInt(50) + 1;
+         DenseMatrix64F actual = RandomMatrices.createRandom(numRow, numCol, random);
+         DenseMatrix64F expected = new DenseMatrix64F(actual);
+
+         int i = random.nextInt(numRow);
+         int j = random.nextInt(numRow);
+
+         CommonOps.extract(actual, i, i + 1, 0, numCol, expected, j, 0);
+         CommonOps.extract(actual, j, j + 1, 0, numCol, expected, i, 0);
+
+         MatrixTools.swapRows(i, j, actual);
+
+         MatrixTestTools.assertMatrixEquals(expected, actual, 0.0);
+         assertThrows(IllegalArgumentException.class, () -> MatrixTools.swapRows(-1, j, actual));
+         assertThrows(IllegalArgumentException.class, () -> MatrixTools.swapRows(actual.getNumRows(), j, actual));
+         assertThrows(IllegalArgumentException.class, () -> MatrixTools.swapRows(i, -1, actual));
+         assertThrows(IllegalArgumentException.class, () -> MatrixTools.swapRows(i, actual.getNumRows(), actual));
+      }
+   }
+
+   @Test
+   public void testSwapColumns()
+   {
+      Random random = new Random(46357);
+
+      for (int iteration = 0; iteration < 1000; iteration++)
+      {
+         int numRow = random.nextInt(50) + 1;
+         int numCol = random.nextInt(50) + 1;
+         DenseMatrix64F actual = RandomMatrices.createRandom(numRow, numCol, random);
+         DenseMatrix64F expected = new DenseMatrix64F(actual);
+
+         int i = random.nextInt(numCol);
+         int j = random.nextInt(numCol);
+
+         CommonOps.extract(actual, 0, numRow, i, i + 1, expected, 0, j);
+         CommonOps.extract(actual, 0, numRow, j, j + 1, expected, 0, i);
+
+         MatrixTools.swapColumns(i, j, actual);
+
+         MatrixTestTools.assertMatrixEquals(expected, actual, 0.0);
+         assertThrows(IllegalArgumentException.class, () -> MatrixTools.swapColumns(-1, j, actual));
+         assertThrows(IllegalArgumentException.class, () -> MatrixTools.swapColumns(actual.getNumCols(), j, actual));
+         assertThrows(IllegalArgumentException.class, () -> MatrixTools.swapColumns(i, -1, actual));
+         assertThrows(IllegalArgumentException.class, () -> MatrixTools.swapColumns(i, actual.getNumCols(), actual));
       }
    }
 }
