@@ -172,7 +172,7 @@ public class MatrixTools
    /**
     * return a newVector based on vectorElements
     */
-   public static DenseMatrix64F createVector(double[] vectorElements)
+   public static DenseMatrix64F createVector(double... vectorElements)
    {
       DenseMatrix64F ret = new DenseMatrix64F(vectorElements.length, 1);
       setMatrixColumnFromArray(ret, 0, vectorElements);
