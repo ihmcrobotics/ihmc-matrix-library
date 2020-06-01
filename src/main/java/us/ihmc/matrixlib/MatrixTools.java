@@ -443,20 +443,49 @@ public class MatrixTools
       }
    }
 
+   /**
+    * Extracts columns from {@code source} and copy them into {@code dest}.
+    * <p>
+    * The columns are written in consecutive order in {@code dest} regardless of whether the given row
+    * indices are ordered or successive.
+    * </p>
+    * 
+    * @param source          any N-by-M matrix.
+    * @param srcColumns      the set of columns indices to be extracted.
+    * @param dest            the matrix in which the columns are to be copied over, it should have a
+    *                        number of columns at least equal to
+    *                        {@code srcColumns.length + destStartColumn} and a number of rows at least
+    *                        equal to {@code source}'s number of rows.
+    * @param destStartColumn the index of the first column to start writing at.
+    */
    public static void extractColumns(DenseMatrix64F source, int[] srcColumns, DenseMatrix64F dest, int destStartColumn)
    {
-      for (int i : srcColumns)
+      for (int srcColumn : srcColumns)
       {
-         CommonOps.extract(source, 0, source.getNumRows(), i, i + 1, dest, 0, destStartColumn);
+         CommonOps.extract(source, 0, source.getNumRows(), srcColumn, srcColumn + 1, dest, 0, destStartColumn);
          destStartColumn++;
       }
    }
 
+   /**
+    * Extracts rows from {@code source} and copy them into {@code dest}.
+    * <p>
+    * The rows are written in consecutive order in {@code dest} regardless of whether the given row
+    * indices are ordered or successive.
+    * </p>
+    * 
+    * @param source       any N-by-M matrix.
+    * @param srcRows      the set of rows indices to be extracted.
+    * @param dest         the matrix in which the rows are to be copied over, it should have a number
+    *                     of rows at least equal to {@code srcRows.length + destStartRow} and a number
+    *                     of columns at least equal to {@code source}'s number of columns.
+    * @param destStartRow the index of the first row to start writing at.
+    */
    public static void extractRows(DenseMatrix64F source, int[] srcRows, DenseMatrix64F dest, int destStartRow)
    {
-      for (int i : srcRows)
+      for (int srcRow : srcRows)
       {
-         CommonOps.extract(source, i, i + 1, 0, source.getNumCols(), dest, destStartRow, 0);
+         CommonOps.extract(source, srcRow, srcRow + 1, 0, source.getNumCols(), dest, destStartRow, 0);
          destStartRow++;
       }
    }
