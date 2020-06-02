@@ -172,7 +172,7 @@ public class MatrixTools
    /**
     * return a newVector based on vectorElements
     */
-   public static DenseMatrix64F createVector(double[] vectorElements)
+   public static DenseMatrix64F createVector(double... vectorElements)
    {
       DenseMatrix64F ret = new DenseMatrix64F(vectorElements.length, 1);
       setMatrixColumnFromArray(ret, 0, vectorElements);
@@ -443,20 +443,49 @@ public class MatrixTools
       }
    }
 
+   /**
+    * Extracts columns from {@code source} and copy them into {@code dest}.
+    * <p>
+    * The columns are written in consecutive order in {@code dest} regardless of whether the given row
+    * indices are ordered or successive.
+    * </p>
+    * 
+    * @param source          any N-by-M matrix.
+    * @param srcColumns      the set of columns indices to be extracted.
+    * @param dest            the matrix in which the columns are to be copied over, it should have a
+    *                        number of columns at least equal to
+    *                        {@code srcColumns.length + destStartColumn} and a number of rows at least
+    *                        equal to {@code source}'s number of rows.
+    * @param destStartColumn the index of the first column to start writing at.
+    */
    public static void extractColumns(DenseMatrix64F source, int[] srcColumns, DenseMatrix64F dest, int destStartColumn)
    {
-      for (int i : srcColumns)
+      for (int srcColumn : srcColumns)
       {
-         CommonOps.extract(source, 0, source.getNumRows(), i, i + 1, dest, 0, destStartColumn);
+         CommonOps.extract(source, 0, source.getNumRows(), srcColumn, srcColumn + 1, dest, 0, destStartColumn);
          destStartColumn++;
       }
    }
 
+   /**
+    * Extracts rows from {@code source} and copy them into {@code dest}.
+    * <p>
+    * The rows are written in consecutive order in {@code dest} regardless of whether the given row
+    * indices are ordered or successive.
+    * </p>
+    * 
+    * @param source       any N-by-M matrix.
+    * @param srcRows      the set of rows indices to be extracted.
+    * @param dest         the matrix in which the rows are to be copied over, it should have a number
+    *                     of rows at least equal to {@code srcRows.length + destStartRow} and a number
+    *                     of columns at least equal to {@code source}'s number of columns.
+    * @param destStartRow the index of the first row to start writing at.
+    */
    public static void extractRows(DenseMatrix64F source, int[] srcRows, DenseMatrix64F dest, int destStartRow)
    {
-      for (int i : srcRows)
+      for (int srcRow : srcRows)
       {
-         CommonOps.extract(source, i, i + 1, 0, source.getNumCols(), dest, destStartRow, 0);
+         CommonOps.extract(source, srcRow, srcRow + 1, 0, source.getNumCols(), dest, destStartRow, 0);
          destStartRow++;
       }
    }
@@ -1048,6 +1077,58 @@ public class MatrixTools
       for (int i = 0; i < originRowIndices.length; i++)
       {
          addRow(originRowIndices[i], valuesToAdd, destRowIndices[i], matrix);
+      }
+   }
+
+   /**
+    * Swaps the rows <tt>i</tt> and <tt>j</tt> in the given matrix.
+    * 
+    * @param i              the index of the first row to swap.
+    * @param j              the index of the second row to swap.
+    * @param matrixToModify the matrix to
+    */
+   public static void swapRows(int i, int j, RowD1Matrix64F matrixToModify)
+   {
+      if (i < 0 || j < 0 || i >= matrixToModify.getNumRows() || j >= matrixToModify.getNumRows())
+         throw new IllegalArgumentException(String.format("Specified row indices are out of bound: [i= %d, j=%d], number of rows= %d",
+                                                          i,
+                                                          j,
+                                                          matrixToModify.getNumRows()));
+
+      for (int col = 0; col < matrixToModify.getNumCols(); col++)
+      {
+         int iIndex = matrixToModify.getIndex(i, col);
+         int jIndex = matrixToModify.getIndex(j, col);
+         double iValue = matrixToModify.get(iIndex);
+         double jValue = matrixToModify.get(jIndex);
+         matrixToModify.set(iIndex, jValue);
+         matrixToModify.set(jIndex, iValue);
+      }
+   }
+
+   /**
+    * Swaps the columns <tt>i</tt> and <tt>j</tt> in the given matrix.
+    * 
+    * @param i              the index of the first column to swap.
+    * @param j              the index of the second column to swap.
+    * @param matrixToModify the matrix to
+    */
+   public static void swapColumns(int i, int j, RowD1Matrix64F matrixToModify)
+   {
+      if (i < 0 || j < 0 || i >= matrixToModify.getNumCols() || j >= matrixToModify.getNumCols())
+         throw new IllegalArgumentException(String.format("Specified column indices are out of bound: [i= %d, j=%d], number of columns= %d",
+                                                          i,
+                                                          j,
+                                                          matrixToModify.getNumCols()));
+
+      for (int row = 0; row < matrixToModify.getNumRows(); row++)
+      {
+         int iIndex = matrixToModify.getIndex(row, i);
+         int jIndex = matrixToModify.getIndex(row, j);
+         double iValue = matrixToModify.get(iIndex);
+         double jValue = matrixToModify.get(jIndex);
+         matrixToModify.set(iIndex, jValue);
+         matrixToModify.set(jIndex, iValue);
       }
    }
 

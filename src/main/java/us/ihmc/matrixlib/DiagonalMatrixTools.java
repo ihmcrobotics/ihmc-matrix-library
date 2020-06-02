@@ -10,23 +10,22 @@ public class DiagonalMatrixTools
 {
    /**
     * Finds the inverse of a diagonal matrix
-    * @param matrixToInvert matrix to compute inverse of
+    * 
+    * @param matrixToInvert       matrix to compute inverse of
     * @param invertedMatrixToPack matrix to store inverse
     */
    public static void invertDiagonalMatrix(RowD1Matrix64F matrixToInvert, RowD1Matrix64F invertedMatrixToPack)
    {
       if (matrixToInvert.numRows != matrixToInvert.numCols)
       {
-         throw new MatrixDimensionException(
-               "Diagonal matrix to invert is not square. Number of rows in matrix: " + matrixToInvert.getNumRows() + ", number of" + " cols in matrix: "
-                     + matrixToInvert.getNumCols() + ".");
+         throw new MatrixDimensionException("Diagonal matrix to invert is not square. Number of rows in matrix: " + matrixToInvert.getNumRows() + ", number of"
+               + " cols in matrix: " + matrixToInvert.getNumCols() + ".");
       }
 
       if (invertedMatrixToPack.numRows != matrixToInvert.numRows && invertedMatrixToPack.numCols != matrixToInvert.numCols)
       {
-         throw new MatrixDimensionException(
-               "Matrix destination is the wrong size. Number of rows in matrix: " + matrixToInvert.getNumRows() + ", number of" + " cols in matrix: "
-                     + matrixToInvert.getNumCols() + ".");
+         throw new MatrixDimensionException("Matrix destination is the wrong size. Number of rows in matrix: " + matrixToInvert.getNumRows() + ", number of"
+               + " cols in matrix: " + matrixToInvert.getNumCols() + ".");
       }
 
       if (matrixToInvert == invertedMatrixToPack)
@@ -43,15 +42,15 @@ public class DiagonalMatrixTools
 
    /**
     * Finds the inverse of a diagonal matrix
+    * 
     * @param matrixToInvertAndPack matrix to compute inverse of
     */
    public static void invertDiagonalMatrix(RowD1Matrix64F matrixToInvertAndPack)
    {
       if (matrixToInvertAndPack.numRows != matrixToInvertAndPack.numCols)
       {
-         throw new MatrixDimensionException(
-               "Diagonal matrix to invert is not square. Number of rows in matrix: " + matrixToInvertAndPack.getNumRows() + ", number of" + " cols in matrix: "
-                     + matrixToInvertAndPack.getNumCols() + ".");
+         throw new MatrixDimensionException("Diagonal matrix to invert is not square. Number of rows in matrix: " + matrixToInvertAndPack.getNumRows()
+               + ", number of" + " cols in matrix: " + matrixToInvertAndPack.getNumCols() + ".");
       }
 
       int size = matrixToInvertAndPack.getNumRows();
@@ -61,14 +60,21 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Performs the following operation:<br>
+    * <p>
+    * Performs the following operation:<br>
     * <br>
     * c = a * b <br>
     * <br>
     * c<sub>ij</sub> = &sum;<sub>k=1:n</sub> { a<sub>ik</sub> * b<sub>kj</sub>}
     * </p>
-    * <p> where we assume that matrix 'a' is a diagonal matrix. </p>
-    * <p> 'a' can also be passed in as a vector, where each element represents the off-diagonal value of the 'a' matrix. </p>
+    * <p>
+    * where we assume that matrix 'a' is a diagonal matrix.
+    * </p>
+    * <p>
+    * 'a' can also be passed in as a vector, where each element represents the off-diagonal value of
+    * the 'a' matrix.
+    * </p>
+    * 
     * @param a The left matrix in the multiplication operation. Not modified. Assumed to be diagonal.
     * @param b The right matrix in the multiplication operation. Not modified.
     * @param c Where the results of the operation are stored. Modified.
@@ -112,18 +118,28 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Performs the following operation:<br>
+    * <p>
+    * Performs the following operation:<br>
     * <br>
     * c = c + a * b <br>
     * <br>
-    * c<sub>(startRow + i) (startCol + j)</sub> = c<sub>(startRow + i) (startCol + j)</sub> + &sum;<sub>k=1:n</sub> { a<sub>ik</sub> * b<sub>kj</sub>}
+    * c<sub>(startRow + i) (startCol + j)</sub> = c<sub>(startRow + i) (startCol + j)</sub> +
+    * &sum;<sub>k=1:n</sub> { a<sub>ik</sub> * b<sub>kj</sub>}
     * </p>
-    * <p> where we assume that matrix 'a' is a diagonal matrix. </p>
-    * <p> The 'a' matrix can also be passed in as a vector of the diagonal elements </p>
-    * <p> The block is added to matrix c starting at startRow, startCol </p>
-    * @param a The left matrix in the multiplication operation. Not modified. Assumed to be diagonal.
-    * @param b The right matrix in the multiplication operation. Not modified.
-    * @param c Where the results of the operation are stored. Modified.
+    * <p>
+    * where we assume that matrix 'a' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'a' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
+    * <p>
+    * The block is added to matrix c starting at startRow, startCol
+    * </p>
+    * 
+    * @param a        The left matrix in the multiplication operation. Not modified. Assumed to be
+    *                 diagonal.
+    * @param b        The right matrix in the multiplication operation. Not modified.
+    * @param c        Where the results of the operation are stored. Modified.
     * @param startRow The row index to start writing to in the block 'c'.
     * @param startCol The col index to start writing to in the block 'c'.
     */
@@ -170,14 +186,23 @@ public class DiagonalMatrixTools
     * <br>
     * c = c + d * a * b <br>
     * <br>
-    * c<sub>(startRow + i) (startCol + j)</sub> = c<sub>(startRow + i) (startCol + j)</sub> + d * &sum;<sub>k=1:n</sub> { a<sub>ik</sub> * b<sub>kj</sub>}
+    * c<sub>(startRow + i) (startCol + j)</sub> = c<sub>(startRow + i) (startCol + j)</sub> + d *
+    * &sum;<sub>k=1:n</sub> { a<sub>ik</sub> * b<sub>kj</sub>}
     * </p>
-    * <p> where we assume that matrix 'a' is a diagonal matrix. </p>
-    * <p> The 'a' matrix can also be passed in as a vector of the diagonal elements </p>
-    * <p> The block is added to matrix c starting at startRow, startCol </p>
-    * @param a The left matrix in the multiplication operation. Not modified. Assumed to be diagonal.
-    * @param b The right matrix in the multiplication operation. Not modified.
-    * @param c Where the results of the operation are stored. Modified.
+    * <p>
+    * where we assume that matrix 'a' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'a' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
+    * <p>
+    * The block is added to matrix c starting at startRow, startCol
+    * </p>
+    * 
+    * @param a        The left matrix in the multiplication operation. Not modified. Assumed to be
+    *                 diagonal.
+    * @param b        The right matrix in the multiplication operation. Not modified.
+    * @param c        Where the results of the operation are stored. Modified.
     * @param startRow The row index to start writing to in the block 'c'.
     * @param startCol The col index to start writing to in the block 'c'.
     */
@@ -220,14 +245,19 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Performs the following operation:<br>
+    * <p>
+    * Performs the following operation:<br>
     * <br>
-    * c = a * b
-    * </br>
+    * c = a * b </br>
     * c<sub>ij</sub> = &sum;<sub>k=1:n</sub> { a<sub>ik</sub> * b<sub>kj</sub>}
     * </p>
-    * <p> where we assume that matrix 'b' is a diagonal matrix. </p>
-    * <p> The 'b' matrix can also be passed in as a vector of the diagonal elements </p>
+    * <p>
+    * where we assume that matrix 'b' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'b' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
+    * 
     * @param a The left matrix in the multiplication operation. Not modified.
     * @param b The right matrix in the multiplication operation. Not modified. Assumed to be diagonal.
     * @param c Where the results of the operation are stored. Modified.
@@ -273,13 +303,18 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Performs the following operation:<br>
+    * <p>
+    * Performs the following operation:<br>
     * <br>
-    * c = a<sup>T</sup> * b
-    * </br>
+    * c = a<sup>T</sup> * b </br>
     * </p>
-    * <p> where we assume that matrix 'b' is a diagonal matrix. </p>
-    * <p> The 'b' matrix can also be passed in as a vector of the diagonal elements </p>
+    * <p>
+    * where we assume that matrix 'b' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'b' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
+    * 
     * @param a The left matrix in the multiplication operation. Not modified.
     * @param b The right matrix in the multiplication operation. Not modified. Assumed to be diagonal.
     * @param c Where the results of the operation are stored. Modified.
@@ -337,22 +372,28 @@ public class DiagonalMatrixTools
             c.data[index2] = b.data[bIndex] * a.data[index++];
             index2 += c.numCols;
          }
-         bIndex ++;
+         bIndex++;
       }
    }
 
    /**
-    * <p>Computes the matrix multiplication inner product:<br>
+    * <p>
+    * Computes the matrix multiplication inner product:<br>
     * <br>
     * c = a<sup>T</sup> * b * a <br>
     * <br>
     * c<sub>ij</sub> = &sum;<sub>k=1:n</sub> { a<sub>ki</sub> * a<sub>kj</sub> * b<sub>k</sub>}
     * </p>
-    * <p> where we assume that matrix 'b' is a diagonal matrix. </p>
-    * <p> The 'b' matrix can also be passed in as a vector of the diagonal elements </p>
+    * <p>
+    * where we assume that matrix 'b' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'b' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
     * <p>
     * Is faster than using a generic matrix multiplication by taking advantage of symmetry.
     * </p>
+    * 
     * @param a The matrix being multiplied. Not modified.
     * @param b The inner diagonal matrix in the multiplication. Not Modified.
     * @param c Where the results of the operation are stored. Modified.
@@ -388,7 +429,7 @@ public class DiagonalMatrixTools
             int indexC = 0;
             double sum = 0;
             int end = indexA + a.numRows * a.numCols;
-            for (; indexA < end; indexA += a.numCols, indexB += a.numCols, indexC += (b.numCols + 1))
+            for (; indexA < end; indexA += a.numCols, indexB += a.numCols, indexC += b.numCols + 1)
             {
                sum += a.data[indexA] * a.data[indexB] * b.data[indexC];
             }
@@ -420,17 +461,24 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Computes the matrix multiplication inner product:<br>
+    * <p>
+    * Computes the matrix multiplication inner product:<br>
     * <br>
     * c = c + a<sup>T</sup> * b * a <br>
     * <br>
-    * c<sub>ij</sub> = c<sub>ij</sub> + &sum;<sub>k=1:n</sub> { a<sub>ki</sub> * a<sub>kj</sub> * b<sub>k</sub>}
+    * c<sub>ij</sub> = c<sub>ij</sub> + &sum;<sub>k=1:n</sub> { a<sub>ki</sub> * a<sub>kj</sub> *
+    * b<sub>k</sub>}
     * </p>
-    * <p> where we assume that matrix 'b' is a diagonal matrix. </p>
-    * <p> The 'b' matrix can also be passed in as a vector of the diagonal elements </p>
+    * <p>
+    * where we assume that matrix 'b' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'b' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
     * <p>
     * Is faster than using a generic matrix multiplication by taking advantage of symmetry.
     * </p>
+    * 
     * @param a The matrix being multiplied. Not modified.
     * @param b The inner diagonal matrix in the multiplication. Not Modified.
     * @param c Where the results of the operation are stored. Modified.
@@ -463,7 +511,7 @@ public class DiagonalMatrixTools
          int indexC = 0;
          double sum = 0;
          int end = indexA + a.numRows * a.numCols;
-         for (; indexA < end; indexA += a.numCols, indexC += (b.numCols + 1))
+         for (; indexA < end; indexA += a.numCols, indexC += b.numCols + 1)
          {
             sum += a.data[indexA] * a.data[indexA] * b.data[indexC];
          }
@@ -479,7 +527,7 @@ public class DiagonalMatrixTools
             indexC = 0;
             sum = 0;
             end = indexA + a.numRows * a.numCols;
-            for (; indexA < end; indexA += a.numCols, indexB += a.numCols, indexC += (b.numCols + 1))
+            for (; indexA < end; indexA += a.numCols, indexB += a.numCols, indexC += b.numCols + 1)
             {
                sum += a.data[indexA] * a.data[indexB] * b.data[indexC];
             }
@@ -525,24 +573,32 @@ public class DiagonalMatrixTools
       }
    }
 
-
-
    /**
-    * <p>Computes the matrix multiplication inner product:<br>
+    * <p>
+    * Computes the matrix multiplication inner product:<br>
     * <br>
     * c = c + a<sup>T</sup> * b * a <br>
     * <br>
-    * c<sub>(cRowStart + i) (cColStart + j)</sub> = c<sub>(cRowStart + i) (cColStart + j)</sub> + &sum;<sub>k=1:n</sub> { a<sub>ki</sub> * a<sub>kj</sub> * b<sub>k</sub>}
+    * c<sub>(cRowStart + i) (cColStart + j)</sub> = c<sub>(cRowStart + i) (cColStart + j)</sub> +
+    * &sum;<sub>k=1:n</sub> { a<sub>ki</sub> * a<sub>kj</sub> * b<sub>k</sub>}
     * </p>
-    * <p> where we assume that matrix 'b' is a diagonal matrix. </p>
-    * <p> The 'b' matrix can also be passed in as a vector of the diagonal elements </p>
-    * <p> The block is added to matrix 'c' starting at cStartRow, cStartCol </p>
+    * <p>
+    * where we assume that matrix 'b' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'b' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
+    * <p>
+    * The block is added to matrix 'c' starting at cStartRow, cStartCol
+    * </p>
     * <p>
     * Is faster than using a generic matrix multiplication by taking advantage of symmetry.
     * </p>
-    * @param a The matrix being multiplied. Not modified.
-    * @param b The matrix on the inside of the multiplication. Assumed to be diagonal. Not modified.
-    * @param c Where the results of the operation are stored. Modified.
+    * 
+    * @param a         The matrix being multiplied. Not modified.
+    * @param b         The matrix on the inside of the multiplication. Assumed to be diagonal. Not
+    *                  modified.
+    * @param c         Where the results of the operation are stored. Modified.
     * @param cRowStart The row index to start writing to in the block 'c'.
     * @param cColStart The col index to start writing to in the block 'c'.
     */
@@ -573,7 +629,7 @@ public class DiagonalMatrixTools
          int indexC = 0;
          double sum = 0;
          int end = indexA + a.numRows * a.numCols;
-         for (; indexA < end; indexA += a.numCols, indexC += (b.numCols + 1))
+         for (; indexA < end; indexA += a.numCols, indexC += b.numCols + 1)
          {
             sum += a.data[indexA] * a.data[indexA] * b.data[indexC];
          }
@@ -588,7 +644,7 @@ public class DiagonalMatrixTools
             indexC = 0;
             sum = 0;
             end = indexA + a.numRows * a.numCols;
-            for (; indexA < end; indexA += a.numCols, indexB += a.numCols, indexC += (b.numCols + 1))
+            for (; indexA < end; indexA += a.numCols, indexB += a.numCols, indexC += b.numCols + 1)
             {
                sum += a.data[indexA] * a.data[indexB] * b.data[indexC];
             }
@@ -637,17 +693,24 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Computes the matrix multiplication inner product:<br>
+    * <p>
+    * Computes the matrix multiplication inner product:<br>
     * <br>
     * d = d + a * b<sup>T</sup> * c * b <br>
     * <br>
-    * d<sub>ij</sub> = d<sub>ij</sub> + b * &sum;<sub>k=1:n</sub> { b<sub>ki</sub> * b<sub>kj</sub> * c<sub>k</sub>}
+    * d<sub>ij</sub> = d<sub>ij</sub> + b * &sum;<sub>k=1:n</sub> { b<sub>ki</sub> * b<sub>kj</sub> *
+    * c<sub>k</sub>}
     * </p>
-    * <p> where we assume that matrix 'c' is a diagonal matrix. </p>
-    * <p> The 'c' matrix can also be passed in as a vector of the diagonal elements </p>
+    * <p>
+    * where we assume that matrix 'c' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'c' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
     * <p>
     * Is faster than using a generic matrix multiplication by taking advantage of symmetry.
     * </p>
+    * 
     * @param a The scalar multiplying the inner operation.
     * @param b The matrix being multiplied. Not modified.
     * @param c The matrix on the inside of the multiplication. Assumed to be diagonal. Not modified.
@@ -681,7 +744,7 @@ public class DiagonalMatrixTools
          int indexC = 0;
          double sum = 0;
          int end = indexA + b.numRows * b.numCols;
-         for (; indexA < end; indexA += b.numCols, indexC += (c.numCols + 1))
+         for (; indexA < end; indexA += b.numCols, indexC += c.numCols + 1)
          {
             sum += b.data[indexA] * b.data[indexA] * c.data[indexC];
          }
@@ -697,7 +760,7 @@ public class DiagonalMatrixTools
             indexC = 0;
             sum = 0;
             end = indexA + b.numRows * b.numCols;
-            for (; indexA < end; indexA += b.numCols, indexB += b.numCols, indexC += (c.numCols + 1))
+            for (; indexA < end; indexA += b.numCols, indexB += b.numCols, indexC += c.numCols + 1)
             {
                sum += b.data[indexA] * b.data[indexB] * c.data[indexC];
             }
@@ -744,7 +807,8 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Computes the matrix multiplication inner product:<br>
+    * <p>
+    * Computes the matrix multiplication inner product:<br>
     * <br>
     * c = b * a * a<sup>T</sup> <br>
     * <br>
@@ -753,6 +817,7 @@ public class DiagonalMatrixTools
     * <p>
     * Is faster than using a generic matrix multiplication by taking advantage of symmetry.
     * </p>
+    * 
     * @param a The matrix being multiplied. Not modified.
     * @param b The scalar multiplier of the inner product multiplication.
     * @param c Where the results of the operation are stored. Modified.
@@ -784,17 +849,23 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Computes the matrix multiplication inner product:<br>
+    * <p>
+    * Computes the matrix multiplication inner product:<br>
     * <br>
     * c = a * b * a<sup>T</sup> <br>
     * <br>
     * c<sub>ij</sub> = &sum;<sub>k=1:n</sub> { a<sub>ki</sub> * a<sub>kj</sub> * b<sub>k</sub>}
     * </p>
-    * <p> where we assume that matrix 'b' is a diagonal matrix. </p>
-    * <p> The 'b' matrix can also be passed in as a vector of the diagonal elements </p>
+    * <p>
+    * where we assume that matrix 'b' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'b' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
     * <p>
     * Is faster than using a generic matrix multiplication by taking advantage of symmetry.
     * </p>
+    * 
     * @param a The matrix being multiplied. Not modified.
     * @param b The matrix on the inside of the multiplication. Assumed to be diagonal. Not modified.
     * @param c Where the results of the operation are stored. Modified.
@@ -830,7 +901,7 @@ public class DiagonalMatrixTools
             int indexC = 0;
             double sum = 0;
             int end = indexA + a.numCols;
-            for (; indexA < end; indexA++, indexB++, indexC += (b.numCols + 1))
+            for (; indexA < end; indexA++, indexB++, indexC += b.numCols + 1)
             {
                sum += a.data[indexA] * a.data[indexB] * b.data[indexC];
             }
@@ -862,7 +933,8 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Computes the matrix multiplication inner product:<br>
+    * <p>
+    * Computes the matrix multiplication inner product:<br>
     * <br>
     * c = b * a<sup>T</sup> * a <br>
     * <br>
@@ -871,6 +943,7 @@ public class DiagonalMatrixTools
     * <p>
     * Is faster than using a generic matrix multiplication by taking advantage of symmetry.
     * </p>
+    * 
     * @param a The matrix being multiplied. Not modified.
     * @param b The scalar multiplier of the outer operation.
     * @param c Where the results of the operation are stored. Modified.
@@ -902,13 +975,18 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Performs the following operation:<br>
+    * <p>
+    * Performs the following operation:<br>
     * <br>
-    * c = a * b * c
-    * </br>
+    * c = a * b * c </br>
     * </p>
-    * <p>  where we assume that matrix 'b' is a diagonal matrix. </p>
-    * <p> The 'b' matrix can also be passed in as a vector of the diagonal elements </p>
+    * <p>
+    * where we assume that matrix 'b' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'b' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
+    * 
     * @param a The left matrix in the multiplication operation. Not modified.
     * @param b The middle matrix in the multiplication operation. Not modified. Assumed to be diagonal.
     * @param c The right matrix in the multiplication operation. Not modified.
@@ -992,13 +1070,18 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Performs the following operation:<br>
+    * <p>
+    * Performs the following operation:<br>
     * <br>
-    * d = a<sup>T</sup> * b * c
-    * </br>
+    * d = a<sup>T</sup> * b * c </br>
     * </p>
-    * <p>  where we assume that matrix 'b' is a diagonal matrix. </p>
-    * <p> The 'b' matrix can also be passed in as a vector of the diagonal elements </p>
+    * <p>
+    * where we assume that matrix 'b' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'b' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
+    * 
     * @param a The left matrix in the multiplication operation. Not modified.
     * @param b The middle matrix in the multiplication operation. Not modified. Assumed to be diagonal.
     * @param c The right matrix in the multiplication operation. Not modified.
@@ -1084,13 +1167,18 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Performs the following operation:<br>
+    * <p>
+    * Performs the following operation:<br>
     * <br>
-    * d = d + a<sup>T</sup> * b * c
-    * </br>
+    * d = d + a<sup>T</sup> * b * c </br>
     * </p>
-    * <p>  where we assume that matrix 'b' is a diagonal matrix. </p>
-    * <p> The 'b' matrix can also be passed in as a vector of the diagonal elements </p>
+    * <p>
+    * where we assume that matrix 'b' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'b' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
+    * 
     * @param a The left matrix in the multiplication operation. Not modified.
     * @param b The middle matrix in the multiplication operation. Not modified. Assumed to be diagonal.
     * @param c The right matrix in the multiplication operation. Not modified.
@@ -1176,17 +1264,23 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Performs the following operation:<br>
+    * <p>
+    * Performs the following operation:<br>
     * <br>
-    * d = d + a<sup>T</sup> * b * c
-    * </br>
+    * d = d + a<sup>T</sup> * b * c </br>
     * </p>
-    * <p>  where we assume that matrix 'b' is a diagonal matrix. </p>
-    * <p> The 'b' matrix can also be passed in as a vector of the diagonal elements </p>
-    * @param a The left matrix in the multiplication operation. Not modified.
-    * @param b The middle matrix in the multiplication operation. Not modified. Assumed to be diagonal.
-    * @param c The right matrix in the multiplication operation. Not modified.
-    * @param d Where the results of the operation are stored. Modified.
+    * <p>
+    * where we assume that matrix 'b' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'b' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
+    * 
+    * @param a        The left matrix in the multiplication operation. Not modified.
+    * @param b        The middle matrix in the multiplication operation. Not modified. Assumed to be
+    *                 diagonal.
+    * @param c        The right matrix in the multiplication operation. Not modified.
+    * @param d        Where the results of the operation are stored. Modified.
     * @param rowStart the start row to write to of the 'd' matrix.
     * @param colStart the start column to write to fo the 'd' matrix.
     */
@@ -1205,7 +1299,8 @@ public class DiagonalMatrixTools
          innerDiagonalMultAddBlockTransA_vector(a, b, c, d, rowStart, colStart);
    }
 
-   private static void innerDiagonalMultAddBlockTransA_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d, int rowStart, int colStart)
+   private static void innerDiagonalMultAddBlockTransA_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d, int rowStart,
+                                                              int colStart)
    {
       if (b.numCols != c.numRows)
          throw new MatrixDimensionException("The 'b' and 'c' matrices do not have compatible dimensions");
@@ -1268,18 +1363,24 @@ public class DiagonalMatrixTools
    }
 
    /**
-    * <p>Performs the following operation:<br>
+    * <p>
+    * Performs the following operation:<br>
     * <br>
-    * e = e + a * b<sup>T</sup> * c * d
-    * </br>
+    * e = e + a * b<sup>T</sup> * c * d </br>
     * </p>
-    * <p>  where we assume that matrix 'c' is a diagonal matrix. </p>
-    * <p> The 'b' matrix can also be passed in as a vector of the diagonal elements </p>
-    * @param a The scalar multiplier of the matrix operation.
-    * @param b The left matrix in the multiplication operation. Not modified.
-    * @param c The middle matrix in the multiplication operation. Not modified. Assumed to be diagonal.
-    * @param d The right matrix in the multiplication operation. Not modified.
-    * @param e Where the results of the operation are stored. Modified.
+    * <p>
+    * where we assume that matrix 'c' is a diagonal matrix.
+    * </p>
+    * <p>
+    * The 'b' matrix can also be passed in as a vector of the diagonal elements
+    * </p>
+    * 
+    * @param a        The scalar multiplier of the matrix operation.
+    * @param b        The left matrix in the multiplication operation. Not modified.
+    * @param c        The middle matrix in the multiplication operation. Not modified. Assumed to be
+    *                 diagonal.
+    * @param d        The right matrix in the multiplication operation. Not modified.
+    * @param e        Where the results of the operation are stored. Modified.
     * @param rowStart The start row of matrix 'e' to write to.
     * @param colStart The start col of matrix 'e' to write to.
     */
@@ -1300,7 +1401,7 @@ public class DiagonalMatrixTools
    }
 
    private static void innerDiagonalMultAddBlockTransA_matrix(double a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d, RowD1Matrix64F e, int rowStart,
-                                                             int colStart)
+                                                              int colStart)
    {
       if (c.numCols != d.numRows)
          throw new MatrixDimensionException("The 'c' and 'd' matrices do not have compatible dimensions");
