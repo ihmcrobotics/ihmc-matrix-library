@@ -2,14 +2,14 @@ package us.ihmc.matrixlib;
 
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrixRMaj;
 import org.junit.jupiter.api.Test;
 
 public class MatrixTestToolsTest
 {
 
    @Test
-   public void testAssertDenseMatrix64FEquals()
+   public void testAssertDMatrixRMajEquals()
    {
       final int ITERATIONS = 1000;
       final double EPSILON = 0.000001;
@@ -23,14 +23,14 @@ public class MatrixTestToolsTest
 
          int n1 = random1.nextInt(MATRIX_SIZE_BOUND);
          int m1 = random1.nextInt(MATRIX_SIZE_BOUND);
-         DenseMatrix64F matrix1 = new DenseMatrix64F(n1, m1, true, randomDoubleArray(random1, n1 * m1));
+         DMatrixRMaj matrix1 = new DMatrixRMaj(n1, m1, true, randomDoubleArray(random1, n1 * m1));
 
          int n2 = random2.nextInt(MATRIX_SIZE_BOUND);
          int m2 = random2.nextInt(MATRIX_SIZE_BOUND);
-         DenseMatrix64F matrix2 = new DenseMatrix64F(n2, m2, true, randomDoubleArray(random2, n2 * m2));
+         DMatrixRMaj matrix2 = new DMatrixRMaj(n2, m2, true, randomDoubleArray(random2, n2 * m2));
 
          MatrixTestTools.assertMatrixEquals(matrix1, matrix2, EPSILON);
-         MatrixTestTools.assertMatrixEquals("testAssertDenseMatrix64FEquals", matrix1, matrix2, EPSILON);
+         MatrixTestTools.assertMatrixEquals("testAssertDMatrixRMajEquals", matrix1, matrix2, EPSILON);
       }
    }
 
@@ -45,7 +45,7 @@ public class MatrixTestToolsTest
 
       for (int i = 0; i < ITERATIONS; i++)
       {
-         DenseMatrix64F matrix = new DenseMatrix64F(random.nextInt(MATRIX_SIZE_BOUND), random.nextInt(MATRIX_SIZE_BOUND));
+         DMatrixRMaj matrix = new DMatrixRMaj(random.nextInt(MATRIX_SIZE_BOUND), random.nextInt(MATRIX_SIZE_BOUND));
 
          MatrixTestTools.assertMatrixEqualsZero(matrix, EPSILON);
          MatrixTestTools.assertMatrixEqualsZero("testAssertMatrixEqualsZero", matrix, EPSILON);

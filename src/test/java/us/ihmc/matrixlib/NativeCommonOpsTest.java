@@ -2,11 +2,11 @@ package us.ihmc.matrixlib;
 
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.factory.LinearSolverFactory;
-import org.ejml.interfaces.linsol.LinearSolver;
-import org.ejml.ops.CommonOps;
-import org.ejml.ops.RandomMatrices;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.CommonOps_DDRM;
+import org.ejml.dense.row.RandomMatrices_DDRM;
+import org.ejml.dense.row.factory.LinearSolverFactory_DDRM;
+import org.ejml.interfaces.linsol.LinearSolverDense;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.commons.Conversions;
@@ -31,10 +31,10 @@ public class NativeCommonOpsTest
 
       for (int i = 0; i < warmumIterations; i++)
       {
-         DenseMatrix64F A = RandomMatrices.createRandom(maxSize, maxSize, random);
-         DenseMatrix64F B = RandomMatrices.createRandom(maxSize, maxSize, random);
-         DenseMatrix64F AB = new DenseMatrix64F(maxSize, maxSize);
-         CommonOps.mult(A, B, AB);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+         DMatrixRMaj AB = new DMatrixRMaj(maxSize, maxSize);
+         CommonOps_DDRM.mult(A, B, AB);
          NativeCommonOps.mult(A, B, AB);
       }
 
@@ -45,17 +45,17 @@ public class NativeCommonOpsTest
          int bCols = random.nextInt(maxSize) + 1;
          matrixSizes += (aRows + aCols + bCols) / 3.0;
 
-         DenseMatrix64F A = RandomMatrices.createRandom(aRows, aCols, random);
-         DenseMatrix64F B = RandomMatrices.createRandom(aCols, bCols, random);
-         DenseMatrix64F actual = new DenseMatrix64F(aRows, bCols);
-         DenseMatrix64F expected = new DenseMatrix64F(aRows, bCols);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(aRows, aCols, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(aCols, bCols, random);
+         DMatrixRMaj actual = new DMatrixRMaj(aRows, bCols);
+         DMatrixRMaj expected = new DMatrixRMaj(aRows, bCols);
 
          nativeTime -= System.nanoTime();
          NativeCommonOps.mult(A, B, actual);
          nativeTime += System.nanoTime();
 
          ejmlTime -= System.nanoTime();
-         CommonOps.mult(A, B, expected);
+         CommonOps_DDRM.mult(A, B, expected);
          ejmlTime += System.nanoTime();
 
          MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
@@ -80,12 +80,12 @@ public class NativeCommonOpsTest
 
       for (int i = 0; i < warmumIterations; i++)
       {
-         DenseMatrix64F A = RandomMatrices.createRandom(maxSize, maxSize, random);
-         DenseMatrix64F B = RandomMatrices.createRandom(maxSize, maxSize, random);
-         DenseMatrix64F tempBA = new DenseMatrix64F(maxSize, maxSize);
-         DenseMatrix64F AtBA = new DenseMatrix64F(maxSize, maxSize);
-         CommonOps.mult(B, A, tempBA);
-         CommonOps.multTransA(A, tempBA, AtBA);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+         DMatrixRMaj tempBA = new DMatrixRMaj(maxSize, maxSize);
+         DMatrixRMaj AtBA = new DMatrixRMaj(maxSize, maxSize);
+         CommonOps_DDRM.mult(B, A, tempBA);
+         CommonOps_DDRM.multTransA(A, tempBA, AtBA);
          NativeCommonOps.multQuad(A, B, AtBA);
       }
 
@@ -95,19 +95,19 @@ public class NativeCommonOpsTest
          int aCols = random.nextInt(maxSize) + 1;
          matrixSizes += (aRows + aCols) / 2.0;
 
-         DenseMatrix64F A = RandomMatrices.createRandom(aRows, aCols, random);
-         DenseMatrix64F B = RandomMatrices.createRandom(aRows, aRows, random);
-         DenseMatrix64F actual = new DenseMatrix64F(aCols, aCols);
-         DenseMatrix64F expected = new DenseMatrix64F(aCols, aCols);
-         DenseMatrix64F tempBA = new DenseMatrix64F(aRows, aCols);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(aRows, aCols, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(aRows, aRows, random);
+         DMatrixRMaj actual = new DMatrixRMaj(aCols, aCols);
+         DMatrixRMaj expected = new DMatrixRMaj(aCols, aCols);
+         DMatrixRMaj tempBA = new DMatrixRMaj(aRows, aCols);
 
          nativeTime -= System.nanoTime();
          NativeCommonOps.multQuad(A, B, actual);
          nativeTime += System.nanoTime();
 
          ejmlTime -= System.nanoTime();
-         CommonOps.mult(B, A, tempBA);
-         CommonOps.multTransA(A, tempBA, expected);
+         CommonOps_DDRM.mult(B, A, tempBA);
+         CommonOps_DDRM.multTransA(A, tempBA, expected);
          ejmlTime += System.nanoTime();
 
          MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
@@ -129,12 +129,12 @@ public class NativeCommonOpsTest
       long nativeTime = 0;
       long ejmlTime = 0;
       double matrixSizes = 0;
-      LinearSolver<DenseMatrix64F> solver = LinearSolverFactory.lu(maxSize);
+      LinearSolverDense<DMatrixRMaj> solver = LinearSolverFactory_DDRM.lu(maxSize);
 
       for (int i = 0; i < warmumIterations; i++)
       {
-         DenseMatrix64F A = RandomMatrices.createRandom(maxSize, maxSize, -100.0, 100.0, random);
-         DenseMatrix64F B = new DenseMatrix64F(maxSize, maxSize);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(maxSize, maxSize, -100.0, 100.0, random);
+         DMatrixRMaj B = new DMatrixRMaj(maxSize, maxSize);
          solver.setA(A);
          solver.invert(B);
          NativeCommonOps.invert(A, B);
@@ -145,9 +145,9 @@ public class NativeCommonOpsTest
          int aRows = random.nextInt(maxSize) + 1;
          matrixSizes += aRows;
 
-         DenseMatrix64F A = RandomMatrices.createRandom(aRows, aRows, -100.0, 100.0, random);
-         DenseMatrix64F nativeResult = new DenseMatrix64F(aRows, aRows);
-         DenseMatrix64F ejmlResult = new DenseMatrix64F(aRows, aRows);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(aRows, aRows, -100.0, 100.0, random);
+         DMatrixRMaj nativeResult = new DMatrixRMaj(aRows, aRows);
+         DMatrixRMaj ejmlResult = new DMatrixRMaj(aRows, aRows);
 
          nativeTime -= System.nanoTime();
          NativeCommonOps.invert(A, nativeResult);
@@ -177,14 +177,14 @@ public class NativeCommonOpsTest
       long nativeTime = 0;
       long ejmlTime = 0;
       double matrixSizes = 0;
-      LinearSolver<DenseMatrix64F> solver = LinearSolverFactory.lu(maxSize);
+      LinearSolverDense<DMatrixRMaj> solver = LinearSolverFactory_DDRM.lu(maxSize);
 
       for (int i = 0; i < warmumIterations; i++)
       {
-         DenseMatrix64F A = RandomMatrices.createRandom(maxSize, maxSize, random);
-         DenseMatrix64F x = RandomMatrices.createRandom(maxSize, 1, random);
-         DenseMatrix64F b = new DenseMatrix64F(maxSize, 1);
-         CommonOps.mult(A, x, b);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+         DMatrixRMaj x = RandomMatrices_DDRM.rectangle(maxSize, 1, random);
+         DMatrixRMaj b = new DMatrixRMaj(maxSize, 1);
+         CommonOps_DDRM.mult(A, x, b);
          solver.setA(A);
          solver.solve(b, x);
          NativeCommonOps.solve(A, b, x);
@@ -195,13 +195,13 @@ public class NativeCommonOpsTest
          int aRows = random.nextInt(maxSize) + 1;
          matrixSizes += aRows;
 
-         DenseMatrix64F A = RandomMatrices.createRandom(aRows, aRows, random);
-         DenseMatrix64F x = RandomMatrices.createRandom(aRows, 1, random);
-         DenseMatrix64F b = new DenseMatrix64F(aRows, 1);
-         CommonOps.mult(A, x, b);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(aRows, aRows, random);
+         DMatrixRMaj x = RandomMatrices_DDRM.rectangle(aRows, 1, random);
+         DMatrixRMaj b = new DMatrixRMaj(aRows, 1);
+         CommonOps_DDRM.mult(A, x, b);
 
-         DenseMatrix64F nativeResult = new DenseMatrix64F(aRows, 1);
-         DenseMatrix64F ejmlResult = new DenseMatrix64F(aRows, 1);
+         DMatrixRMaj nativeResult = new DMatrixRMaj(aRows, 1);
+         DMatrixRMaj ejmlResult = new DMatrixRMaj(aRows, 1);
 
          nativeTime -= System.nanoTime();
          NativeCommonOps.solve(A, b, nativeResult);
@@ -226,9 +226,9 @@ public class NativeCommonOpsTest
    {
       int size = 500;
       Random random = new Random(40L);
-      DenseMatrix64F A = RandomMatrices.createRandom(size, size, random);
-      DenseMatrix64F B = RandomMatrices.createRandom(size, size, random);
-      DenseMatrix64F AtBA = new DenseMatrix64F(size, size);
+      DMatrixRMaj A = RandomMatrices_DDRM.rectangle(size, size, random);
+      DMatrixRMaj B = RandomMatrices_DDRM.rectangle(size, size, random);
+      DMatrixRMaj AtBA = new DMatrixRMaj(size, size);
 
       System.out.println("Running...");
 
