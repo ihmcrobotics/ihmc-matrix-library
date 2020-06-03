@@ -62,7 +62,7 @@ public class MatrixTools
     * @param object    Map<String, Object> object = (Map<String, Object>) yaml.load(input);
     *                  yamlFieldToMatrix(beq,"beq",object);
     */
-   public static DMatrix1Row yamlFieldToMatrix(DMatrix1Row val, String fieldName, Map<String, Object> object)
+   public static DMatrixRMaj yamlFieldToMatrix(DMatrixRMaj val, String fieldName, Map<String, Object> object)
    {
       if (val == null)
          val = new DMatrixRMaj(1, 1);
@@ -171,9 +171,9 @@ public class MatrixTools
    /**
     * return a newVector based on vectorElements
     */
-   public static DMatrix1Row createVector(double... vectorElements)
+   public static DMatrixRMaj createVector(double... vectorElements)
    {
-      DMatrix1Row ret = new DMatrixRMaj(vectorElements.length, 1);
+      DMatrixRMaj ret = new DMatrixRMaj(vectorElements.length, 1);
       setMatrixColumnFromArray(ret, 0, vectorElements);
       return ret;
    }
@@ -200,9 +200,9 @@ public class MatrixTools
    /**
     * AtGA = A' * G * A if AtGA is null, a new Matrix will be allocated and returned
     */
-   public static DMatrix1Row multQuad(DMatrix1Row A, DMatrix1Row G, DMatrix1Row AtGA)
+   public static DMatrixRMaj multQuad(DMatrix1Row A, DMatrix1Row G, DMatrixRMaj AtGA)
    {
-      DMatrix1Row out;
+      DMatrixRMaj out;
       if (AtGA == null)
       {
          out = new DMatrixRMaj(A.numCols, A.numCols);
@@ -489,9 +489,9 @@ public class MatrixTools
       }
    }
 
-   public static DMatrix1Row mult(DMatrix1Row A, DMatrix1Row B)
+   public static DMatrixRMaj mult(DMatrix1Row A, DMatrix1Row B)
    {
-      DMatrix1Row C = new DMatrixRMaj(A.getNumRows(), B.getNumCols());
+      DMatrixRMaj C = new DMatrixRMaj(A.getNumRows(), B.getNumCols());
       CommonOps_DDRM.mult(A, B, C);
       return C;
    }
