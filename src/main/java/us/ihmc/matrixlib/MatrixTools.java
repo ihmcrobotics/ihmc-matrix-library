@@ -6,12 +6,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.ejml.alg.dense.misc.TransposeAlgs;
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.data.RowD1Matrix64F;
-import org.ejml.ops.CommonOps;
-import org.ejml.ops.MatrixDimensionException;
-import org.ejml.ops.MatrixFeatures;
+import org.ejml.MatrixDimensionException;
+import org.ejml.data.DMatrix1Row;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.CommonOps_DDRM;
+import org.ejml.dense.row.MatrixFeatures_DDRM;
 import org.ejml.ops.MatrixIO;
 
 import us.ihmc.commons.MathTools;
@@ -35,9 +34,9 @@ public class MatrixTools
     *
     * @param matrix
     */
-   public static void setToNaN(DenseMatrix64F matrix)
+   public static void setToNaN(DMatrix1Row matrix)
    {
-      CommonOps.fill(matrix, Double.NaN);
+      CommonOps_DDRM.fill(matrix, Double.NaN);
    }
 
    /**
@@ -45,28 +44,28 @@ public class MatrixTools
     *
     * @param matrix
     */
-   public static void setToZero(DenseMatrix64F matrix)
+   public static void setToZero(DMatrix1Row matrix)
    {
-      CommonOps.fill(matrix, 0.0);
+      CommonOps_DDRM.fill(matrix, 0.0);
    }
 
-   public static boolean containsNaN(DenseMatrix64F matrix)
+   public static boolean containsNaN(DMatrix1Row matrix)
    {
-      return MatrixFeatures.hasNaN(matrix);
+      return MatrixFeatures_DDRM.hasNaN(matrix);
    }
 
    /**
-    * This method tries to be smart about converting the various yaml fields to DenseMatrix64F
+    * This method tries to be smart about converting the various yaml fields to DMatrix1Row
     *
     * @param val
     * @param fieldName
     * @param object    Map<String, Object> object = (Map<String, Object>) yaml.load(input);
     *                  yamlFieldToMatrix(beq,"beq",object);
     */
-   public static DenseMatrix64F yamlFieldToMatrix(DenseMatrix64F val, String fieldName, Map<String, Object> object)
+   public static DMatrixRMaj yamlFieldToMatrix(DMatrixRMaj val, String fieldName, Map<String, Object> object)
    {
       if (val == null)
-         val = new DenseMatrix64F(1, 1);
+         val = new DMatrixRMaj(1, 1);
       if (object.get(fieldName) instanceof ArrayList<?>)
       {
          ArrayList<?> arrayList = (ArrayList<?>) object.get(fieldName);
@@ -118,7 +117,7 @@ public class MatrixTools
       return val;
    }
 
-   public static boolean isEmptyMatrix(DenseMatrix64F m)
+   public static boolean isEmptyMatrix(DMatrix1Row m)
    {
       if (m == null)
          throw new RuntimeException("Matrix is null");
@@ -131,7 +130,7 @@ public class MatrixTools
    /**
     * Same as CommonOps.mult but allow a,b,c to be zero rol/col matrices c = a * b;
     */
-   public static void multAllowEmptyMatrix(DenseMatrix64F a, DenseMatrix64F b, DenseMatrix64F c)
+   public static void multAllowEmptyMatrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a.numRows != c.numRows || b.numCols != c.numCols)
          throw new RuntimeException("matrix c dimension should be " + a.numRows + " x " + b.numCols);
@@ -142,13 +141,13 @@ public class MatrixTools
       if (a.numCols == 0 && b.numRows == 0)
          c.zero();
       else
-         CommonOps.mult(a, b, c);
+         CommonOps_DDRM.mult(a, b, c);
    }
 
    /**
     * same as CommonOps.multAdd but allow a,b,c to be empty matrices
     */
-   public static void multAddAllowEmptyMatrix(DenseMatrix64F a, DenseMatrix64F b, DenseMatrix64F c)
+   public static void multAddAllowEmptyMatrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a.numRows != c.numRows || b.numCols != c.numCols)
          throw new RuntimeException("matrix c dimension should be " + a.numRows + " x " + b.numCols);
@@ -157,13 +156,13 @@ public class MatrixTools
          throw new RuntimeException("a, b matrices are not compatible, check their dimensions");
 
       if (a.numRows != 0 && b.numCols != 0)
-         CommonOps.multAdd(a, b, c);
+         CommonOps_DDRM.multAdd(a, b, c);
    }
 
    /**
     * fill column col of matrix m with value val
     */
-   public static void fillColumn(DenseMatrix64F m, int col, double val)
+   public static void fillColumn(DMatrix1Row m, int col, double val)
    {
       for (int i = 0; i < m.numRows; i++)
          m.set(i, col, val);
@@ -172,9 +171,9 @@ public class MatrixTools
    /**
     * return a newVector based on vectorElements
     */
-   public static DenseMatrix64F createVector(double... vectorElements)
+   public static DMatrixRMaj createVector(double... vectorElements)
    {
-      DenseMatrix64F ret = new DenseMatrix64F(vectorElements.length, 1);
+      DMatrixRMaj ret = new DMatrixRMaj(vectorElements.length, 1);
       setMatrixColumnFromArray(ret, 0, vectorElements);
       return ret;
    }
@@ -201,25 +200,25 @@ public class MatrixTools
    /**
     * AtGA = A' * G * A if AtGA is null, a new Matrix will be allocated and returned
     */
-   public static DenseMatrix64F multQuad(DenseMatrix64F A, DenseMatrix64F G, DenseMatrix64F AtGA)
+   public static DMatrixRMaj multQuad(DMatrix1Row A, DMatrix1Row G, DMatrixRMaj AtGA)
    {
-      DenseMatrix64F out;
+      DMatrixRMaj out;
       if (AtGA == null)
       {
-         out = new DenseMatrix64F(A.numCols, A.numCols);
+         out = new DMatrixRMaj(A.numCols, A.numCols);
       }
       else
       {
          out = AtGA;
       }
 
-      DenseMatrix64F tmp = new DenseMatrix64F(A.numCols, G.numCols);
-      CommonOps.multTransA(A, G, tmp);
-      CommonOps.mult(tmp, A, out);
+      DMatrix1Row tmp = new DMatrixRMaj(A.numCols, G.numCols);
+      CommonOps_DDRM.multTransA(A, G, tmp);
+      CommonOps_DDRM.mult(tmp, A, out);
       return out;
    }
 
-   public static double multMatrixRowVector(DenseMatrix64F a, int row, DenseMatrix64F b)
+   public static double multMatrixRowVector(DMatrix1Row a, int row, DMatrix1Row b)
    {
       if (a.numCols != b.numRows)
          throw new RuntimeException("a.numCols should be equal to b.numRows");
@@ -244,7 +243,7 @@ public class MatrixTools
     * @param column       Column
     * @param columnValues
     */
-   public static void setMatrixColumnFromArray(DenseMatrix64F matrix, int column, double[] columnValues)
+   public static void setMatrixColumnFromArray(DMatrix1Row matrix, int column, double[] columnValues)
    {
       setMatrixColumnFromArray(matrix, column, columnValues, 0);
    }
@@ -256,7 +255,7 @@ public class MatrixTools
     * @param column       Column
     * @param columnValues
     */
-   public static void setMatrixColumnFromArray(DenseMatrix64F matrix, int column, double[] columnValues, int startRow)
+   public static void setMatrixColumnFromArray(DMatrix1Row matrix, int column, double[] columnValues, int startRow)
    {
       setMatrixColumnFromArray(matrix, column, columnValues, startRow, columnValues.length);
    }
@@ -268,7 +267,7 @@ public class MatrixTools
     * @param column       Column
     * @param columnValues
     */
-   public static void setMatrixColumnFromArray(DenseMatrix64F matrix, int column, double[] columnValues, int startRow, int dataLength)
+   public static void setMatrixColumnFromArray(DMatrix1Row matrix, int column, double[] columnValues, int startRow, int dataLength)
    {
       if (dataLength == 0)
          return;
@@ -293,7 +292,7 @@ public class MatrixTools
     * @param numberOfRows Rows to differentiate
     * @param vectorToPack Result row vector
     */
-   public static void diff(DenseMatrix64F vectorToDiff, int startRow, int numberOfRows, DenseMatrix64F vectorToPack)
+   public static void diff(DMatrix1Row vectorToDiff, int startRow, int numberOfRows, DMatrix1Row vectorToPack)
    {
       if (vectorToDiff.getNumCols() != 1)
          throw new IllegalArgumentException("vectorToDiff is not a column vector");
@@ -312,7 +311,7 @@ public class MatrixTools
     * @param vectorToDiff
     * @param vectorToPack Result row vector
     */
-   public static void diff(double[] vectorToDiff, DenseMatrix64F vectorToPack)
+   public static void diff(double[] vectorToDiff, DMatrix1Row vectorToPack)
    {
       diff(vectorToDiff, 0, vectorToDiff.length, vectorToPack);
    }
@@ -323,7 +322,7 @@ public class MatrixTools
     * @param vectorToDiff
     * @param vectorToPack Result row vector
     */
-   public static void diff(double[] vectorToDiff, int startRow, int numberOfRows, DenseMatrix64F vectorToPack)
+   public static void diff(double[] vectorToDiff, int startRow, int numberOfRows, DMatrix1Row vectorToPack)
    {
       if (vectorToPack.getNumCols() != 1)
          throw new IllegalArgumentException("vectorToPack is not a column vector");
@@ -334,11 +333,11 @@ public class MatrixTools
       }
    }
 
-   public static void numericallyDifferentiate(DenseMatrix64F derivativeToPack, DenseMatrix64F previousMatrixToUpdate, DenseMatrix64F newMatrix, double dt)
+   public static void numericallyDifferentiate(DMatrix1Row derivativeToPack, DMatrix1Row previousMatrixToUpdate, DMatrix1Row newMatrix, double dt)
    {
       derivativeToPack.set(newMatrix);
-      CommonOps.subtractEquals(derivativeToPack, previousMatrixToUpdate);
-      CommonOps.scale(1.0 / dt, derivativeToPack);
+      CommonOps_DDRM.subtractEquals(derivativeToPack, previousMatrixToUpdate);
+      CommonOps_DDRM.scale(1.0 / dt, derivativeToPack);
       previousMatrixToUpdate.set(newMatrix);
    }
 
@@ -355,7 +354,7 @@ public class MatrixTools
     * @param numberOfColumns Column size of the block
     * @param scale           Scale the block from otherMatrix by this value
     */
-   public static void setMatrixBlock(DenseMatrix64F dest, int destStartRow, int destStartColumn, DenseMatrix64F src, int srcStartRow, int srcStartColumn,
+   public static void setMatrixBlock(DMatrix1Row dest, int destStartRow, int destStartColumn, DMatrix1Row src, int srcStartRow, int srcStartColumn,
                                      int numberOfRows, int numberOfColumns, double scale)
    {
       if (numberOfRows == 0 || numberOfColumns == 0)
@@ -385,7 +384,7 @@ public class MatrixTools
     * @param rows         rows of input matrix to use in setting matrix to pack
     * @param columns      columns of input matrix to use in setting matrix to pack
     */
-   public static void getMatrixBlock(DenseMatrix64F matrixToPack, DenseMatrix64F input, int[] rows, int[] columns)
+   public static void getMatrixBlock(DMatrix1Row matrixToPack, DMatrix1Row input, int[] rows, int[] columns)
    {
       if (rows.length != matrixToPack.getNumRows() || columns.length != matrixToPack.getNumCols())
       {
@@ -419,7 +418,7 @@ public class MatrixTools
     * @param numberOfColumns Column size of the block
     * @param scale           Scale the block from otherMatrix by this value
     */
-   public static void addMatrixBlock(DenseMatrix64F dest, int destStartRow, int destStartColumn, DenseMatrix64F src, int srcStartRow, int srcStartColumn,
+   public static void addMatrixBlock(DMatrix1Row dest, int destStartRow, int destStartColumn, DMatrix1Row src, int srcStartRow, int srcStartColumn,
                                      int numberOfRows, int numberOfColumns, double scale)
    {
       if (numberOfRows == 0 || numberOfColumns == 0)
@@ -458,11 +457,11 @@ public class MatrixTools
     *                        equal to {@code source}'s number of rows.
     * @param destStartColumn the index of the first column to start writing at.
     */
-   public static void extractColumns(DenseMatrix64F source, int[] srcColumns, DenseMatrix64F dest, int destStartColumn)
+   public static void extractColumns(DMatrix1Row source, int[] srcColumns, DMatrix1Row dest, int destStartColumn)
    {
       for (int srcColumn : srcColumns)
       {
-         CommonOps.extract(source, 0, source.getNumRows(), srcColumn, srcColumn + 1, dest, 0, destStartColumn);
+         CommonOps_DDRM.extract(source, 0, source.getNumRows(), srcColumn, srcColumn + 1, dest, 0, destStartColumn);
          destStartColumn++;
       }
    }
@@ -481,28 +480,28 @@ public class MatrixTools
     *                     of columns at least equal to {@code source}'s number of columns.
     * @param destStartRow the index of the first row to start writing at.
     */
-   public static void extractRows(DenseMatrix64F source, int[] srcRows, DenseMatrix64F dest, int destStartRow)
+   public static void extractRows(DMatrix1Row source, int[] srcRows, DMatrix1Row dest, int destStartRow)
    {
       for (int srcRow : srcRows)
       {
-         CommonOps.extract(source, srcRow, srcRow + 1, 0, source.getNumCols(), dest, destStartRow, 0);
+         CommonOps_DDRM.extract(source, srcRow, srcRow + 1, 0, source.getNumCols(), dest, destStartRow, 0);
          destStartRow++;
       }
    }
 
-   public static DenseMatrix64F mult(DenseMatrix64F A, DenseMatrix64F B)
+   public static DMatrixRMaj mult(DMatrix1Row A, DMatrix1Row B)
    {
-      DenseMatrix64F C = new DenseMatrix64F(A.getNumRows(), B.getNumCols());
-      CommonOps.mult(A, B, C);
+      DMatrixRMaj C = new DMatrixRMaj(A.getNumRows(), B.getNumCols());
+      CommonOps_DDRM.mult(A, B, C);
       return C;
    }
 
-   public static void addDiagonal(DenseMatrix64F matrix, double scalar)
+   public static void addDiagonal(DMatrix1Row matrix, double scalar)
    {
       int n = Math.max(matrix.getNumRows(), matrix.getNumCols());
       for (int i = 0; i < n; i++)
       {
-         matrix.add(i, i, scalar);
+         matrix.set(i, i, matrix.get(i, i) + scalar);
       }
    }
 
@@ -539,7 +538,7 @@ public class MatrixTools
     *
     * @param mat A square matrix.
     */
-   public static void setDiagonal(RowD1Matrix64F mat, double diagonalValue)
+   public static void setDiagonal(DMatrix1Row mat, double diagonalValue)
    {
       int width = mat.numRows < mat.numCols ? mat.numRows : mat.numCols;
 
@@ -552,7 +551,7 @@ public class MatrixTools
       }
    }
 
-   public static void vectorToSkewSymmetricMatrix(DenseMatrix64F matrixToPack, Tuple3DReadOnly tuple)
+   public static void vectorToSkewSymmetricMatrix(DMatrix1Row matrixToPack, Tuple3DReadOnly tuple)
    {
       matrixToPack.set(0, 0, 0.0);
       matrixToPack.set(0, 1, -tuple.getZ());
@@ -589,12 +588,12 @@ public class MatrixTools
       M.setM22(-axbx - ayby);
    }
 
-   public static int denseMatrixToArrayColumnMajor(DenseMatrix64F src, double[] dest)
+   public static int denseMatrixToArrayColumnMajor(DMatrix1Row src, double[] dest)
    {
       return denseMatrixToArrayColumnMajor(src, 0, 0, src.getNumRows(), src.getNumCols(), dest, 0);
    }
 
-   public static int denseMatrixToArrayColumnMajor(DenseMatrix64F src, int srcStartRow, int srcStartCol, int numRows, int numCols, double[] dest,
+   public static int denseMatrixToArrayColumnMajor(DMatrix1Row src, int srcStartRow, int srcStartCol, int numRows, int numCols, double[] dest,
                                                    int destStartIndex)
    {
       int currentIndex = destStartIndex;
@@ -609,7 +608,7 @@ public class MatrixTools
       return currentIndex - destStartIndex;
    }
 
-   public static void extractDiagonal(DenseMatrix64F matrix, double[] diagonal)
+   public static void extractDiagonal(DMatrix1Row matrix, double[] diagonal)
    {
       for (int i = 0; i < Math.min(matrix.getNumRows(), matrix.getNumCols()); i++)
       {
@@ -617,7 +616,7 @@ public class MatrixTools
       }
    }
 
-   public static String denseMatrixToString(DenseMatrix64F mat)
+   public static String denseMatrixToString(DMatrix1Row mat)
    {
       ByteArrayOutputStream stream = new ByteArrayOutputStream();
       MatrixIO.print(new PrintStream(stream), mat, "%13.6g");
@@ -653,7 +652,7 @@ public class MatrixTools
     * @param matrix
     * @param tuple
     */
-   public static void mult(DenseMatrix64F matrix, Tuple3DBasics tuple)
+   public static void mult(DMatrix1Row matrix, Tuple3DBasics tuple)
    {
       if (matrix.numCols != 3 || matrix.numRows != 3)
       {
@@ -674,7 +673,7 @@ public class MatrixTools
     * @param matrix
     * @param vector
     */
-   public static void mult(DenseMatrix64F matrix, Vector4DBasics vector)
+   public static void mult(DMatrix1Row matrix, Vector4DBasics vector)
    {
       if (matrix.numCols != 4 || matrix.numRows != 4)
       {
@@ -697,7 +696,7 @@ public class MatrixTools
     * @param matrixToRemoveRowTo the matrix from which the row is to be removed. Modified.
     * @param indexOfRowToRemove  the column index to remove.
     */
-   public static void removeRow(DenseMatrix64F matrixToRemoveRowTo, int indexOfRowToRemove)
+   public static void removeRow(DMatrix1Row matrixToRemoveRowTo, int indexOfRowToRemove)
    {
       if (indexOfRowToRemove >= matrixToRemoveRowTo.getNumRows())
          throw new RuntimeException("The index indexOfRowToRemove was expected to be in [0, " + (matrixToRemoveRowTo.getNumRows() - 1) + "], but was: "
@@ -725,7 +724,7 @@ public class MatrixTools
     * @param matrixToRemoveColumnTo the matrix from which the column is to be removed. Modified.
     * @param indexOfColumnToRemove  the column index to remove.
     */
-   public static void removeColumn(DenseMatrix64F matrixToRemoveColumnTo, int indexOfColumnToRemove)
+   public static void removeColumn(DMatrix1Row matrixToRemoveColumnTo, int indexOfColumnToRemove)
    {
       if (indexOfColumnToRemove >= matrixToRemoveColumnTo.getNumCols())
          throw new RuntimeException("The index indexOfColumnToRemove was expected to be in [0, " + (matrixToRemoveColumnTo.getNumCols() - 1) + "], but was: "
@@ -752,7 +751,7 @@ public class MatrixTools
     * @param matrixToModify the matrix from which 'zero-rows' have to be removed. Modified.
     * @param epsilon        the tolerance to use for determining if a row is a 'zero-row'.
     */
-   public static void removeZeroRows(DenseMatrix64F matrixToModify, double epsilon)
+   public static void removeZeroRows(DMatrix1Row matrixToModify, double epsilon)
    {
       removeZeroRows(matrixToModify, 0, matrixToModify.getNumRows() - 1, epsilon);
    }
@@ -772,7 +771,7 @@ public class MatrixTools
     * @throws RuntimeException         if {@code startRow} or {@code endRow} are not in [0,
     *                                  {@code matrixToModify.getNumrows()}[.
     */
-   public static void removeZeroRows(DenseMatrix64F matrixToModify, int startRow, int endRow, double epsilon)
+   public static void removeZeroRows(DMatrix1Row matrixToModify, int startRow, int endRow, double epsilon)
    {
       if (startRow > endRow)
          throw new IllegalArgumentException("The index startRow cannot be greater than endRow.");
@@ -804,13 +803,13 @@ public class MatrixTools
     * where 'b' is the scaled transpose of 'a'.
     * </p>
     * Transpose algorithm taken from
-    * {@link TransposeAlgs#standard(org.ejml.data.RowD1Matrix64F, org.ejml.data.RowD1Matrix64F)}.
+    * {@link TransposeAlgs#standard(org.ejml.data.DMatrix1Row, org.ejml.data.DMatrix1Row)}.
     *
     * @param alpha the amount each element is multiplied by.
     * @param a     The matrix that is to be scaled and transposed. Not modified.
     * @param b     Where the scaled transpose is stored. Modified.
     */
-   public static void scaleTranspose(double alpha, DenseMatrix64F a, DenseMatrix64F b)
+   public static void scaleTranspose(double alpha, DMatrix1Row a, DMatrix1Row b)
    {
       if (a.getNumRows() != b.getNumCols() || a.getNumCols() != b.getNumRows())
          throw new IllegalArgumentException("Incompatible matrix dimensions");
@@ -838,7 +837,7 @@ public class MatrixTools
     * @param column column to scale
     * @param matrix matrix modify
     */
-   public static void scaleColumn(double alpha, int column, DenseMatrix64F matrix)
+   public static void scaleColumn(double alpha, int column, DMatrix1Row matrix)
    {
       if (column < 0 || column >= matrix.getNumCols())
          throw new IllegalArgumentException("Specified column index is out of bounds: " + column + ", number of columns in matrix: " + matrix.getNumCols());
@@ -856,7 +855,7 @@ public class MatrixTools
     * @param row    row to scale
     * @param matrix matrix modify
     */
-   public static void scaleRow(double alpha, int row, DenseMatrix64F matrix)
+   public static void scaleRow(double alpha, int row, DMatrix1Row matrix)
    {
       if (row < 0 || row >= matrix.getNumRows())
          throw new IllegalArgumentException("Specified row index is out of bounds: " + row + ", number of rows in matrix: " + matrix.getNumRows());
@@ -875,7 +874,7 @@ public class MatrixTools
     * @param rowIndex    row to add to
     * @param matrix      matrix modify
     */
-   public static void setRow(DenseMatrix64F valuesToSet, int rowIndex, DenseMatrix64F matrix)
+   public static void setRow(DMatrix1Row valuesToSet, int rowIndex, DMatrix1Row matrix)
    {
       setRow(0, valuesToSet, rowIndex, matrix);
    }
@@ -891,7 +890,7 @@ public class MatrixTools
     * @param rowIndex    row to add to
     * @param matrix      matrix modify
     */
-   public static void setRow(double alpha, DenseMatrix64F valuesToSet, int rowIndex, DenseMatrix64F matrix)
+   public static void setRow(double alpha, DMatrix1Row valuesToSet, int rowIndex, DMatrix1Row matrix)
    {
       setRow(0, alpha, valuesToSet, rowIndex, matrix);
    }
@@ -907,7 +906,7 @@ public class MatrixTools
     * @param destRowIndex   row to set to
     * @param matrix         matrix modify
     */
-   public static void setRow(int originRowIndex, DenseMatrix64F valuesToSet, int destRowIndex, DenseMatrix64F matrix)
+   public static void setRow(int originRowIndex, DMatrix1Row valuesToSet, int destRowIndex, DMatrix1Row matrix)
    {
       if (destRowIndex < 0 || destRowIndex >= matrix.getNumRows())
          throw new IllegalArgumentException("Specified row index is out of bounds: " + destRowIndex + ", number of rows in matrix: " + matrix.getNumRows());
@@ -934,7 +933,7 @@ public class MatrixTools
     * @param destRowIndex   row index to set to
     * @param matrix         matrix modify
     */
-   public static void setRow(int originRowIndex, double alpha, DenseMatrix64F valuesToSet, int destRowIndex, DenseMatrix64F matrix)
+   public static void setRow(int originRowIndex, double alpha, DMatrix1Row valuesToSet, int destRowIndex, DMatrix1Row matrix)
    {
       if (destRowIndex < 0 || destRowIndex >= matrix.getNumRows())
          throw new IllegalArgumentException("Specified row index is out of bounds: " + destRowIndex + ", number of rows in matrix: " + matrix.getNumRows());
@@ -961,7 +960,7 @@ public class MatrixTools
     * @param destRowIndices   indices of the row to add to
     * @param matrix           matrix modify
     */
-   public static void setRows(int[] originRowIndices, DenseMatrix64F valuesToSet, int[] destRowIndices, DenseMatrix64F matrix)
+   public static void setRows(int[] originRowIndices, DMatrix1Row valuesToSet, int[] destRowIndices, DMatrix1Row matrix)
    {
       if (originRowIndices.length != destRowIndices.length)
          throw new IllegalArgumentException("Specified indices are not of equivalent length.");
@@ -982,7 +981,7 @@ public class MatrixTools
     * @param rowIndex    row to add to
     * @param matrix      matrix modify
     */
-   public static void addRow(DenseMatrix64F valuesToAdd, int rowIndex, DenseMatrix64F matrix)
+   public static void addRow(DMatrix1Row valuesToAdd, int rowIndex, DMatrix1Row matrix)
    {
       addRow(0, valuesToAdd, rowIndex, matrix);
    }
@@ -998,7 +997,7 @@ public class MatrixTools
     * @param rowIndex    row index of vector destination
     * @param matrix      matrix modify
     */
-   public static void addRow(double alpha, DenseMatrix64F valuesToAdd, int rowIndex, DenseMatrix64F matrix)
+   public static void addRow(double alpha, DMatrix1Row valuesToAdd, int rowIndex, DMatrix1Row matrix)
    {
       addRow(0, alpha, valuesToAdd, rowIndex, matrix);
    }
@@ -1014,7 +1013,7 @@ public class MatrixTools
     * @param destRowIndex   row index of vector destination
     * @param matrix         matrix modify
     */
-   public static void addRow(int originRowIndex, DenseMatrix64F valuesToAdd, int destRowIndex, DenseMatrix64F matrix)
+   public static void addRow(int originRowIndex, DMatrix1Row valuesToAdd, int destRowIndex, DMatrix1Row matrix)
    {
       if (destRowIndex < 0 || destRowIndex >= matrix.getNumRows())
          throw new IllegalArgumentException("Specified row index is out of bounds: " + destRowIndex + ", number of rows in matrix: " + matrix.getNumRows());
@@ -1042,7 +1041,7 @@ public class MatrixTools
     * @param destRowIndex   row index of vector destination
     * @param matrix         matrix modify
     */
-   public static void addRow(int originRowIndex, double alpha, DenseMatrix64F valuesToAdd, int destRowIndex, DenseMatrix64F matrix)
+   public static void addRow(int originRowIndex, double alpha, DMatrix1Row valuesToAdd, int destRowIndex, DMatrix1Row matrix)
    {
       if (destRowIndex < 0 || destRowIndex >= matrix.getNumRows())
          throw new IllegalArgumentException("Specified row index is out of bounds: " + destRowIndex + ", number of rows in matrix: " + matrix.getNumRows());
@@ -1069,7 +1068,7 @@ public class MatrixTools
     * @param destRowIndices   indices of the row to add to
     * @param matrix           matrix modify
     */
-   public static void addRows(int[] originRowIndices, DenseMatrix64F valuesToAdd, int[] destRowIndices, DenseMatrix64F matrix)
+   public static void addRows(int[] originRowIndices, DMatrix1Row valuesToAdd, int[] destRowIndices, DMatrix1Row matrix)
    {
       if (originRowIndices.length != destRowIndices.length)
          throw new IllegalArgumentException("Specified indices are not of equivalent length.");
@@ -1087,7 +1086,7 @@ public class MatrixTools
     * @param j              the index of the second row to swap.
     * @param matrixToModify the matrix to
     */
-   public static void swapRows(int i, int j, RowD1Matrix64F matrixToModify)
+   public static void swapRows(int i, int j, DMatrix1Row matrixToModify)
    {
       if (i < 0 || j < 0 || i >= matrixToModify.getNumRows() || j >= matrixToModify.getNumRows())
          throw new IllegalArgumentException(String.format("Specified row indices are out of bound: [i= %d, j=%d], number of rows= %d",
@@ -1113,7 +1112,7 @@ public class MatrixTools
     * @param j              the index of the second column to swap.
     * @param matrixToModify the matrix to
     */
-   public static void swapColumns(int i, int j, RowD1Matrix64F matrixToModify)
+   public static void swapColumns(int i, int j, DMatrix1Row matrixToModify)
    {
       if (i < 0 || j < 0 || i >= matrixToModify.getNumCols() || j >= matrixToModify.getNumCols())
          throw new IllegalArgumentException(String.format("Specified column indices are out of bound: [i= %d, j=%d], number of columns= %d",
@@ -1140,7 +1139,7 @@ public class MatrixTools
     * @param column column to scale
     * @param matrix matrix modify
     */
-   public static void zeroColumn(int column, DenseMatrix64F matrix)
+   public static void zeroColumn(int column, DMatrix1Row matrix)
    {
       if (column < 0 || column >= matrix.getNumCols())
          throw new IllegalArgumentException("Specified column index is out of bounds: " + column + ", number of columns in matrix: " + matrix.getNumCols());
@@ -1157,7 +1156,7 @@ public class MatrixTools
     * @param row    row to scale
     * @param matrix matrix modify
     */
-   public static void zeroRow(int row, DenseMatrix64F matrix)
+   public static void zeroRow(int row, DMatrix1Row matrix)
    {
       if (row < 0 || row >= matrix.getNumRows())
          throw new IllegalArgumentException("Specified row index is out of bounds: " + row + ", number of rows in matrix: " + matrix.getNumRows());
@@ -1166,14 +1165,14 @@ public class MatrixTools
          matrix.unsafe_set(row, column, 0.0);
    }
 
-   public static void printJavaForConstruction(String name, DenseMatrix64F matrix)
+   public static void printJavaForConstruction(String name, DMatrix1Row matrix)
    {
       StringBuffer stringBuffer = new StringBuffer();
       printJavaForConstruction(stringBuffer, name, matrix);
       System.out.println(stringBuffer);
    }
 
-   public static void printJavaForConstruction(StringBuffer stringBuffer, String name, DenseMatrix64F matrix)
+   public static void printJavaForConstruction(StringBuffer stringBuffer, String name, DMatrix1Row matrix)
    {
       int numRows = matrix.getNumRows();
       int numColumns = matrix.getNumCols();
@@ -1197,10 +1196,10 @@ public class MatrixTools
       }
       stringBuffer.append("};\n");
 
-      stringBuffer.append("      DenseMatrix64F " + name + " = new DenseMatrix64F(" + name + "Data);");
+      stringBuffer.append("      DMatrix1Row " + name + " = new DMatrix1Row(" + name + "Data);");
    }
 
-   public static void checkMatrixDimensions(DenseMatrix64F matrixToCheck, int expectedRows, int expectedColumns)
+   public static void checkMatrixDimensions(DMatrix1Row matrixToCheck, int expectedRows, int expectedColumns)
    {
       if (matrixToCheck.getNumRows() != expectedRows || matrixToCheck.getNumCols() != expectedColumns)
       {
@@ -1223,7 +1222,7 @@ public class MatrixTools
     * @param b The right matrix in the multiplication operation. Not modified.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void multAddBlock(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, int rowStart, int colStart)
+   public static void multAddBlock(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int rowStart, int colStart)
    {
       if (a == c || b == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -1268,7 +1267,7 @@ public class MatrixTools
     * @param b The right matrix in the multiplication operation. Not modified.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void multAddBlock(double scalar, RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, int rowStart, int colStart)
+   public static void multAddBlock(double scalar, DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int rowStart, int colStart)
    {
       if (a == c || b == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -1317,7 +1316,7 @@ public class MatrixTools
     * @param b The matrix being multiplied. Not modified.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void multAddInner(double a, RowD1Matrix64F b, RowD1Matrix64F c)
+   public static void multAddInner(double a, DMatrix1Row b, DMatrix1Row c)
    {
       if (b == c)
          throw new IllegalArgumentException("'b' cannot be the same matrix as 'c'");
@@ -1379,7 +1378,7 @@ public class MatrixTools
     * @param cRowStart The row index to start writing to in the block 'c'.
     * @param cColStart The col index to start writing to in the block 'c'.
     */
-   public static void multAddBlockInner(double a, RowD1Matrix64F b, RowD1Matrix64F c, int cRowStart, int cColStart)
+   public static void multAddBlockInner(double a, DMatrix1Row b, DMatrix1Row c, int cRowStart, int cColStart)
    {
       if (b == c)
          throw new IllegalArgumentException("'b' cannot be the same matrix as 'c'");
@@ -1431,7 +1430,7 @@ public class MatrixTools
     * @param b The right matrix in the multiplication operation. Not modified.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void multAddBlockTransA(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, int rowStart, int colStart)
+   public static void multAddBlockTransA(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int rowStart, int colStart)
    {
       if (a == c || b == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -1475,7 +1474,7 @@ public class MatrixTools
     * @param b The right matrix in the multiplication operation. Not modified.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void multAddBlockTransA(double scalar, RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, int rowStart, int colStart)
+   public static void multAddBlockTransA(double scalar, DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int rowStart, int colStart)
    {
       if (a == c || b == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -1515,7 +1514,7 @@ public class MatrixTools
     * @param a first matrix
     * @param b second matrix
     */
-   public static boolean equals(DenseMatrix64F a, DenseMatrix64F b)
+   public static boolean equals(DMatrix1Row a, DMatrix1Row b)
    {
       if (a.numRows != b.numRows)
          return false;
