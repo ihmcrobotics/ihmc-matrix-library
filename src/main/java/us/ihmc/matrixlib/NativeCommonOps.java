@@ -1,8 +1,7 @@
 package us.ihmc.matrixlib;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.data.RowD1Matrix64F;
-import org.ejml.ops.CommonOps;
+import org.ejml.data.DMatrix1Row;
+import org.ejml.dense.row.CommonOps_DDRM;
 
 import us.ihmc.robotics.linearAlgebra.commonOps.NativeCommonOpsWrapper;
 import us.ihmc.tools.nativelibraries.NativeLibraryLoader;
@@ -26,7 +25,7 @@ public class NativeCommonOps
     * @param c where the result is stored (modified)
     * @throws IllegalArgumentException if the matrix dimensions are incompatible.
     */
-   public static void mult(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   public static void mult(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a.getNumCols() != b.getNumRows())
       {
@@ -45,7 +44,7 @@ public class NativeCommonOps
     * @param c where the result is stored (modified)
     * @throws IllegalArgumentException if the matrix dimensions are incompatible.
     */
-   public static void multQuad(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   public static void multQuad(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a.getNumRows() != b.getNumCols() || b.getNumCols() != b.getNumRows())
       {
@@ -63,7 +62,7 @@ public class NativeCommonOps
     * @param inv where the result is stored (modified)
     * @throws IllegalArgumentException if the matrix dimensions are incompatible.
     */
-   public static void invert(RowD1Matrix64F a, RowD1Matrix64F inv)
+   public static void invert(DMatrix1Row a, DMatrix1Row inv)
    {
       if (a == inv)
       {
@@ -87,7 +86,7 @@ public class NativeCommonOps
     * @param x where the result is stored (modified)
     * @throws IllegalArgumentException if the matrix dimensions are incompatible.
     */
-   public static void solve(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F x)
+   public static void solve(DMatrix1Row a, DMatrix1Row b, DMatrix1Row x)
    {
       if (a.getNumRows() != b.getNumRows() || b.getNumCols() != 1 || a.getNumCols() != a.getNumRows())
       {
@@ -109,7 +108,7 @@ public class NativeCommonOps
     * @return whether a solution was found
     * @throws IllegalArgumentException if the matrix dimensions are incompatible.
     */
-   public static boolean solveCheck(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F x)
+   public static boolean solveCheck(DMatrix1Row a, DMatrix1Row b, DMatrix1Row x)
    {
       if (a.getNumRows() != b.getNumRows() || b.getNumCols() != 1 || a.getNumCols() != a.getNumRows())
       {
@@ -120,7 +119,7 @@ public class NativeCommonOps
       {
          return true;
       }
-      CommonOps.fill(x, Double.NaN);
+      CommonOps_DDRM.fill(x, Double.NaN);
       return false;
    }
 
@@ -135,7 +134,7 @@ public class NativeCommonOps
     * @param x where the result is stored (modified)
     * @throws IllegalArgumentException if the matrix dimensions are incompatible.
     */
-   public static void solveRobust(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F x)
+   public static void solveRobust(DMatrix1Row a, DMatrix1Row b, DMatrix1Row x)
    {
       if (a.getNumRows() != b.getNumRows() || b.getNumCols() != 1)
       {
@@ -157,7 +156,7 @@ public class NativeCommonOps
     * @param x     where the result is stored (modified)
     * @throws IllegalArgumentException if the matrix dimensions are incompatible.
     */
-   public static void solveDamped(RowD1Matrix64F a, RowD1Matrix64F b, double alpha, RowD1Matrix64F x)
+   public static void solveDamped(DMatrix1Row a, DMatrix1Row b, double alpha, DMatrix1Row x)
    {
       if (a.getNumRows() != b.getNumRows() || b.getNumCols() != 1)
       {
@@ -179,7 +178,7 @@ public class NativeCommonOps
     * @param alpha damping value
     * @throws IllegalArgumentException if the matrix dimensions are incompatible.
     */
-   public static void projectOnNullspace(DenseMatrix64F a, DenseMatrix64F b, DenseMatrix64F c, double alpha)
+   public static void projectOnNullspace(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, double alpha)
    {
       if (a == c)
       {

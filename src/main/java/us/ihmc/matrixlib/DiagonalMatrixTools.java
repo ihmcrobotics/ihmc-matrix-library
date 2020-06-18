@@ -2,9 +2,8 @@ package us.ihmc.matrixlib;
 
 import java.util.Arrays;
 
-import org.ejml.data.D1Matrix64F;
-import org.ejml.data.RowD1Matrix64F;
-import org.ejml.ops.MatrixDimensionException;
+import org.ejml.MatrixDimensionException;
+import org.ejml.data.DMatrix1Row;
 
 public class DiagonalMatrixTools
 {
@@ -14,7 +13,7 @@ public class DiagonalMatrixTools
     * @param matrixToInvert       matrix to compute inverse of
     * @param invertedMatrixToPack matrix to store inverse
     */
-   public static void invertDiagonalMatrix(RowD1Matrix64F matrixToInvert, RowD1Matrix64F invertedMatrixToPack)
+   public static void invertDiagonalMatrix(DMatrix1Row matrixToInvert, DMatrix1Row invertedMatrixToPack)
    {
       if (matrixToInvert.numRows != matrixToInvert.numCols)
       {
@@ -30,7 +29,7 @@ public class DiagonalMatrixTools
 
       if (matrixToInvert == invertedMatrixToPack)
       {
-         throw new IllegalArgumentException("Matrices should not be the same. Use {@link DiagonalMatrixTools.invertDiagonalMatrix(RowD1Matrix64F)} instead.");
+         throw new IllegalArgumentException("Matrices should not be the same. Use {@link DiagonalMatrixTools.invertDiagonalMatrix(DMatrix1Row)} instead.");
       }
 
       int size = matrixToInvert.getNumRows();
@@ -45,7 +44,7 @@ public class DiagonalMatrixTools
     * 
     * @param matrixToInvertAndPack matrix to compute inverse of
     */
-   public static void invertDiagonalMatrix(RowD1Matrix64F matrixToInvertAndPack)
+   public static void invertDiagonalMatrix(DMatrix1Row matrixToInvertAndPack)
    {
       if (matrixToInvertAndPack.numRows != matrixToInvertAndPack.numCols)
       {
@@ -79,7 +78,7 @@ public class DiagonalMatrixTools
     * @param b The right matrix in the multiplication operation. Not modified.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void preMult(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   public static void preMult(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a == c || b == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -92,7 +91,7 @@ public class DiagonalMatrixTools
          preMult_vector(a, b, c);
    }
 
-   private static void preMult_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   private static void preMult_matrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a.numCols != b.numRows)
          throw new MatrixDimensionException("The 'a' and 'b' matrices do not have compatible dimensions");
@@ -106,7 +105,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void preMult_vector(D1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   private static void preMult_vector(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       for (int row = 0; row < Math.min(a.numRows, b.numRows); row++)
       {
@@ -143,7 +142,7 @@ public class DiagonalMatrixTools
     * @param startRow The row index to start writing to in the block 'c'.
     * @param startCol The col index to start writing to in the block 'c'.
     */
-   public static void preMultAddBlock(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, int startRow, int startCol)
+   public static void preMultAddBlock(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int startRow, int startCol)
    {
       if (a == c || b == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -156,7 +155,7 @@ public class DiagonalMatrixTools
          preMultAddBlock_vector(a, b, c, startRow, startCol);
    }
 
-   private static void preMultAddBlock_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, int startRow, int startCol)
+   private static void preMultAddBlock_matrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int startRow, int startCol)
    {
       if (a.numCols != b.numRows)
          throw new MatrixDimensionException("The 'a' and 'b' matrices do not have compatible dimensions");
@@ -170,7 +169,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void preMultAddBlock_vector(D1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, int startRow, int startCol)
+   private static void preMultAddBlock_vector(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int startRow, int startCol)
    {
       for (int row = 0; row < Math.min(a.numRows, b.numRows); row++)
       {
@@ -206,7 +205,7 @@ public class DiagonalMatrixTools
     * @param startRow The row index to start writing to in the block 'c'.
     * @param startCol The col index to start writing to in the block 'c'.
     */
-   public static void preMultAddBlock(double d, RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, int startRow, int startCol)
+   public static void preMultAddBlock(double d, DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int startRow, int startCol)
    {
       if (a == c || b == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -219,7 +218,7 @@ public class DiagonalMatrixTools
          preMultAddBlock_vector(d, a, b, c, startRow, startCol);
    }
 
-   private static void preMultAddBlock_matrix(double d, RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, int startRow, int startCol)
+   private static void preMultAddBlock_matrix(double d, DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int startRow, int startCol)
    {
       if (a.numCols != b.numRows)
          throw new MatrixDimensionException("The 'a' and 'b' matrices do not have compatible dimensions");
@@ -233,7 +232,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void preMultAddBlock_vector(double d, D1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, int startRow, int startCol)
+   private static void preMultAddBlock_vector(double d, DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int startRow, int startCol)
    {
       for (int row = 0; row < Math.min(a.numRows, b.numRows); row++)
       {
@@ -262,7 +261,7 @@ public class DiagonalMatrixTools
     * @param b The right matrix in the multiplication operation. Not modified. Assumed to be diagonal.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void postMult(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   public static void postMult(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a == c || b == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -275,7 +274,7 @@ public class DiagonalMatrixTools
          postMult_vector(a, b, c);
    }
 
-   private static void postMult_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   private static void postMult_matrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a.numCols != b.numRows)
          throw new MatrixDimensionException("The 'a' and 'b' matrices do not have compatible dimensions");
@@ -291,7 +290,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void postMult_vector(RowD1Matrix64F a, D1Matrix64F b, RowD1Matrix64F c)
+   private static void postMult_vector(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       for (int row = 0; row < a.numRows; row++)
       {
@@ -319,7 +318,7 @@ public class DiagonalMatrixTools
     * @param b The right matrix in the multiplication operation. Not modified. Assumed to be diagonal.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void postMultTransA(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   public static void postMultTransA(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a == c || b == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -332,7 +331,7 @@ public class DiagonalMatrixTools
          postMultTransA_vector(a, b, c);
    }
 
-   private static void postMultTransA_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   private static void postMultTransA_matrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a.numCols != c.numRows || b.numCols != c.numCols)
          throw new MatrixDimensionException("The results matrix does not have the desired dimensions");
@@ -354,7 +353,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void postMultTransA_vector(RowD1Matrix64F a, D1Matrix64F b, RowD1Matrix64F c)
+   private static void postMultTransA_vector(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a.numCols != c.numRows)
          throw new MatrixDimensionException("The results matrix does not have the desired dimensions");
@@ -398,7 +397,7 @@ public class DiagonalMatrixTools
     * @param b The inner diagonal matrix in the multiplication. Not Modified.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void multInner(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   public static void multInner(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a == c || b == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -413,7 +412,7 @@ public class DiagonalMatrixTools
          multInner_vector(a, b, c);
    }
 
-   private static void multInner_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   private static void multInner_matrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a.numRows != b.numCols)
          throw new MatrixDimensionException("The 'a' and 'b' matrices do not have compatible dimensions");
@@ -438,7 +437,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void multInner_vector(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   private static void multInner_vector(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       for (int i = 0; i < a.numCols; i++)
       {
@@ -483,7 +482,7 @@ public class DiagonalMatrixTools
     * @param b The inner diagonal matrix in the multiplication. Not Modified.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void multAddInner(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   public static void multAddInner(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a == c || b == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -498,7 +497,7 @@ public class DiagonalMatrixTools
          multAddInner_vector(a, b, c);
    }
 
-   private static void multAddInner_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   private static void multAddInner_matrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a.numRows != b.numCols)
          throw new MatrixDimensionException("The 'a' and 'b' matrices do not have compatible dimensions");
@@ -537,7 +536,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void multAddInner_vector(RowD1Matrix64F a, D1Matrix64F b, RowD1Matrix64F c)
+   private static void multAddInner_vector(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       for (int i = 0; i < a.numCols; i++)
       {
@@ -602,7 +601,7 @@ public class DiagonalMatrixTools
     * @param cRowStart The row index to start writing to in the block 'c'.
     * @param cColStart The col index to start writing to in the block 'c'.
     */
-   public static void multAddBlockInner(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, int cRowStart, int cColStart)
+   public static void multAddBlockInner(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int cRowStart, int cColStart)
    {
       if (a == c || b == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -617,7 +616,7 @@ public class DiagonalMatrixTools
          multAddBlockInner_vector(a, b, c, cRowStart, cColStart);
    }
 
-   private static void multAddBlockInner_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, int cRowStart, int cColStart)
+   private static void multAddBlockInner_matrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int cRowStart, int cColStart)
    {
       if (a.numRows != b.numCols)
          throw new MatrixDimensionException("The 'a' and 'b' matrices do not have compatible dimensions");
@@ -656,7 +655,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void multAddBlockInner_vector(RowD1Matrix64F a, D1Matrix64F b, RowD1Matrix64F c, int cRowStart, int cColStart)
+   private static void multAddBlockInner_vector(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, int cRowStart, int cColStart)
    {
       for (int i = 0; i < a.numCols; i++)
       {
@@ -716,7 +715,7 @@ public class DiagonalMatrixTools
     * @param c The matrix on the inside of the multiplication. Assumed to be diagonal. Not modified.
     * @param d Where the results of the operation are stored. Modified.
     */
-   public static void multAddInner(double a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d)
+   public static void multAddInner(double a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d)
    {
       if (b == c || c == d)
          throw new IllegalArgumentException("Neither 'b' or 'c' can be the same matrix as 'd'");
@@ -731,7 +730,7 @@ public class DiagonalMatrixTools
          multAddInner_vector(a, b, c, d);
    }
 
-   private static void multAddInner_matrix(double a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d)
+   private static void multAddInner_matrix(double a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d)
    {
       if (b.numRows != c.numCols)
          throw new MatrixDimensionException("The 'b' and 'c' matrices do not have compatible dimensions");
@@ -770,7 +769,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void multAddInner_vector(double a, RowD1Matrix64F b, D1Matrix64F c, RowD1Matrix64F d)
+   private static void multAddInner_vector(double a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d)
    {
       for (int i = 0; i < b.numCols; i++)
       {
@@ -822,7 +821,7 @@ public class DiagonalMatrixTools
     * @param b The scalar multiplier of the inner product multiplication.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void multOuter(RowD1Matrix64F a, double b, RowD1Matrix64F c)
+   public static void multOuter(DMatrix1Row a, double b, DMatrix1Row c)
    {
       if (a == c)
          throw new IllegalArgumentException("'a' cannot be the same matrix as 'c'");
@@ -870,7 +869,7 @@ public class DiagonalMatrixTools
     * @param b The matrix on the inside of the multiplication. Assumed to be diagonal. Not modified.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void multOuter(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   public static void multOuter(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a == c)
          throw new IllegalArgumentException("Neither 'a' or 'b' can be the same matrix as 'c'");
@@ -885,7 +884,7 @@ public class DiagonalMatrixTools
          multOuter_vector(a, b, c);
    }
 
-   private static void multOuter_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c)
+   private static void multOuter_matrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       if (a.numCols != b.numCols)
          throw new MatrixDimensionException("The 'a' and 'b' matrices do not have compatible dimensions");
@@ -910,7 +909,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void multOuter_vector(RowD1Matrix64F a, D1Matrix64F b, RowD1Matrix64F c)
+   private static void multOuter_vector(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c)
    {
       for (int i = 0; i < a.numRows; i++)
       {
@@ -948,7 +947,7 @@ public class DiagonalMatrixTools
     * @param b The scalar multiplier of the outer operation.
     * @param c Where the results of the operation are stored. Modified.
     */
-   public static void multInner(RowD1Matrix64F a, double b, RowD1Matrix64F c)
+   public static void multInner(DMatrix1Row a, double b, DMatrix1Row c)
    {
       if (a == c)
          throw new IllegalArgumentException("'a' cannot be the same matrix as 'c'");
@@ -992,7 +991,7 @@ public class DiagonalMatrixTools
     * @param c The right matrix in the multiplication operation. Not modified.
     * @param d Where the results of the operation are stored. Modified.
     */
-   public static void innerDiagonalMult(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d)
+   public static void innerDiagonalMult(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d)
    {
       if (a == c || b == c || c == d)
          throw new IllegalArgumentException("Neither 'a', 'b', or 'c' can be the same matrix as 'd'");
@@ -1007,7 +1006,7 @@ public class DiagonalMatrixTools
          innerDiagonalMult_vector(a, b, c, d);
    }
 
-   private static void innerDiagonalMult_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d)
+   private static void innerDiagonalMult_matrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d)
    {
       if (b.numCols != c.numRows)
          throw new MatrixDimensionException("The 'b' and 'c' matrices do not have compatible dimensions");
@@ -1038,7 +1037,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void innerDiagonalMult_vector(RowD1Matrix64F a, D1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d)
+   private static void innerDiagonalMult_vector(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d)
    {
       if (a.numCols != c.numRows)
          throw new MatrixDimensionException("The 'a' and 'c' matrices do not have compatible dimensions");
@@ -1087,7 +1086,7 @@ public class DiagonalMatrixTools
     * @param c The right matrix in the multiplication operation. Not modified.
     * @param d Where the results of the operation are stored. Modified.
     */
-   public static void innerDiagonalMultTransA(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d)
+   public static void innerDiagonalMultTransA(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d)
    {
       if (a == c || b == c || c == d)
          throw new IllegalArgumentException("Neither 'a', 'b', or 'c' can be the same matrix as 'd'");
@@ -1102,7 +1101,7 @@ public class DiagonalMatrixTools
          innerDiagonalMultTransA_vector(a, b, c, d);
    }
 
-   private static void innerDiagonalMultTransA_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d)
+   private static void innerDiagonalMultTransA_matrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d)
    {
       if (b.numCols != c.numRows)
          throw new MatrixDimensionException("The 'b' and 'c' matrices do not have compatible dimensions");
@@ -1134,7 +1133,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void innerDiagonalMultTransA_vector(RowD1Matrix64F a, D1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d)
+   private static void innerDiagonalMultTransA_vector(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d)
    {
       if (a.numRows != c.numRows)
          throw new MatrixDimensionException("The 'a' and 'c' matrices do not have compatible dimensions");
@@ -1184,7 +1183,7 @@ public class DiagonalMatrixTools
     * @param c The right matrix in the multiplication operation. Not modified.
     * @param d Where the results of the operation are stored. Modified.
     */
-   public static void innerDiagonalMultAddTransA(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d)
+   public static void innerDiagonalMultAddTransA(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d)
    {
       if (a == c || b == c || c == d)
          throw new IllegalArgumentException("Neither 'a', 'b', or 'c' can be the same matrix as 'd'");
@@ -1199,7 +1198,7 @@ public class DiagonalMatrixTools
          innerDiagonalMultAddTransA_vector(a, b, c, d);
    }
 
-   private static void innerDiagonalMultAddTransA_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d)
+   private static void innerDiagonalMultAddTransA_matrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d)
    {
       if (b.numCols != c.numRows)
          throw new MatrixDimensionException("The 'b' and 'c' matrices do not have compatible dimensions");
@@ -1231,7 +1230,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void innerDiagonalMultAddTransA_vector(RowD1Matrix64F a, D1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d)
+   private static void innerDiagonalMultAddTransA_vector(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d)
    {
       if (a.numRows != c.numRows)
          throw new MatrixDimensionException("The 'b' and 'c' matrices do not have compatible dimensions");
@@ -1284,7 +1283,7 @@ public class DiagonalMatrixTools
     * @param rowStart the start row to write to of the 'd' matrix.
     * @param colStart the start column to write to fo the 'd' matrix.
     */
-   public static void innerDiagonalMultAddBlockTransA(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d, int rowStart, int colStart)
+   public static void innerDiagonalMultAddBlockTransA(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d, int rowStart, int colStart)
    {
       if (a == c || b == c || c == d)
          throw new IllegalArgumentException("Neither 'a', 'b', or 'c' can be the same matrix as 'd'");
@@ -1299,7 +1298,7 @@ public class DiagonalMatrixTools
          innerDiagonalMultAddBlockTransA_vector(a, b, c, d, rowStart, colStart);
    }
 
-   private static void innerDiagonalMultAddBlockTransA_matrix(RowD1Matrix64F a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d, int rowStart,
+   private static void innerDiagonalMultAddBlockTransA_matrix(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d, int rowStart,
                                                               int colStart)
    {
       if (b.numCols != c.numRows)
@@ -1331,7 +1330,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void innerDiagonalMultAddBlockTransA_vector(RowD1Matrix64F a, D1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d, int rowStart, int colStart)
+   private static void innerDiagonalMultAddBlockTransA_vector(DMatrix1Row a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d, int rowStart, int colStart)
    {
       if (a.numRows != c.numRows)
          throw new MatrixDimensionException("The 'b' and 'c' matrices do not have compatible dimensions");
@@ -1384,7 +1383,7 @@ public class DiagonalMatrixTools
     * @param rowStart The start row of matrix 'e' to write to.
     * @param colStart The start col of matrix 'e' to write to.
     */
-   public static void innerDiagonalMultAddBlockTransA(double a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d, RowD1Matrix64F e, int rowStart,
+   public static void innerDiagonalMultAddBlockTransA(double a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d, DMatrix1Row e, int rowStart,
                                                       int colStart)
    {
       if (b == d || c == d || d == e)
@@ -1400,7 +1399,7 @@ public class DiagonalMatrixTools
          innerDiagonalMultAddBlockTransA_vector(a, b, c, d, e, rowStart, colStart);
    }
 
-   private static void innerDiagonalMultAddBlockTransA_matrix(double a, RowD1Matrix64F b, RowD1Matrix64F c, RowD1Matrix64F d, RowD1Matrix64F e, int rowStart,
+   private static void innerDiagonalMultAddBlockTransA_matrix(double a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d, DMatrix1Row e, int rowStart,
                                                               int colStart)
    {
       if (c.numCols != d.numRows)
@@ -1432,7 +1431,7 @@ public class DiagonalMatrixTools
       }
    }
 
-   private static void innerDiagonalMultAddBlockTransA_vector(double a, RowD1Matrix64F b, D1Matrix64F c, RowD1Matrix64F d, RowD1Matrix64F e, int rowStart,
+   private static void innerDiagonalMultAddBlockTransA_vector(double a, DMatrix1Row b, DMatrix1Row c, DMatrix1Row d, DMatrix1Row e, int rowStart,
                                                               int colStart)
    {
       if (b.numRows != d.numRows)

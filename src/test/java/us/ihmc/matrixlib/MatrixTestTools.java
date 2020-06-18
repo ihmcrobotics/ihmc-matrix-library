@@ -2,22 +2,22 @@ package us.ihmc.matrixlib;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.ejml.data.DenseMatrix64F;
+import org.ejml.data.DMatrix;
 
 public class MatrixTestTools
 {
 
-   public static void assertMatrixEquals(DenseMatrix64F expected, DenseMatrix64F actual, double delta)
+   public static void assertMatrixEquals(DMatrix expected, DMatrix actual, double delta)
    {
       MatrixTestTools.assertMatrixEquals("", expected, actual, delta);
    }
 
-   public static void assertMatrixEqualsZero(DenseMatrix64F matrix, double epsilon)
+   public static void assertMatrixEqualsZero(DMatrix matrix, double epsilon)
    {
       MatrixTestTools.assertMatrixEqualsZero("", matrix, epsilon);
    }
 
-   public static void assertMatrixEqualsZero(String message, DenseMatrix64F matrix, double epsilon)
+   public static void assertMatrixEqualsZero(String message, DMatrix matrix, double epsilon)
    {
       int numberOfRows = matrix.getNumRows();
       int numberOfColumns = matrix.getNumCols();
@@ -31,7 +31,7 @@ public class MatrixTestTools
       }
    }
 
-   public static void assertMatrixEquals(String message, DenseMatrix64F expected, DenseMatrix64F actual, double delta)
+   public static void assertMatrixEquals(String message, DMatrix expected, DMatrix actual, double delta)
    {
       assertEquals(expected.getNumRows(), actual.getNumRows(), message);
       assertEquals(expected.getNumCols(), actual.getNumCols(), message);

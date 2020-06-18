@@ -9,10 +9,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.CommonOps;
-import org.ejml.ops.MatrixFeatures;
-import org.ejml.ops.RandomMatrices;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.CommonOps_DDRM;
+import org.ejml.dense.row.MatrixFeatures_DDRM;
+import org.ejml.dense.row.RandomMatrices_DDRM;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.commons.RandomNumbers;
@@ -25,7 +25,7 @@ public class MatrixToolsTest
    @Test
    public void testSetToNaNDenseMatrix()
    {
-      DenseMatrix64F test = new DenseMatrix64F(3, 3);
+      DMatrixRMaj test = new DMatrixRMaj(3, 3);
       MatrixTools.setToNaN(test);
 
       for (int i = 0; i < 3; i++)
@@ -40,7 +40,7 @@ public class MatrixToolsTest
    @Test
    public void testSetToZeroDenseMatrix()
    {
-      DenseMatrix64F test = new DenseMatrix64F(3, 3);
+      DMatrixRMaj test = new DMatrixRMaj(3, 3);
       MatrixTools.setToZero(test);
 
       for (int i = 0; i < 3; i++)
@@ -55,7 +55,7 @@ public class MatrixToolsTest
    @Test
    public void testSetMatrixColumnFromArrayDenseMatrix()
    {
-      DenseMatrix64F test = new DenseMatrix64F(2, 2);
+      DMatrixRMaj test = new DMatrixRMaj(2, 2);
 
       double[] col = new double[] {3.0, 4.0};
 
@@ -70,9 +70,9 @@ public class MatrixToolsTest
    public void testDiffDenseMatrixIntIntDenseMatrix()
    {
       double[][] vals = new double[][] {{1.0}, {2.0}, {4.0}, {8.0}, {16.0}, {32.0}};
-      DenseMatrix64F test = new DenseMatrix64F(vals);
+      DMatrixRMaj test = new DMatrixRMaj(vals);
 
-      DenseMatrix64F res = new DenseMatrix64F(2, 1);
+      DMatrixRMaj res = new DMatrixRMaj(2, 1);
 
       MatrixTools.diff(test, 2, 3, res);
 
@@ -86,7 +86,7 @@ public class MatrixToolsTest
    {
       double[] vals = new double[] {1.0, 3.0, 4.0, 9.0, 16.0, 32.0};
       double[] expected = new double[] {2.0, 1.0, 5.0, 7.0, 16.0};
-      DenseMatrix64F res = new DenseMatrix64F(5, 1);
+      DMatrixRMaj res = new DMatrixRMaj(5, 1);
 
       MatrixTools.diff(vals, res);
 
@@ -101,7 +101,7 @@ public class MatrixToolsTest
    {
       double[] vals = new double[] {Double.NaN, Double.NaN, 1.0, 3.0, 4.0, 9.0, 16.0, 32.0, Double.NaN};
       double[] expected = new double[] {2.0, 1.0, 5.0, 7.0, 16.0};
-      DenseMatrix64F res = new DenseMatrix64F(5, 1);
+      DMatrixRMaj res = new DMatrixRMaj(5, 1);
 
       MatrixTools.diff(vals, 2, 6, res);
 
@@ -119,9 +119,9 @@ public class MatrixToolsTest
       {
          int numRows = RandomNumbers.nextInt(random, 1, 100);
          int numCols = RandomNumbers.nextInt(random, 1, 100);
-         DenseMatrix64F randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
+         DMatrixRMaj randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
          int indexOfRowToRemove = RandomNumbers.nextInt(random, 0, randomMatrix.getNumRows() - 1);
-         DenseMatrix64F expectedMatrix = new DenseMatrix64F(numRows - 1, numCols);
+         DMatrixRMaj expectedMatrix = new DMatrixRMaj(numRows - 1, numCols);
 
          for (int rowIndex = 0; rowIndex < numRows - 1; rowIndex++)
          {
@@ -134,10 +134,10 @@ public class MatrixToolsTest
             }
          }
 
-         DenseMatrix64F matrixToTest = new DenseMatrix64F(randomMatrix);
+         DMatrixRMaj matrixToTest = new DMatrixRMaj(randomMatrix);
          MatrixTools.removeRow(matrixToTest, indexOfRowToRemove);
 
-         boolean areMatricesEqual = MatrixFeatures.isEquals(expectedMatrix, matrixToTest, 1.0e-10);
+         boolean areMatricesEqual = MatrixFeatures_DDRM.isEquals(expectedMatrix, matrixToTest, 1.0e-10);
          assertTrue(areMatricesEqual);
       }
    }
@@ -150,12 +150,12 @@ public class MatrixToolsTest
       {
          int numRows = RandomNumbers.nextInt(random, 1, 100);
          int numCols = RandomNumbers.nextInt(random, 1, 100);
-         DenseMatrix64F randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
-         DenseMatrix64F randomRow = RandomMatrices.createRandom(1, numCols, 1.0, 100.0, random);
+         DMatrixRMaj randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
+         DMatrixRMaj randomRow = RandomMatrices_DDRM.rectangle(1, numCols, 1.0, 100.0, random);
          int indexOfRowToSet = RandomNumbers.nextInt(random, 0, numRows - 1);
 
-         DenseMatrix64F expectedMatrix = new DenseMatrix64F(randomMatrix);
-         DenseMatrix64F matrixToTest = new DenseMatrix64F(randomMatrix);
+         DMatrixRMaj expectedMatrix = new DMatrixRMaj(randomMatrix);
+         DMatrixRMaj matrixToTest = new DMatrixRMaj(randomMatrix);
 
          for (int j = 0; j < numCols; j++)
             expectedMatrix.set(indexOfRowToSet, j, randomRow.get(0, j));
@@ -165,13 +165,13 @@ public class MatrixToolsTest
 
          numRows = RandomNumbers.nextInt(random, 1, 100);
          numCols = RandomNumbers.nextInt(random, 1, 100);
-         randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
-         randomRow = RandomMatrices.createRandom(1, numCols, 1.0, 100.0, random);
+         randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
+         randomRow = RandomMatrices_DDRM.rectangle(1, numCols, 1.0, 100.0, random);
          indexOfRowToSet = RandomNumbers.nextInt(random, 0, numRows - 1);
          double randomMultiplier = RandomNumbers.nextDouble(random, 1, 100);
 
-         expectedMatrix = new DenseMatrix64F(randomMatrix);
-         matrixToTest = new DenseMatrix64F(randomMatrix);
+         expectedMatrix = new DMatrixRMaj(randomMatrix);
+         matrixToTest = new DMatrixRMaj(randomMatrix);
          for (int j = 0; j < numCols; j++)
             expectedMatrix.set(indexOfRowToSet, j, randomMultiplier * randomRow.get(0, j));
 
@@ -181,13 +181,13 @@ public class MatrixToolsTest
          numRows = RandomNumbers.nextInt(random, 1, 100);
          int numOriginRows = RandomNumbers.nextInt(random, 1, 100);
          numCols = RandomNumbers.nextInt(random, 1, 100);
-         randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
-         randomRow = RandomMatrices.createRandom(numOriginRows, numCols, 1.0, 100.0, random);
+         randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
+         randomRow = RandomMatrices_DDRM.rectangle(numOriginRows, numCols, 1.0, 100.0, random);
          indexOfRowToSet = RandomNumbers.nextInt(random, 0, numRows - 1);
          int indexOfOriginRow = RandomNumbers.nextInt(random, 0, numOriginRows - 1);
 
-         expectedMatrix = new DenseMatrix64F(randomMatrix);
-         matrixToTest = new DenseMatrix64F(randomMatrix);
+         expectedMatrix = new DMatrixRMaj(randomMatrix);
+         matrixToTest = new DMatrixRMaj(randomMatrix);
          for (int j = 0; j < numCols; j++)
             expectedMatrix.set(indexOfRowToSet, j, randomRow.get(indexOfOriginRow, j));
 
@@ -197,15 +197,15 @@ public class MatrixToolsTest
          numRows = RandomNumbers.nextInt(random, 1, 100);
          numOriginRows = RandomNumbers.nextInt(random, 1, 100);
          numCols = RandomNumbers.nextInt(random, 1, 100);
-         randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
-         randomRow = RandomMatrices.createRandom(numOriginRows, numCols, 1.0, 100.0, random);
+         randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
+         randomRow = RandomMatrices_DDRM.rectangle(numOriginRows, numCols, 1.0, 100.0, random);
          indexOfRowToSet = RandomNumbers.nextInt(random, 0, numRows - 1);
          indexOfOriginRow = RandomNumbers.nextInt(random, 0, numOriginRows - 1);
 
          randomMultiplier = RandomNumbers.nextDouble(random, 1, 100);
 
-         expectedMatrix = new DenseMatrix64F(randomMatrix);
-         matrixToTest = new DenseMatrix64F(randomMatrix);
+         expectedMatrix = new DMatrixRMaj(randomMatrix);
+         matrixToTest = new DMatrixRMaj(randomMatrix);
          for (int j = 0; j < numCols; j++)
             expectedMatrix.set(indexOfRowToSet, j, randomMultiplier * randomRow.get(indexOfOriginRow, j));
 
@@ -215,15 +215,15 @@ public class MatrixToolsTest
          numRows = RandomNumbers.nextInt(random, 1, 100);
          numOriginRows = RandomNumbers.nextInt(random, 1, 100);
          numCols = RandomNumbers.nextInt(random, 1, 100);
-         randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
-         randomRow = RandomMatrices.createRandom(numOriginRows, numCols, 1.0, 100.0, random);
+         randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
+         randomRow = RandomMatrices_DDRM.rectangle(numOriginRows, numCols, 1.0, 100.0, random);
 
          int numOfRowsToSet = RandomNumbers.nextInt(random, 1, Math.min(numOriginRows, numRows));
          int[] originRowIndices = RandomNumbers.nextIntArray(random, numOfRowsToSet, 1, numOriginRows - 1);
          int[] destRowIndices = RandomNumbers.nextIntArray(random, numOfRowsToSet, 1, numRows - 1);
 
-         expectedMatrix = new DenseMatrix64F(randomMatrix);
-         matrixToTest = new DenseMatrix64F(randomMatrix);
+         expectedMatrix = new DMatrixRMaj(randomMatrix);
+         matrixToTest = new DMatrixRMaj(randomMatrix);
          for (int j = 0; j < numCols; j++)
          {
             for (int k = 0; k < numOfRowsToSet; k++)
@@ -243,12 +243,12 @@ public class MatrixToolsTest
       {
          int numRows = RandomNumbers.nextInt(random, 1, 100);
          int numCols = RandomNumbers.nextInt(random, 1, 100);
-         DenseMatrix64F randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
-         DenseMatrix64F randomRow = RandomMatrices.createRandom(1, numCols, 1.0, 100.0, random);
+         DMatrixRMaj randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
+         DMatrixRMaj randomRow = RandomMatrices_DDRM.rectangle(1, numCols, 1.0, 100.0, random);
          int indexOfRowToAdd = RandomNumbers.nextInt(random, 0, numRows - 1);
 
-         DenseMatrix64F expectedMatrix = new DenseMatrix64F(randomMatrix);
-         DenseMatrix64F matrixToTest = new DenseMatrix64F(randomMatrix);
+         DMatrixRMaj expectedMatrix = new DMatrixRMaj(randomMatrix);
+         DMatrixRMaj matrixToTest = new DMatrixRMaj(randomMatrix);
 
          for (int j = 0; j < numCols; j++)
             expectedMatrix.add(indexOfRowToAdd, j, randomRow.get(0, j));
@@ -258,13 +258,13 @@ public class MatrixToolsTest
 
          numRows = RandomNumbers.nextInt(random, 1, 100);
          numCols = RandomNumbers.nextInt(random, 1, 100);
-         randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
-         randomRow = RandomMatrices.createRandom(1, numCols, 1.0, 100.0, random);
+         randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
+         randomRow = RandomMatrices_DDRM.rectangle(1, numCols, 1.0, 100.0, random);
          indexOfRowToAdd = RandomNumbers.nextInt(random, 0, numRows - 1);
          double randomMultiplier = RandomNumbers.nextDouble(random, 1, 100);
 
-         expectedMatrix = new DenseMatrix64F(randomMatrix);
-         matrixToTest = new DenseMatrix64F(randomMatrix);
+         expectedMatrix = new DMatrixRMaj(randomMatrix);
+         matrixToTest = new DMatrixRMaj(randomMatrix);
          for (int j = 0; j < numCols; j++)
             expectedMatrix.add(indexOfRowToAdd, j, randomMultiplier * randomRow.get(0, j));
 
@@ -274,13 +274,13 @@ public class MatrixToolsTest
          numRows = RandomNumbers.nextInt(random, 1, 100);
          int numOriginRows = RandomNumbers.nextInt(random, 1, 100);
          numCols = RandomNumbers.nextInt(random, 1, 100);
-         randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
-         randomRow = RandomMatrices.createRandom(numOriginRows, numCols, 1.0, 100.0, random);
+         randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
+         randomRow = RandomMatrices_DDRM.rectangle(numOriginRows, numCols, 1.0, 100.0, random);
          indexOfRowToAdd = RandomNumbers.nextInt(random, 0, numRows - 1);
          int indexOfOriginRow = RandomNumbers.nextInt(random, 0, numOriginRows - 1);
 
-         expectedMatrix = new DenseMatrix64F(randomMatrix);
-         matrixToTest = new DenseMatrix64F(randomMatrix);
+         expectedMatrix = new DMatrixRMaj(randomMatrix);
+         matrixToTest = new DMatrixRMaj(randomMatrix);
          for (int j = 0; j < numCols; j++)
             expectedMatrix.add(indexOfRowToAdd, j, randomRow.get(indexOfOriginRow, j));
 
@@ -290,15 +290,15 @@ public class MatrixToolsTest
          numRows = RandomNumbers.nextInt(random, 1, 100);
          numOriginRows = RandomNumbers.nextInt(random, 1, 100);
          numCols = RandomNumbers.nextInt(random, 1, 100);
-         randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
-         randomRow = RandomMatrices.createRandom(numOriginRows, numCols, 1.0, 100.0, random);
+         randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
+         randomRow = RandomMatrices_DDRM.rectangle(numOriginRows, numCols, 1.0, 100.0, random);
          indexOfRowToAdd = RandomNumbers.nextInt(random, 0, numRows - 1);
          indexOfOriginRow = RandomNumbers.nextInt(random, 0, numOriginRows - 1);
 
          randomMultiplier = RandomNumbers.nextDouble(random, 1, 100);
 
-         expectedMatrix = new DenseMatrix64F(randomMatrix);
-         matrixToTest = new DenseMatrix64F(randomMatrix);
+         expectedMatrix = new DMatrixRMaj(randomMatrix);
+         matrixToTest = new DMatrixRMaj(randomMatrix);
          for (int j = 0; j < numCols; j++)
             expectedMatrix.add(indexOfRowToAdd, j, randomMultiplier * randomRow.get(indexOfOriginRow, j));
 
@@ -308,15 +308,15 @@ public class MatrixToolsTest
          numRows = RandomNumbers.nextInt(random, 1, 100);
          numOriginRows = RandomNumbers.nextInt(random, 1, 100);
          numCols = RandomNumbers.nextInt(random, 1, 100);
-         randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
-         randomRow = RandomMatrices.createRandom(numOriginRows, numCols, 1.0, 100.0, random);
+         randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
+         randomRow = RandomMatrices_DDRM.rectangle(numOriginRows, numCols, 1.0, 100.0, random);
 
          int numOfRowsToSet = RandomNumbers.nextInt(random, 1, Math.min(numOriginRows, numRows));
          int[] originRowIndices = RandomNumbers.nextIntArray(random, numOfRowsToSet, 1, numOriginRows - 1);
          int[] destRowIndices = RandomNumbers.nextIntArray(random, numOfRowsToSet, 1, numRows - 1);
 
-         expectedMatrix = new DenseMatrix64F(randomMatrix);
-         matrixToTest = new DenseMatrix64F(randomMatrix);
+         expectedMatrix = new DMatrixRMaj(randomMatrix);
+         matrixToTest = new DMatrixRMaj(randomMatrix);
          for (int j = 0; j < numCols; j++)
          {
             for (int k = 0; k < numOfRowsToSet; k++)
@@ -336,9 +336,9 @@ public class MatrixToolsTest
       {
          int numRows = RandomNumbers.nextInt(random, 1, 100);
          int numCols = RandomNumbers.nextInt(random, 1, 100);
-         DenseMatrix64F randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
+         DMatrixRMaj randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
          int indexOfColumnToRemove = RandomNumbers.nextInt(random, 0, randomMatrix.getNumCols() - 1);
-         DenseMatrix64F expectedMatrix = new DenseMatrix64F(numRows, numCols - 1);
+         DMatrixRMaj expectedMatrix = new DMatrixRMaj(numRows, numCols - 1);
 
          for (int colIndex = 0; colIndex < numCols - 1; colIndex++)
          {
@@ -351,25 +351,25 @@ public class MatrixToolsTest
             }
          }
 
-         DenseMatrix64F matrixToTest = new DenseMatrix64F(randomMatrix);
+         DMatrixRMaj matrixToTest = new DMatrixRMaj(randomMatrix);
          MatrixTools.removeColumn(matrixToTest, indexOfColumnToRemove);
 
          for (int colIndex = 0; colIndex < numCols - 1; colIndex++)
          {
-            DenseMatrix64F expectedMatrixColumn = new DenseMatrix64F(numRows, 1);
-            DenseMatrix64F randomMatrixColumn = new DenseMatrix64F(numRows, 1);
+            DMatrixRMaj expectedMatrixColumn = new DMatrixRMaj(numRows, 1);
+            DMatrixRMaj randomMatrixColumn = new DMatrixRMaj(numRows, 1);
 
             int originalColumnIndex = colIndex;
             if (colIndex >= indexOfColumnToRemove)
                originalColumnIndex++;
 
-            CommonOps.extractColumn(expectedMatrix, colIndex, expectedMatrixColumn);
-            CommonOps.extractColumn(randomMatrix, originalColumnIndex, randomMatrixColumn);
-            boolean areMatricesEqual = MatrixFeatures.isEquals(randomMatrixColumn, expectedMatrixColumn, 1.0e-10);
+            CommonOps_DDRM.extractColumn(expectedMatrix, colIndex, expectedMatrixColumn);
+            CommonOps_DDRM.extractColumn(randomMatrix, originalColumnIndex, randomMatrixColumn);
+            boolean areMatricesEqual = MatrixFeatures_DDRM.isEquals(randomMatrixColumn, expectedMatrixColumn, 1.0e-10);
             assertTrue(areMatricesEqual);
          }
 
-         boolean areMatricesEqual = MatrixFeatures.isEquals(expectedMatrix, matrixToTest, 1.0e-10);
+         boolean areMatricesEqual = MatrixFeatures_DDRM.isEquals(expectedMatrix, matrixToTest, 1.0e-10);
          assertTrue(areMatricesEqual);
       }
    }
@@ -382,7 +382,7 @@ public class MatrixToolsTest
       {
          int numRows = RandomNumbers.nextInt(random, 1, 100);
          int numCols = RandomNumbers.nextInt(random, 1, 100);
-         DenseMatrix64F randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
+         DMatrixRMaj randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
          int randomNumberOfZeroRows = RandomNumbers.nextInt(random, 0, 5);
          int[] indicesOfZeroRows = RandomNumbers.nextIntArray(random, randomNumberOfZeroRows, 0, randomMatrix.getNumRows() - 1);
 
@@ -405,14 +405,14 @@ public class MatrixToolsTest
                randomMatrix.set(zeroRowIndex, columnIndex, 0.0);
             }
          }
-         DenseMatrix64F expectedMatrix = new DenseMatrix64F(randomMatrix);
+         DMatrixRMaj expectedMatrix = new DMatrixRMaj(randomMatrix);
          for (int j = indicesOfZeroRows.length - 1; j >= 0; j--)
             MatrixTools.removeRow(expectedMatrix, indicesOfZeroRows[j]);
 
-         DenseMatrix64F matrixToTest = new DenseMatrix64F(randomMatrix);
+         DMatrixRMaj matrixToTest = new DMatrixRMaj(randomMatrix);
          MatrixTools.removeZeroRows(matrixToTest, 1.0e-12);
 
-         boolean areMatricesEqual = MatrixFeatures.isEquals(expectedMatrix, matrixToTest, 1.0e-10);
+         boolean areMatricesEqual = MatrixFeatures_DDRM.isEquals(expectedMatrix, matrixToTest, 1.0e-10);
          assertTrue(areMatricesEqual);
       }
    }
@@ -425,17 +425,17 @@ public class MatrixToolsTest
       {
          int numRows = RandomNumbers.nextInt(random, 1, 100);
          int numCols = RandomNumbers.nextInt(random, 1, 100);
-         DenseMatrix64F randomMatrix = RandomMatrices.createRandom(numRows, numCols, 1.0, 100.0, random);
+         DMatrixRMaj randomMatrix = RandomMatrices_DDRM.rectangle(numRows, numCols, 1.0, 100.0, random);
          double randomAlpha = RandomNumbers.nextDouble(random, 100.0);
-         DenseMatrix64F expectedMatrix = new DenseMatrix64F(numCols, numRows);
-         DenseMatrix64F actualMatrix = new DenseMatrix64F(numCols, numRows);
+         DMatrixRMaj expectedMatrix = new DMatrixRMaj(numCols, numRows);
+         DMatrixRMaj actualMatrix = new DMatrixRMaj(numCols, numRows);
 
-         CommonOps.transpose(randomMatrix, expectedMatrix);
-         CommonOps.scale(randomAlpha, expectedMatrix);
+         CommonOps_DDRM.transpose(randomMatrix, expectedMatrix);
+         CommonOps_DDRM.scale(randomAlpha, expectedMatrix);
 
          MatrixTools.scaleTranspose(randomAlpha, randomMatrix, actualMatrix);
 
-         boolean areMatricesEqual = MatrixFeatures.isEquals(expectedMatrix, actualMatrix, 1.0e-10);
+         boolean areMatricesEqual = MatrixFeatures_DDRM.isEquals(expectedMatrix, actualMatrix, 1.0e-10);
          assertTrue(areMatricesEqual);
       }
    }
@@ -447,7 +447,7 @@ public class MatrixToolsTest
       for (int i = 0; i < 1000; i++)
       {
          int numRows = RandomNumbers.nextInt(random, 3, 100);
-         DenseMatrix64F matrixToTest = RandomMatrices.createRandom(numRows, 1, 1.0, 100.0, random);
+         DMatrixRMaj matrixToTest = RandomMatrices_DDRM.rectangle(numRows, 1, 1.0, 100.0, random);
          FramePoint3D framePointToInsert = EuclidFrameRandomTools.nextFramePoint3D(random, ReferenceFrame.getWorldFrame(), 100.0, 100.0, 100.0);
          int startRowToInsertFrameTuple = RandomNumbers.nextInt(random, 0, numRows - 3);
          framePointToInsert.get(startRowToInsertFrameTuple, matrixToTest);
@@ -465,7 +465,7 @@ public class MatrixToolsTest
       for (int i = 0; i < 1000; i++)
       {
          int numRows = RandomNumbers.nextInt(random, 3, 100);
-         DenseMatrix64F matrixToExtractFrom = RandomMatrices.createRandom(numRows, 1, 1.0, 100.0, random);
+         DMatrixRMaj matrixToExtractFrom = RandomMatrices_DDRM.rectangle(numRows, 1, 1.0, 100.0, random);
          FramePoint3D framePointToTest = new FramePoint3D(null, -1.0, -1.0, -1.0);
          int startRowToExtractFrameTuple = RandomNumbers.nextInt(random, 0, numRows - 3);
          framePointToTest.setIncludingFrame(ReferenceFrame.getWorldFrame(), startRowToExtractFrameTuple, matrixToExtractFrom);
@@ -493,7 +493,7 @@ public class MatrixToolsTest
          // these should not throw exceptions
          try
          {
-            DenseMatrix64F testm = new DenseMatrix64F(rows, columns);
+            DMatrixRMaj testm = new DMatrixRMaj(rows, columns);
             MatrixTools.checkMatrixDimensions(testm, rows, columns);
          }
          catch (Throwable e)
@@ -522,16 +522,16 @@ public class MatrixToolsTest
          int colStart = RandomNumbers.nextInt(random, 0, fullCols - cols);
 
          double scale = RandomNumbers.nextDouble(random, 1000.0);
-         DenseMatrix64F randomMatrixA = RandomMatrices.createRandom(taskSize, rows, -50.0, 50.0, random);
-         DenseMatrix64F randomMatrixB = RandomMatrices.createRandom(taskSize, cols, -50.0, 50.0, random);
+         DMatrixRMaj randomMatrixA = RandomMatrices_DDRM.rectangle(taskSize, rows, -50.0, 50.0, random);
+         DMatrixRMaj randomMatrixB = RandomMatrices_DDRM.rectangle(taskSize, cols, -50.0, 50.0, random);
 
-         DenseMatrix64F solution = RandomMatrices.createRandom(fullRows, fullCols, -50.0, 50.0, random);
-         DenseMatrix64F solutionB = new DenseMatrix64F(solution);
-         DenseMatrix64F expectedSolution = new DenseMatrix64F(solution);
-         DenseMatrix64F expectedSolutionB = new DenseMatrix64F(solution);
+         DMatrixRMaj solution = RandomMatrices_DDRM.rectangle(fullRows, fullCols, -50.0, 50.0, random);
+         DMatrixRMaj solutionB = new DMatrixRMaj(solution);
+         DMatrixRMaj expectedSolution = new DMatrixRMaj(solution);
+         DMatrixRMaj expectedSolutionB = new DMatrixRMaj(solution);
 
-         DenseMatrix64F temp = new DenseMatrix64F(rows, cols);
-         CommonOps.multTransA(randomMatrixA, randomMatrixB, temp);
+         DMatrixRMaj temp = new DMatrixRMaj(rows, cols);
+         CommonOps_DDRM.multTransA(randomMatrixA, randomMatrixB, temp);
          MatrixTools.addMatrixBlock(expectedSolution, rowStart, colStart, temp, 0, 0, rows, cols, 1.0);
          MatrixTools.addMatrixBlock(expectedSolutionB, rowStart, colStart, temp, 0, 0, rows, cols, scale);
 
@@ -561,16 +561,16 @@ public class MatrixToolsTest
          int colStart = RandomNumbers.nextInt(random, 0, fullCols - cols);
 
          double scale = RandomNumbers.nextDouble(random, 1000.0);
-         DenseMatrix64F randomMatrixA = RandomMatrices.createRandom(rows, taskSize, -50.0, 50.0, random);
-         DenseMatrix64F randomMatrixB = RandomMatrices.createRandom(taskSize, cols, -50.0, 50.0, random);
+         DMatrixRMaj randomMatrixA = RandomMatrices_DDRM.rectangle(rows, taskSize, -50.0, 50.0, random);
+         DMatrixRMaj randomMatrixB = RandomMatrices_DDRM.rectangle(taskSize, cols, -50.0, 50.0, random);
 
-         DenseMatrix64F solution = RandomMatrices.createRandom(fullRows, fullCols, -50.0, 50.0, random);
-         DenseMatrix64F solutionB = new DenseMatrix64F(solution);
-         DenseMatrix64F expectedSolution = new DenseMatrix64F(solution);
-         DenseMatrix64F expectedSolutionB = new DenseMatrix64F(solution);
+         DMatrixRMaj solution = RandomMatrices_DDRM.rectangle(fullRows, fullCols, -50.0, 50.0, random);
+         DMatrixRMaj solutionB = new DMatrixRMaj(solution);
+         DMatrixRMaj expectedSolution = new DMatrixRMaj(solution);
+         DMatrixRMaj expectedSolutionB = new DMatrixRMaj(solution);
 
-         DenseMatrix64F temp = new DenseMatrix64F(rows, cols);
-         CommonOps.mult(randomMatrixA, randomMatrixB, temp);
+         DMatrixRMaj temp = new DMatrixRMaj(rows, cols);
+         CommonOps_DDRM.mult(randomMatrixA, randomMatrixB, temp);
          MatrixTools.addMatrixBlock(expectedSolution, rowStart, colStart, temp, 0, 0, rows, cols, 1.0);
          MatrixTools.addMatrixBlock(expectedSolutionB, rowStart, colStart, temp, 0, 0, rows, cols, scale);
 
@@ -598,22 +598,22 @@ public class MatrixToolsTest
          int startRow = RandomNumbers.nextInt(random, 0, fullVariables - variables);
          int startCol = RandomNumbers.nextInt(random, 0, fullVariables - variables);
 
-         DenseMatrix64F diagonal = CommonOps.identity(taskSize, taskSize);
+         DMatrixRMaj diagonal = CommonOps_DDRM.identity(taskSize, taskSize);
          double diagonalValue = RandomNumbers.nextDouble(random, 50.0);
-         DenseMatrix64F randomMatrix = RandomMatrices.createRandom(taskSize, variables, -50.0, 50.0, random);
+         DMatrixRMaj randomMatrix = RandomMatrices_DDRM.rectangle(taskSize, variables, -50.0, 50.0, random);
 
-         DenseMatrix64F expectedSolution = RandomMatrices.createRandom(fullVariables, fullVariables, -50, 50, random);
-         DenseMatrix64F solution = new DenseMatrix64F(expectedSolution);
+         DMatrixRMaj expectedSolution = RandomMatrices_DDRM.rectangle(fullVariables, fullVariables, -50, 50, random);
+         DMatrixRMaj solution = new DMatrixRMaj(expectedSolution);
 
          for (int index = 0; index < taskSize; index++)
          {
             diagonal.set(index, index, diagonalValue);
          }
 
-         DenseMatrix64F tempJtW = new DenseMatrix64F(variables, taskSize);
-         DenseMatrix64F temp = new DenseMatrix64F(variables, variables);
-         CommonOps.multTransA(randomMatrix, diagonal, tempJtW);
-         CommonOps.mult(tempJtW, randomMatrix, temp);
+         DMatrixRMaj tempJtW = new DMatrixRMaj(variables, taskSize);
+         DMatrixRMaj temp = new DMatrixRMaj(variables, variables);
+         CommonOps_DDRM.multTransA(randomMatrix, diagonal, tempJtW);
+         CommonOps_DDRM.mult(tempJtW, randomMatrix, temp);
 
          MatrixTools.addMatrixBlock(expectedSolution, startRow, startCol, temp, 0, 0, variables, variables, 1.0);
 
@@ -636,13 +636,13 @@ public class MatrixToolsTest
          int taskSize = 3;
 
          double diagonalScalar = RandomNumbers.nextDouble(random, 100.0);
-         DenseMatrix64F randomMatrix = RandomMatrices.createRandom(taskSize, variables, -50.0, 50.0, random);
-         DenseMatrix64F solution = RandomMatrices.createRandom(variables, variables, -50.0, 50.0, random);
-         DenseMatrix64F expectedSolution = new DenseMatrix64F(solution);
+         DMatrixRMaj randomMatrix = RandomMatrices_DDRM.rectangle(taskSize, variables, -50.0, 50.0, random);
+         DMatrixRMaj solution = RandomMatrices_DDRM.rectangle(variables, variables, -50.0, 50.0, random);
+         DMatrixRMaj expectedSolution = new DMatrixRMaj(solution);
 
-         DenseMatrix64F tempJtW = new DenseMatrix64F(variables, taskSize);
-         CommonOps.transpose(randomMatrix, tempJtW);
-         CommonOps.multAdd(diagonalScalar, tempJtW, randomMatrix, expectedSolution);
+         DMatrixRMaj tempJtW = new DMatrixRMaj(variables, taskSize);
+         CommonOps_DDRM.transpose(randomMatrix, tempJtW);
+         CommonOps_DDRM.multAdd(diagonalScalar, tempJtW, randomMatrix, expectedSolution);
 
          MatrixTools.multAddInner(diagonalScalar, randomMatrix, solution);
 
@@ -663,13 +663,13 @@ public class MatrixToolsTest
          int taskSize = RandomNumbers.nextInt(random, 1, 100);
 
          double scale = RandomNumbers.nextDouble(random, 100.0);
-         DenseMatrix64F randomMatrix = RandomMatrices.createRandom(taskSize, variables, -50.0, 50.0, random);
-         DenseMatrix64F solution = RandomMatrices.createRandom(variables, variables, -50, 50, random);
-         DenseMatrix64F expectedSolution = new DenseMatrix64F(solution);
+         DMatrixRMaj randomMatrix = RandomMatrices_DDRM.rectangle(taskSize, variables, -50.0, 50.0, random);
+         DMatrixRMaj solution = RandomMatrices_DDRM.rectangle(variables, variables, -50, 50, random);
+         DMatrixRMaj expectedSolution = new DMatrixRMaj(solution);
 
-         DenseMatrix64F tempJtW = new DenseMatrix64F(variables, taskSize);
-         CommonOps.transpose(randomMatrix, tempJtW);
-         CommonOps.multAdd(scale, tempJtW, randomMatrix, expectedSolution);
+         DMatrixRMaj tempJtW = new DMatrixRMaj(variables, taskSize);
+         CommonOps_DDRM.transpose(randomMatrix, tempJtW);
+         CommonOps_DDRM.multAdd(scale, tempJtW, randomMatrix, expectedSolution);
 
          MatrixTools.multAddInner(scale, randomMatrix, solution);
 
@@ -686,14 +686,14 @@ public class MatrixToolsTest
       {
          int numRow = random.nextInt(50) + 1;
          int numCol = random.nextInt(50) + 1;
-         DenseMatrix64F actual = RandomMatrices.createRandom(numRow, numCol, random);
-         DenseMatrix64F expected = new DenseMatrix64F(actual);
+         DMatrixRMaj actual = RandomMatrices_DDRM.rectangle(numRow, numCol, random);
+         DMatrixRMaj expected = new DMatrixRMaj(actual);
 
          int i = random.nextInt(numRow);
          int j = random.nextInt(numRow);
 
-         CommonOps.extract(actual, i, i + 1, 0, numCol, expected, j, 0);
-         CommonOps.extract(actual, j, j + 1, 0, numCol, expected, i, 0);
+         CommonOps_DDRM.extract(actual, i, i + 1, 0, numCol, expected, j, 0);
+         CommonOps_DDRM.extract(actual, j, j + 1, 0, numCol, expected, i, 0);
 
          MatrixTools.swapRows(i, j, actual);
 
@@ -714,14 +714,14 @@ public class MatrixToolsTest
       {
          int numRow = random.nextInt(50) + 1;
          int numCol = random.nextInt(50) + 1;
-         DenseMatrix64F actual = RandomMatrices.createRandom(numRow, numCol, random);
-         DenseMatrix64F expected = new DenseMatrix64F(actual);
+         DMatrixRMaj actual = RandomMatrices_DDRM.rectangle(numRow, numCol, random);
+         DMatrixRMaj expected = new DMatrixRMaj(actual);
 
          int i = random.nextInt(numCol);
          int j = random.nextInt(numCol);
 
-         CommonOps.extract(actual, 0, numRow, i, i + 1, expected, 0, j);
-         CommonOps.extract(actual, 0, numRow, j, j + 1, expected, 0, i);
+         CommonOps_DDRM.extract(actual, 0, numRow, i, i + 1, expected, 0, j);
+         CommonOps_DDRM.extract(actual, 0, numRow, j, j + 1, expected, 0, i);
 
          MatrixTools.swapColumns(i, j, actual);
 
