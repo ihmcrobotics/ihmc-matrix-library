@@ -4,6 +4,8 @@
  *  Created on: Nov 27, 2018
  *      Author: Georg Wiedebach
  */
+// Rename Eigen to EigenIHMCNativeCommonOps to avoid conflicting with other libraries based on Eigen
+#define Eigen EigenIHMCNativeCommonOps
 
 #include <jni.h>
 #include <Eigen/Dense>
@@ -12,7 +14,7 @@
 
 using Eigen::MatrixXd;
 
-JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_mult(JNIEnv *env, jobject thisObj,
+JNIEXPORT void JNICALL Java_us_ihmc_robotics_linearAlgebra_commonOps_NativeCommonOpsWrapper_mult(JNIEnv *env, jobject thisObj,
 		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols, jint bCols)
 {
 	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
@@ -31,7 +33,7 @@ JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_mult(JNIEnv
 	delete resultDataArray;
 }
 
-JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_multQuad(JNIEnv *env, jobject thisObj,
+JNIEXPORT void JNICALL Java_us_ihmc_robotics_linearAlgebra_commonOps_NativeCommonOpsWrapper_multQuad(JNIEnv *env, jobject thisObj,
 		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols)
 {
 	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
@@ -50,7 +52,7 @@ JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_multQuad(JN
 	delete resultDataArray;
 }
 
-JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_invert(JNIEnv *env, jobject thisObj,
+JNIEXPORT void JNICALL Java_us_ihmc_robotics_linearAlgebra_commonOps_NativeCommonOpsWrapper_invert(JNIEnv *env, jobject thisObj,
 		jdoubleArray result, jdoubleArray aData, jint aRows)
 {
 	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
@@ -66,7 +68,7 @@ JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_invert(JNIE
 	delete resultDataArray;
 }
 
-JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_solve(JNIEnv *env, jobject thisObj,
+JNIEXPORT void JNICALL Java_us_ihmc_robotics_linearAlgebra_commonOps_NativeCommonOpsWrapper_solve(JNIEnv *env, jobject thisObj,
 		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows)
 {
 	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
@@ -84,7 +86,7 @@ JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_solve(JNIEn
 	env->ReleaseDoubleArrayElements(bData, bDataArray, 0);
 }
 
-JNIEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_solveCheck(JNIEnv *env, jobject thisObj,
+JNIEXPORT jboolean JNICALL Java_us_ihmc_robotics_linearAlgebra_commonOps_NativeCommonOpsWrapper_solveCheck(JNIEnv *env, jobject thisObj,
 		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows)
 {
 	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
@@ -114,7 +116,7 @@ JNIEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_solveCh
 	}
 }
 
-JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_solveRobust(JNIEnv *env, jobject thisObj,
+JNIEXPORT void JNICALL Java_us_ihmc_robotics_linearAlgebra_commonOps_NativeCommonOpsWrapper_solveRobust(JNIEnv *env, jobject thisObj,
 		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols)
 {
 	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
@@ -133,7 +135,7 @@ JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_solveRobust
 	delete resultDataArray;
 }
 
-JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_solveDamped(JNIEnv *env, jobject thisObj,
+JNIEXPORT void JNICALL Java_us_ihmc_robotics_linearAlgebra_commonOps_NativeCommonOpsWrapper_solveDamped(JNIEnv *env, jobject thisObj,
 		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols, jdouble alpha)
 {
 	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
@@ -153,7 +155,7 @@ JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_solveDamped
 	delete resultDataArray;
 }
 
-JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_projectOnNullspace(JNIEnv *env, jobject thisObj,
+JNIEXPORT void JNICALL Java_us_ihmc_robotics_linearAlgebra_commonOps_NativeCommonOpsWrapper_projectOnNullspace(JNIEnv *env, jobject thisObj,
 		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols, jint bRows, jdouble alpha)
 {
 	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
