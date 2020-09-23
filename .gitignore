@@ -1,5 +1,5 @@
 # Top level directories to ignore
-/build
+/build*
 /classes
 /bin
 /out
