@@ -10,7 +10,7 @@ public class NativeCommonOps
 {
    private static final NativeCommonOpsWrapper nativeCommonOpsWrapper = loadNativeOps();
 
-   static NativeCommonOpsWrapper loadNativeOps()
+   public static NativeCommonOpsWrapper loadNativeOps()
    {
       NativeLibraryLoader.loadLibrary("", "NativeCommonOps");
       return new NativeCommonOpsWrapper();
