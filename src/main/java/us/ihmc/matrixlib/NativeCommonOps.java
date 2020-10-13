@@ -16,6 +16,11 @@ public class NativeCommonOps
       return new NativeCommonOpsWrapper();
    }
 
+   public static void ensureNativeOpsIsLoaded()
+   {
+      // this method is only to preload the class
+   }
+
    /**
     * Computes the matrix multiplication</br>
     * c = a * b
