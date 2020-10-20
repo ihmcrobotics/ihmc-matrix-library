@@ -1,4 +1,4 @@
-package us.ihmc.robotics.linearAlgebra.commonOps;
+package us.ihmc.matrixlib;
 
 public class NativeCommonOpsWrapper
 {

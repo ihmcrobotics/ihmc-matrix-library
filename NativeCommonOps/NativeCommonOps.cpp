@@ -12,164 +12,153 @@
 
 using Eigen::MatrixXd;
 
+typedef Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> JMatrixMap;
+
 JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_mult(JNIEnv *env, jobject thisObj,
-		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols, jint bCols)
+      jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols, jint bCols)
 {
-	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
-	jdouble *bDataArray = env->GetDoubleArrayElements(bData, NULL);
-	MatrixXd A = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(aDataArray, aRows, aCols);
-	MatrixXd B = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(bDataArray, aCols, bCols);
+   jdouble *aDataArray = (jdouble*) env->GetPrimitiveArrayCritical(aData, NULL);
+   jdouble *bDataArray = (jdouble*) env->GetPrimitiveArrayCritical(bData, NULL);
+   jdouble *resultDataArray = (jdouble*) env->GetPrimitiveArrayCritical(result, NULL);
 
-	MatrixXd AB = A * B;
+   JMatrixMap A(aDataArray, aRows, aCols);
+   JMatrixMap B(bDataArray, aCols, bCols);
+   JMatrixMap x(resultDataArray, aRows, bCols);
 
-	jdouble *resultDataArray = new jdouble[aRows * bCols];
-	Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(resultDataArray, aRows, bCols) = AB;
-	env->SetDoubleArrayRegion(result, 0, aRows * bCols, resultDataArray);
+   x.noalias() = A * B;
 
-	env->ReleaseDoubleArrayElements(aData, aDataArray, 0);
-	env->ReleaseDoubleArrayElements(bData, bDataArray, 0);
-	delete resultDataArray;
+   env->ReleasePrimitiveArrayCritical(aData, aDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(bData, bDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(result, resultDataArray, 0);
 }
 
 JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_multQuad(JNIEnv *env, jobject thisObj,
-		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols)
+      jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols)
 {
-	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
-	jdouble *bDataArray = env->GetDoubleArrayElements(bData, NULL);
-	MatrixXd A = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(aDataArray, aRows, aCols);
-	MatrixXd B = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(bDataArray, aRows, aRows);
+   jdouble *aDataArray = (jdouble*) env->GetPrimitiveArrayCritical(aData, NULL);
+   jdouble *bDataArray = (jdouble*) env->GetPrimitiveArrayCritical(bData, NULL);
+   jdouble *resultDataArray = (jdouble*) env->GetPrimitiveArrayCritical(result, NULL);
 
-	MatrixXd AtBA = A.transpose() * B * A;
+   JMatrixMap A(aDataArray, aRows, aCols);
+   JMatrixMap B(bDataArray, aRows, aRows);
+   JMatrixMap x(resultDataArray, aCols, aCols);
 
-	jdouble *resultDataArray = new jdouble[aCols * aCols];
-	Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(resultDataArray, aCols, aCols) = AtBA;
-	env->SetDoubleArrayRegion(result, 0, aCols * aCols, resultDataArray);
+   x.noalias() = A.transpose() * B * A;
 
-	env->ReleaseDoubleArrayElements(aData, aDataArray, 0);
-	env->ReleaseDoubleArrayElements(bData, bDataArray, 0);
-	delete resultDataArray;
+   env->ReleasePrimitiveArrayCritical(aData, aDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(bData, bDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(result, resultDataArray, 0);
 }
 
 JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_invert(JNIEnv *env, jobject thisObj,
-		jdoubleArray result, jdoubleArray aData, jint aRows)
+      jdoubleArray result, jdoubleArray aData, jint aRows)
 {
-	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
-	MatrixXd A = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(aDataArray, aRows, aRows);
+   jdouble *aDataArray = (jdouble*) env->GetPrimitiveArrayCritical(aData, NULL);
+   jdouble *resultDataArray = (jdouble*) env->GetPrimitiveArrayCritical(result, NULL);
 
-	MatrixXd x = A.lu().inverse();
+   JMatrixMap A(aDataArray, aRows, aRows);
+   JMatrixMap x(resultDataArray, aRows, aRows);
 
-	jdouble *resultDataArray = new jdouble[aRows * aRows];
-	Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(resultDataArray, aRows, aRows) = x;
-	env->SetDoubleArrayRegion(result, 0, aRows * aRows, resultDataArray);
+   x.noalias() = A.lu().inverse();
 
-	env->ReleaseDoubleArrayElements(aData, aDataArray, 0);
-	delete resultDataArray;
+   env->ReleasePrimitiveArrayCritical(aData, aDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(result, resultDataArray, 0);
 }
 
 JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_solve(JNIEnv *env, jobject thisObj,
-		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows)
+      jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows)
 {
-	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
-	jdouble *bDataArray = env->GetDoubleArrayElements(bData, NULL);
-	MatrixXd A = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(aDataArray, aRows, aRows);
-	MatrixXd B = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(bDataArray, aRows, 1);
+   jdouble *aDataArray = (jdouble*) env->GetPrimitiveArrayCritical(aData, NULL);
+   jdouble *bDataArray = (jdouble*) env->GetPrimitiveArrayCritical(bData, NULL);
+   jdouble *resultDataArray = (jdouble*) env->GetPrimitiveArrayCritical(result, NULL);
 
-	MatrixXd x = A.lu().solve(B);
+   JMatrixMap A(aDataArray, aRows, aRows);
+   JMatrixMap B(bDataArray, aRows, 1);
+   JMatrixMap x(resultDataArray, aRows, 1);
 
-	jdouble *resultDataArray = new jdouble[aRows];
-	Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(resultDataArray, aRows, 1) = x;
-	env->SetDoubleArrayRegion(result, 0, aRows, resultDataArray);
+   x.noalias() = A.lu().solve(B);
 
-	env->ReleaseDoubleArrayElements(aData, aDataArray, 0);
-	env->ReleaseDoubleArrayElements(bData, bDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(aData, aDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(bData, bDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(result, resultDataArray, 0);
 }
 
 JNIEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_solveCheck(JNIEnv *env, jobject thisObj,
-		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows)
+      jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows)
 {
-	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
-	jdouble *bDataArray = env->GetDoubleArrayElements(bData, NULL);
-	MatrixXd A = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(aDataArray, aRows, aRows);
-	MatrixXd B = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(bDataArray, aRows, 1);
+   jdouble *aDataArray = (jdouble*) env->GetPrimitiveArrayCritical(aData, NULL);
+   jdouble *bDataArray = (jdouble*) env->GetPrimitiveArrayCritical(bData, NULL);
+   jdouble *resultDataArray = (jdouble*) env->GetPrimitiveArrayCritical(result, NULL);
 
-	const Eigen::FullPivLU<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> > fullPivLu = A.fullPivLu();
-	if (fullPivLu.isInvertible())
-	{
-		MatrixXd x = fullPivLu.solve(B);
+   JMatrixMap A(aDataArray, aRows, aRows);
+   JMatrixMap B(bDataArray, aRows, 1);
+   JMatrixMap x(resultDataArray, aRows, 1);
 
-		jdouble *resultDataArray = new jdouble[aRows];
-		Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(resultDataArray, aRows, 1) = x;
-		env->SetDoubleArrayRegion(result, 0, aRows, resultDataArray);
+   auto fullPivLu = A.fullPivLu();
+   bool invertible = fullPivLu.isInvertible();
+   if (invertible)
+      x.noalias() = fullPivLu.solve(B);
 
-		delete resultDataArray;
-		env->ReleaseDoubleArrayElements(aData, aDataArray, 0);
-		env->ReleaseDoubleArrayElements(bData, bDataArray, 0);
-		return true;
-	}
-	else
-	{
-		env->ReleaseDoubleArrayElements(aData, aDataArray, 0);
-		env->ReleaseDoubleArrayElements(bData, bDataArray, 0);
-		return false;
-	}
+   env->ReleasePrimitiveArrayCritical(aData, aDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(bData, bDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(result, resultDataArray, 0);
+
+   return invertible;
 }
 
 JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_solveRobust(JNIEnv *env, jobject thisObj,
-		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols)
+      jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols)
 {
-	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
-	jdouble *bDataArray = env->GetDoubleArrayElements(bData, NULL);
-	MatrixXd A = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(aDataArray, aRows, aCols);
-	MatrixXd B = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(bDataArray, aRows, 1);
+   jdouble *aDataArray = (jdouble*) env->GetPrimitiveArrayCritical(aData, NULL);
+   jdouble *bDataArray = (jdouble*) env->GetPrimitiveArrayCritical(bData, NULL);
+   jdouble *resultDataArray = (jdouble*) env->GetPrimitiveArrayCritical(result, NULL);
 
-	MatrixXd x = A.householderQr().solve(B);
+   JMatrixMap A(aDataArray, aRows, aCols);
+   JMatrixMap B(bDataArray, aRows, 1);
+   JMatrixMap x(resultDataArray, aCols, 1);
 
-	jdouble *resultDataArray = new jdouble[aCols];
-	Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(resultDataArray, aCols, 1) = x;
-	env->SetDoubleArrayRegion(result, 0, aCols, resultDataArray);
+   x.noalias() = A.householderQr().solve(B);
 
-	env->ReleaseDoubleArrayElements(aData, aDataArray, 0);
-	env->ReleaseDoubleArrayElements(bData, bDataArray, 0);
-	delete resultDataArray;
+   env->ReleasePrimitiveArrayCritical(aData, aDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(bData, bDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(result, resultDataArray, 0);
 }
 
 JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_solveDamped(JNIEnv *env, jobject thisObj,
-		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols, jdouble alpha)
+      jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols, jdouble alpha)
 {
-	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
-	jdouble *bDataArray = env->GetDoubleArrayElements(bData, NULL);
-	MatrixXd A = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(aDataArray, aRows, aCols);
-	MatrixXd B = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(bDataArray, aRows, 1);
+   jdouble *aDataArray = (jdouble*) env->GetPrimitiveArrayCritical(aData, NULL);
+   jdouble *bDataArray = (jdouble*) env->GetPrimitiveArrayCritical(bData, NULL);
+   jdouble *resultDataArray = (jdouble*) env->GetPrimitiveArrayCritical(result, NULL);
 
-	MatrixXd outer = A * A.transpose() + MatrixXd::Identity(aRows, aRows) * alpha * alpha;
-	MatrixXd x = A.transpose() * outer.llt().solve(B);
+   JMatrixMap A(aDataArray, aRows, aCols);
+   JMatrixMap B(bDataArray, aRows, 1);
+   JMatrixMap x(resultDataArray, aCols, 1);
 
-	jdouble *resultDataArray = new jdouble[aCols];
-	Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(resultDataArray, aCols, 1) = x;
-	env->SetDoubleArrayRegion(result, 0, aCols, resultDataArray);
+   auto outer = A * A.transpose() + MatrixXd::Identity(aRows, aRows) * alpha * alpha;
+   x.noalias() = A.transpose() * outer.llt().solve(B);
 
-	env->ReleaseDoubleArrayElements(aData, aDataArray, 0);
-	env->ReleaseDoubleArrayElements(bData, bDataArray, 0);
-	delete resultDataArray;
+   env->ReleasePrimitiveArrayCritical(aData, aDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(bData, bDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(result, resultDataArray, 0);
 }
 
 JNIEXPORT void JNICALL Java_us_ihmc_matrixlib_NativeCommonOpsWrapper_projectOnNullspace(JNIEnv *env, jobject thisObj,
-		jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols, jint bRows, jdouble alpha)
+      jdoubleArray result, jdoubleArray aData, jdoubleArray bData, jint aRows, jint aCols, jint bRows, jdouble alpha)
 {
-	jdouble *aDataArray = env->GetDoubleArrayElements(aData, NULL);
-	jdouble *bDataArray = env->GetDoubleArrayElements(bData, NULL);
-	MatrixXd A = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(aDataArray, aRows, aCols);
-	MatrixXd B = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(bDataArray, bRows, aCols);
+   jdouble *aDataArray = (jdouble*) env->GetPrimitiveArrayCritical(aData, NULL);
+   jdouble *bDataArray = (jdouble*) env->GetPrimitiveArrayCritical(bData, NULL);
+   jdouble *resultDataArray = (jdouble*) env->GetPrimitiveArrayCritical(result, NULL);
 
-	MatrixXd BtB = B.transpose() * B;
-	MatrixXd outer = BtB + MatrixXd::Identity(aCols, aCols) * alpha * alpha;
-	MatrixXd x = A * (MatrixXd::Identity(aCols, aCols) - outer.llt().solve(BtB));
+   JMatrixMap A(aDataArray, aRows, aCols);
+   JMatrixMap B(bDataArray, bRows, aCols);
+   JMatrixMap x(resultDataArray, aRows, aCols);
 
-	jdouble *resultDataArray = new jdouble[aRows * aCols];
-	Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(resultDataArray, aRows, aCols) = x;
-	env->SetDoubleArrayRegion(result, 0, aRows * aCols, resultDataArray);
+   auto BtB = B.transpose() * B;
+   auto outer = BtB + MatrixXd::Identity(aCols, aCols) * alpha * alpha;
+   x.noalias() = A * (MatrixXd::Identity(aCols, aCols) - outer.llt().solve(BtB));
 
-	env->ReleaseDoubleArrayElements(aData, aDataArray, 0);
-	env->ReleaseDoubleArrayElements(bData, bDataArray, 0);
-	delete resultDataArray;
+   env->ReleasePrimitiveArrayCritical(aData, aDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(bData, bDataArray, 0);
+   env->ReleasePrimitiveArrayCritical(result, resultDataArray, 0);
 }
