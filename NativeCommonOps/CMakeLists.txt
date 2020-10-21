@@ -1,19 +1,33 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
 project(NativeCommonOps)
 
 find_package(JNI REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+find_package(SWIG REQUIRED)
 
 include_directories(${JNI_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+include(${SWIG_USE_FILE})
 
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -s")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(SOURCE_FILES NativeCommonOps.cpp)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/../src/main/resources)
 
-add_library(NativeCommonOps SHARED ${SOURCE_FILES})
-target_link_libraries (NativeCommonOps Eigen3::Eigen)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(SOURCE_FILES NativeCommonOps.cpp NativeMatrix.cpp)
+
+
+
+set_source_files_properties(NativeMatrix.i PROPERTIES CPLUSPLUS ON)
+set_property(SOURCE NativeMatrix.i PROPERTY SWIG_FLAGS "-package" "us.ihmc.matrixlib.jni")
+set(SWIG_OPT_LINKER_FLAGS "")
+swig_add_library(NativeCommonOps TYPE SHARED LANGUAGE java OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src/main/java/us/ihmc/matrixlib/jni" SOURCES NativeMatrix.i ${SOURCE_FILES})
+target_link_libraries(NativeCommonOps Eigen3::Eigen)
+
+
+
+
 
 install(TARGETS NativeCommonOps RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/../src/main/resources LIBRARY DESTINATION ${PROJECT_SOURCE_DIR}/../src/main/resources)
