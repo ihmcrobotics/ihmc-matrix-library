@@ -13,11 +13,19 @@ public:
 
     bool mult(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
+    bool multTransB(NativeMatrixImpl* a, NativeMatrixImpl* b);
+
     bool multQuad(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
     bool invert(NativeMatrixImpl* a);
 
     bool solve(NativeMatrixImpl* a, NativeMatrixImpl* b);
+
+    bool insert(NativeMatrixImpl* src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0);
+
+    void zero();
+
+    bool scale(double scale, NativeMatrixImpl* src);
 
     double* data();
 

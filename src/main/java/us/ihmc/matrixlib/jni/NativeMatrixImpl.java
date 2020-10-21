@@ -47,6 +47,10 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_mult(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
   }
 
+  public boolean multTransB(NativeMatrixImpl a, NativeMatrixImpl b) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_multTransB(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
+  }
+
   public boolean multQuad(NativeMatrixImpl a, NativeMatrixImpl b) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_multQuad(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
   }
@@ -57,6 +61,18 @@ public class NativeMatrixImpl {
 
   public boolean solve(NativeMatrixImpl a, NativeMatrixImpl b) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_solve(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
+  }
+
+  public boolean insert(NativeMatrixImpl src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_insert(swigCPtr, this, NativeMatrixImpl.getCPtr(src), src, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0);
+  }
+
+  public void zero() {
+    NativeMatrixLibraryJNI.NativeMatrixImpl_zero(swigCPtr, this);
+  }
+
+  public boolean scale(double scale, NativeMatrixImpl src) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_scale(swigCPtr, this, scale, NativeMatrixImpl.getCPtr(src), src);
   }
 
   public java.nio.ByteBuffer data() {
