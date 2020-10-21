@@ -3,21 +3,21 @@
 
 #include <Eigen/Dense>
 
-class NativeMatrix
+class NativeMatrixImpl
 {
 public:
-    NativeMatrix();
+    NativeMatrixImpl(int numRows, int numCols);
 
     void resize(int numRows, int numCols);
 
 
-    bool mult(NativeMatrix* a, NativeMatrix* b);
+    bool mult(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
-    bool multQuad(NativeMatrix* a, NativeMatrix* b);
+    bool multQuad(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
-    bool invert(NativeMatrix* a);
+    bool invert(NativeMatrixImpl* a);
 
-    bool solve(NativeMatrix* a, NativeMatrix* b);
+    bool solve(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
     double* data();
 
@@ -30,6 +30,13 @@ public:
     {
         return matrix.cols();
     }
+
+    inline int size()
+    {
+        return matrix.cols() * matrix.rows();
+    }
+
+    void print();
 
 private:
     Eigen::MatrixXd matrix;

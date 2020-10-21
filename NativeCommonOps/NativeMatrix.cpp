@@ -1,17 +1,17 @@
 #include "NativeMatrix.h"
 #include <Eigen/Dense>
+#include <iostream>
 
-
-NativeMatrix::NativeMatrix()
+NativeMatrixImpl::NativeMatrixImpl(int numRows, int numCols) : matrix(numRows, numCols)
 {
 }
 
-void NativeMatrix::resize(int numRows, int numCols)
+void NativeMatrixImpl::resize(int numRows, int numCols)
 {
     matrix.resize(numRows, numCols);
 }
 
-bool NativeMatrix::mult(NativeMatrix *a, NativeMatrix *b)
+bool NativeMatrixImpl::mult(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
     if(a->rows() != rows() || b->cols() != cols() || a->cols() != b->rows())
     {
@@ -23,7 +23,7 @@ bool NativeMatrix::mult(NativeMatrix *a, NativeMatrix *b)
     return true;
 }
 
-bool NativeMatrix::multQuad(NativeMatrix *a, NativeMatrix *b)
+bool NativeMatrixImpl::multQuad(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
     if(a->rows() != b->cols() || b->cols() != b->rows() || rows() != a->cols() || cols() != a->cols())
     {
@@ -36,7 +36,7 @@ bool NativeMatrix::multQuad(NativeMatrix *a, NativeMatrix *b)
     return true;
 }
 
-bool NativeMatrix::invert(NativeMatrix *a)
+bool NativeMatrixImpl::invert(NativeMatrixImpl *a)
 {
     if(a->rows() != a->cols() || rows() != a->rows() || cols() != a->cols() )
     {
@@ -48,7 +48,7 @@ bool NativeMatrix::invert(NativeMatrix *a)
     return true;
 }
 
-bool NativeMatrix::solve(NativeMatrix *a, NativeMatrix *b)
+bool NativeMatrixImpl::solve(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
 
     if(a->rows() != b->rows() || b->cols() != 1 || a->cols() != a->rows() || rows() != a->cols() || cols() != 1)
@@ -62,9 +62,14 @@ bool NativeMatrix::solve(NativeMatrix *a, NativeMatrix *b)
 
 }
 
-double *NativeMatrix::data()
+double *NativeMatrixImpl::data()
 {
     return matrix.data();
+}
+
+void NativeMatrixImpl::print()
+{
+    std::cout << matrix << std::endl;
 }
 
 
