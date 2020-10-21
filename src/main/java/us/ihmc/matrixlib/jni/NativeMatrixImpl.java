@@ -44,11 +44,23 @@ public class NativeMatrixImpl {
   }
 
   public boolean mult(NativeMatrixImpl a, NativeMatrixImpl b) {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_mult(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_mult__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
+  }
+
+  public boolean mult(double scale, NativeMatrixImpl a, NativeMatrixImpl b) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_mult__SWIG_1(swigCPtr, this, scale, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
+  }
+
+  public boolean multAdd(NativeMatrixImpl a, NativeMatrixImpl b) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_multAdd(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
   }
 
   public boolean multTransB(NativeMatrixImpl a, NativeMatrixImpl b) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_multTransB(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
+  }
+
+  public boolean multAddBlock(NativeMatrixImpl a, NativeMatrixImpl b, int rowStart, int colStart) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_multAddBlock(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b, rowStart, colStart);
   }
 
   public boolean multQuad(NativeMatrixImpl a, NativeMatrixImpl b) {
@@ -61,6 +73,10 @@ public class NativeMatrixImpl {
 
   public boolean solve(NativeMatrixImpl a, NativeMatrixImpl b) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_solve(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
+  }
+
+  public boolean solveCheck(NativeMatrixImpl a, NativeMatrixImpl b) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_solveCheck(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
   }
 
   public boolean insert(NativeMatrixImpl src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0) {

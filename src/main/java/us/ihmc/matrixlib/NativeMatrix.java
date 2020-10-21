@@ -131,6 +131,41 @@ public class NativeMatrix
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
    }
+   /**
+    * Computes the matrix multiplication</br>
+    * this = scale * a * b
+    * 
+    * @param a matrix in multiplication
+    * @param b matrix in multiplication
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void mult(double scale, NativeMatrix a, NativeMatrix b)
+   {
+      resize(a.getNumRows(), b.getNumCols());
+      
+      if (!impl.mult(scale, a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   public void multAdd(NativeMatrix a, NativeMatrix b)
+   {
+      
+      if (!impl.multAdd(a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   public void multAddBlock(NativeMatrix a, NativeMatrix b, int rowStart, int colStart)
+   {
+      
+      if (!impl.multAddBlock(a.impl, b.impl, rowStart, colStart))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
 
    /**
     * Computes the matrix multiplication</br>
@@ -207,6 +242,22 @@ public class NativeMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
+   }
+   
+   public boolean solveCheck(NativeMatrix a, NativeMatrix b)
+   {
+      resize(a.getNumCols(), 1);
+      
+      if(impl.solveCheck(a.impl, b.impl))
+      {
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+      
+
    }
 
    public void insert(NativeMatrix src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0)

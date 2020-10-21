@@ -268,7 +268,7 @@ SWIGEXPORT void JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Native
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1mult(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_) {
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1mult_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_) {
   jboolean jresult = 0 ;
   NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
   NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
@@ -284,6 +284,50 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
   arg2 = *(NativeMatrixImpl **)&jarg2; 
   arg3 = *(NativeMatrixImpl **)&jarg3; 
   result = (bool)(arg1)->mult(arg2,arg3);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1mult_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdouble jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  double arg2 ;
+  NativeMatrixImpl *arg3 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg4 = (NativeMatrixImpl *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg3_;
+  (void)jarg4_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = (double)jarg2; 
+  arg3 = *(NativeMatrixImpl **)&jarg3; 
+  arg4 = *(NativeMatrixImpl **)&jarg4; 
+  result = (bool)(arg1)->mult(arg2,arg3,arg4);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1multAdd(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg3 = (NativeMatrixImpl *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  arg3 = *(NativeMatrixImpl **)&jarg3; 
+  result = (bool)(arg1)->multAdd(arg2,arg3);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -305,6 +349,31 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
   arg2 = *(NativeMatrixImpl **)&jarg2; 
   arg3 = *(NativeMatrixImpl **)&jarg3; 
   result = (bool)(arg1)->multTransB(arg2,arg3);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1multAddBlock(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_, jint jarg4, jint jarg5) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg3 = (NativeMatrixImpl *) 0 ;
+  int arg4 ;
+  int arg5 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  arg3 = *(NativeMatrixImpl **)&jarg3; 
+  arg4 = (int)jarg4; 
+  arg5 = (int)jarg5; 
+  result = (bool)(arg1)->multAddBlock(arg2,arg3,arg4,arg5);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -365,6 +434,27 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
   arg2 = *(NativeMatrixImpl **)&jarg2; 
   arg3 = *(NativeMatrixImpl **)&jarg3; 
   result = (bool)(arg1)->solve(arg2,arg3);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1solveCheck(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg3 = (NativeMatrixImpl *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  arg3 = *(NativeMatrixImpl **)&jarg3; 
+  result = (bool)(arg1)->solveCheck(arg2,arg3);
   jresult = (jboolean)result; 
   return jresult;
 }

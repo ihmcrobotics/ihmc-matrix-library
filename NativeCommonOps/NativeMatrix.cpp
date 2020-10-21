@@ -1,6 +1,7 @@
 #include "NativeMatrix.h"
 #include <Eigen/Dense>
 #include <iostream>
+#include <cmath>
 
 NativeMatrixImpl::NativeMatrixImpl(int numRows, int numCols) : matrix(numRows, numCols)
 {
@@ -23,6 +24,30 @@ bool NativeMatrixImpl::mult(NativeMatrixImpl *a, NativeMatrixImpl *b)
     return true;
 }
 
+bool NativeMatrixImpl::mult(double scale, NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->rows() != rows() || b->cols() != cols() || a->cols() != b->rows())
+    {
+        return false;
+    }
+
+    matrix = scale * (a->matrix) * (b->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::multAdd(NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->rows() != rows() || b->cols() != cols() || a->cols() != b->rows())
+    {
+        return false;
+    }
+
+    matrix += (a->matrix) * (b->matrix);
+
+    return true;
+}
+
 bool NativeMatrixImpl::multTransB(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
     if(a->rows() != rows() || b->rows() != cols() || a->cols() != b->cols())
@@ -33,6 +58,27 @@ bool NativeMatrixImpl::multTransB(NativeMatrixImpl *a, NativeMatrixImpl *b)
     matrix = (a->matrix) * (b->matrix.transpose());
 
     return true;
+}
+
+bool NativeMatrixImpl::multAddBlock(NativeMatrixImpl *a, NativeMatrixImpl *b, int rowStart, int colStart)
+{
+    if(a->cols() != b->rows())
+    {
+        return false;
+    }
+
+    if( (rows() - rowStart) < a->rows())
+    {
+        return false;
+    }
+
+    if((cols() - colStart) < b->cols())
+    {
+        return false;
+    }
+
+    matrix.block(rowStart, colStart, a->rows(), b->cols()) += a->matrix * b->matrix;
+
 }
 
 bool NativeMatrixImpl::multQuad(NativeMatrixImpl *a, NativeMatrixImpl *b)
@@ -71,6 +117,28 @@ bool NativeMatrixImpl::solve(NativeMatrixImpl *a, NativeMatrixImpl *b)
     matrix = (a->matrix).lu().solve((b->matrix));
 
     return true;
+
+}
+
+bool NativeMatrixImpl::solveCheck(NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->rows() != b->rows() || b->cols() != 1 || a->cols() != a->rows() || rows() != a->cols() || cols() != 1)
+    {
+        std::cerr << "NativeMatrix::solveCheck: Invalid dimensions" << std::endl;
+        return false;
+    }
+
+    const Eigen::FullPivLU<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> > fullPivLu = a->matrix.fullPivLu();
+    if (fullPivLu.isInvertible())
+    {
+        matrix = fullPivLu.solve(b->matrix);
+        return true;
+    }
+    else
+    {
+        matrix.setConstant(std::nan(""));
+        return false;
+    }
 
 }
 
