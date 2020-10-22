@@ -9,7 +9,7 @@ NativeMatrixImpl::NativeMatrixImpl(int numRows, int numCols) : matrix(numRows, n
 
 void NativeMatrixImpl::resize(int numRows, int numCols)
 {
-    if(numRows == rows() || numCols == cols())
+    if(numRows == rows() && numCols == cols())
     {
         return;
     }
@@ -19,10 +19,7 @@ void NativeMatrixImpl::resize(int numRows, int numCols)
 
 bool NativeMatrixImpl::set(NativeMatrixImpl *a)
 {
-    if(cols() != a->cols() || rows() != a->rows())
-    {
-        return false;
-    }
+    resize(a->rows(), a->cols());
 
     matrix = a->matrix;
 
@@ -49,6 +46,7 @@ bool NativeMatrixImpl::subtract(NativeMatrixImpl *a, NativeMatrixImpl *b)
     {
         return false;
     }
+    resize(a->rows(), a->cols());
 
     matrix = (a->matrix) - (b->matrix);
 
@@ -325,10 +323,7 @@ bool NativeMatrixImpl::containsNaN()
 
 bool NativeMatrixImpl::scale(double scale, NativeMatrixImpl *src)
 {
-    if(cols() != src->cols() || rows() != src->rows())
-    {
-        return false;
-    }
+    resize(src->rows(), src->cols());
 
     matrix = scale * src->matrix;
 

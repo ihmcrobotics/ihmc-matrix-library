@@ -31,6 +31,11 @@ public class NativeMatrix
       this(matrix.getNumRows(), matrix.getNumCols());
       set(matrix);
    }
+   
+   public void reshape(int rows, int cols)
+   {
+      impl.resize(rows, cols);
+   }
 
 
    public void scale(double alpha, DMatrixRMaj matrix)
@@ -376,6 +381,9 @@ public class NativeMatrix
       return impl.isAprrox(solution.impl, precision);
    }
 
-   
+   public String toString()
+   {
+      return "NativeMatrix: " + getNumRows() + " x " + getNumCols();
+   }
 
 }

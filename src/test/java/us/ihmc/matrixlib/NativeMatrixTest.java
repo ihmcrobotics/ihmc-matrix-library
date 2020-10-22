@@ -814,6 +814,27 @@ public class NativeMatrixTest
                   
       }
    }
+   
+   @Test
+   public void testSize()
+   {
+      NativeMatrix nativeA = new NativeMatrix(10, 10);
+      
+      assertEquals(10, nativeA.getNumRows());
+      assertEquals(10, nativeA.getNumCols());
+      
+      for(int r = 0; r < 10; r++)
+      {
+         for(int c = 0; c < 10; c++)
+         {
+            nativeA.reshape(r, c);
+            
+            assertEquals(r, nativeA.getNumRows());
+            assertEquals(c, nativeA.getNumCols());
+         }
+      }
+      
+   }
 
 
 }
