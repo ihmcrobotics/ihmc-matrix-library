@@ -319,6 +319,14 @@ public class NativeMatrix
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
    }
+   
+   public void transpose(NativeMatrix a)
+   {
+      if(!impl.transpose(a.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
 
    /**
     * Computes the solution to the linear equation</br>

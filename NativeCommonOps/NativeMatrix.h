@@ -48,6 +48,8 @@ public:
 
     bool insert(NativeMatrixImpl* src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0);
 
+    bool transpose(NativeMatrixImpl* a);
+
     void zero();
 
     bool containsNaN();

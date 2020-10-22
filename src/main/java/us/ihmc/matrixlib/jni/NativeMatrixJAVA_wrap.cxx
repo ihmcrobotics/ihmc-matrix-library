@@ -673,6 +673,24 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
 }
 
 
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1transpose(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  result = (bool)(arg1)->transpose(arg2);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1zero(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
   

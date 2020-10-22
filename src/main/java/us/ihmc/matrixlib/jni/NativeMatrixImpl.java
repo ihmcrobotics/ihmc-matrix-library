@@ -119,6 +119,10 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_insert(swigCPtr, this, NativeMatrixImpl.getCPtr(src), src, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0);
   }
 
+  public boolean transpose(NativeMatrixImpl a) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_transpose(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a);
+  }
+
   public void zero() {
     NativeMatrixLibraryJNI.NativeMatrixImpl_zero(swigCPtr, this);
   }

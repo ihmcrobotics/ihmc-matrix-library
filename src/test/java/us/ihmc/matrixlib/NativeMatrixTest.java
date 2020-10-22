@@ -560,7 +560,7 @@ public class NativeMatrixTest
          
          NativeMatrix nativeA = new NativeMatrix(A);
          NativeMatrix nativeB = new NativeMatrix(B);
-         NativeMatrix nativeSolution = new NativeMatrix(solution);
+         NativeMatrix nativeSolution = new NativeMatrix(Arows, Bcols);
          
          
          CommonOps_DDRM.mult(scale, A, B, solution);
@@ -596,7 +596,7 @@ public class NativeMatrixTest
          
          NativeMatrix nativeA = new NativeMatrix(A);
          NativeMatrix nativeB = new NativeMatrix(B);
-         NativeMatrix nativeSolution = new NativeMatrix(solution);
+         NativeMatrix nativeSolution = new NativeMatrix(Arows, Acols);
          
          
          CommonOps_DDRM.add(A, B, solution);
@@ -632,13 +632,47 @@ public class NativeMatrixTest
          
          NativeMatrix nativeA = new NativeMatrix(A);
          NativeMatrix nativeB = new NativeMatrix(B);
-         NativeMatrix nativeSolution = new NativeMatrix(solution);
+         NativeMatrix nativeSolution = new NativeMatrix(Arows, Acols);
          
          
          CommonOps_DDRM.subtract(A, B, solution);
          nativeSolution.subtract(nativeA, nativeB);
          
          DMatrixRMaj nativeSolutionDMatrix = new DMatrixRMaj(Arows, Acols);
+         nativeSolution.get(nativeSolutionDMatrix);
+         
+         
+         MatrixTestTools.assertMatrixEquals(solution, nativeSolutionDMatrix, 1.0e-7);
+         
+      }
+   }
+   
+   @Test
+   public void testTranspose()
+   {
+      
+      
+      Random random = new Random(124L);
+      
+      int iters = 100;
+      
+      for (int i = 0; i < iters; i++)
+      {
+         int Arows = RandomNumbers.nextInt(random, 1, 100);
+         int Acols = RandomNumbers.nextInt(random, 1, 100);
+         
+         
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
+         DMatrixRMaj solution = new DMatrixRMaj(Acols, Arows);
+         
+         NativeMatrix nativeA = new NativeMatrix(A);
+         NativeMatrix nativeSolution = new NativeMatrix(Acols, Arows);
+         
+         
+         CommonOps_DDRM.transpose(A, solution);
+         nativeSolution.transpose(nativeA);
+         
+         DMatrixRMaj nativeSolutionDMatrix = new DMatrixRMaj(Acols, Arows);
          nativeSolution.get(nativeSolutionDMatrix);
          
          

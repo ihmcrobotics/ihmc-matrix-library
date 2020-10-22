@@ -273,6 +273,18 @@ bool NativeMatrixImpl::insert(NativeMatrixImpl *src, int srcY0, int srcY1, int s
     return true;
 }
 
+bool NativeMatrixImpl::transpose(NativeMatrixImpl *a)
+{
+    if(rows() != a->cols() || cols() != a->rows())
+    {
+        return false;
+    }
+
+    matrix = a->matrix.transpose();
+
+    return true;
+}
+
 void NativeMatrixImpl::zero()
 {
     matrix.setZero();
