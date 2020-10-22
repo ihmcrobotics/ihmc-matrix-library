@@ -6,10 +6,17 @@
 class NativeMatrixImpl
 {
 public:
+    double nan = std::numeric_limits<double>::quiet_NaN();
+
     NativeMatrixImpl(int numRows, int numCols);
 
     void resize(int numRows, int numCols);
 
+    bool set(NativeMatrixImpl* a);
+
+    bool add(NativeMatrixImpl* a, NativeMatrixImpl* b);
+
+    bool subtract(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
     bool mult(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
@@ -17,7 +24,17 @@ public:
 
     bool multAdd(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
+    bool multTransA(NativeMatrixImpl* a, NativeMatrixImpl* b);
+
+    bool multAddTransA(NativeMatrixImpl* a, NativeMatrixImpl* b);
+
     bool multTransB(NativeMatrixImpl* a, NativeMatrixImpl* b);
+
+    bool multAddTransB(NativeMatrixImpl* a, NativeMatrixImpl* b);
+
+    bool addBlock(NativeMatrixImpl* a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn,
+                  int numberOfRows, int numberOfColumns, double scale);
+
 
     bool multAddBlock(NativeMatrixImpl* a, NativeMatrixImpl* b, int rowStart, int colStart);
 
@@ -33,9 +50,38 @@ public:
 
     void zero();
 
+    bool containsNaN();
+
     bool scale(double scale, NativeMatrixImpl* src);
 
+    bool isAprrox(NativeMatrixImpl* other, double precision);
+
     double* data();
+
+    inline double min()
+    {
+       return matrix.minCoeff();
+    }
+
+    inline double max()
+    {
+        return matrix.maxCoeff();
+    }
+
+    inline double sum()
+    {
+        return matrix.sum();
+    }
+
+    inline double prod()
+    {
+        return matrix.prod();
+    }
+
+    inline void scale(double scale)
+    {
+        matrix *= scale;
+    }
 
     inline int rows()
     {

@@ -9,12 +9,21 @@
 package us.ihmc.matrixlib.jni;
 
 public class NativeMatrixLibraryJNI {
+  public final static native void NativeMatrixImpl_nan_set(long jarg1, NativeMatrixImpl jarg1_, double jarg2);
+  public final static native double NativeMatrixImpl_nan_get(long jarg1, NativeMatrixImpl jarg1_);
   public final static native long new_NativeMatrixImpl(int jarg1, int jarg2);
   public final static native void NativeMatrixImpl_resize(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3);
+  public final static native boolean NativeMatrixImpl_set(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_);
+  public final static native boolean NativeMatrixImpl_add(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
+  public final static native boolean NativeMatrixImpl_subtract(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_mult__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_mult__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, double jarg2, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_);
   public final static native boolean NativeMatrixImpl_multAdd(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
+  public final static native boolean NativeMatrixImpl_multTransA(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
+  public final static native boolean NativeMatrixImpl_multAddTransA(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_multTransB(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
+  public final static native boolean NativeMatrixImpl_multAddTransB(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
+  public final static native boolean NativeMatrixImpl_addBlock(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8, double jarg9);
   public final static native boolean NativeMatrixImpl_multAddBlock(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, int jarg4, int jarg5);
   public final static native boolean NativeMatrixImpl_multQuad(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_invert(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_);
@@ -22,8 +31,15 @@ public class NativeMatrixLibraryJNI {
   public final static native boolean NativeMatrixImpl_solveCheck(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_insert(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8);
   public final static native void NativeMatrixImpl_zero(long jarg1, NativeMatrixImpl jarg1_);
-  public final static native boolean NativeMatrixImpl_scale(long jarg1, NativeMatrixImpl jarg1_, double jarg2, long jarg3, NativeMatrixImpl jarg3_);
+  public final static native boolean NativeMatrixImpl_containsNaN(long jarg1, NativeMatrixImpl jarg1_);
+  public final static native boolean NativeMatrixImpl_scale__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, double jarg2, long jarg3, NativeMatrixImpl jarg3_);
+  public final static native boolean NativeMatrixImpl_isAprrox(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, double jarg3);
   public final static native java.nio.ByteBuffer NativeMatrixImpl_data(long jarg1, NativeMatrixImpl jarg1_);
+  public final static native double NativeMatrixImpl_min(long jarg1, NativeMatrixImpl jarg1_);
+  public final static native double NativeMatrixImpl_max(long jarg1, NativeMatrixImpl jarg1_);
+  public final static native double NativeMatrixImpl_sum(long jarg1, NativeMatrixImpl jarg1_);
+  public final static native double NativeMatrixImpl_prod(long jarg1, NativeMatrixImpl jarg1_);
+  public final static native void NativeMatrixImpl_scale__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, double jarg2);
   public final static native int NativeMatrixImpl_rows(long jarg1, NativeMatrixImpl jarg1_);
   public final static native int NativeMatrixImpl_cols(long jarg1, NativeMatrixImpl jarg1_);
   public final static native int NativeMatrixImpl_size(long jarg1, NativeMatrixImpl jarg1_);

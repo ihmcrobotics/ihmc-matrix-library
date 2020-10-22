@@ -12,6 +12,43 @@ void NativeMatrixImpl::resize(int numRows, int numCols)
     matrix.resize(numRows, numCols);
 }
 
+bool NativeMatrixImpl::set(NativeMatrixImpl *a)
+{
+    if(cols() != a->cols() || rows() != a->rows())
+    {
+        return false;
+    }
+
+    matrix = a->matrix;
+
+    return true;
+}
+
+bool NativeMatrixImpl::add(NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->rows() != rows() || b->cols() != cols() || a->cols() != cols() || b->rows() != rows())
+    {
+        return false;
+    }
+
+    matrix = (a->matrix) + (b->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::subtract(NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->rows() != rows() || b->cols() != cols() || a->cols() != cols() || b->rows() != rows())
+    {
+        return false;
+    }
+
+    matrix = (a->matrix) - (b->matrix);
+
+    return true;
+}
+
+
 bool NativeMatrixImpl::mult(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
     if(a->rows() != rows() || b->cols() != cols() || a->cols() != b->rows())
@@ -48,6 +85,30 @@ bool NativeMatrixImpl::multAdd(NativeMatrixImpl *a, NativeMatrixImpl *b)
     return true;
 }
 
+bool NativeMatrixImpl::multTransA(NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->cols() != rows() || b->cols() != cols() || a->rows() != b->rows())
+    {
+        return false;
+    }
+
+    matrix = (a->matrix.transpose()) * (b->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::multAddTransA(NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->cols() != rows() || b->cols() != cols() || a->rows() != b->rows())
+    {
+        return false;
+    }
+
+    matrix += (a->matrix.transpose()) * (b->matrix);
+
+    return true;
+}
+
 bool NativeMatrixImpl::multTransB(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
     if(a->rows() != rows() || b->rows() != cols() || a->cols() != b->cols())
@@ -57,6 +118,44 @@ bool NativeMatrixImpl::multTransB(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
     matrix = (a->matrix) * (b->matrix.transpose());
 
+    return true;
+}
+
+bool NativeMatrixImpl::multAddTransB(NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->rows() != rows() || b->rows() != cols() || a->cols() != b->cols())
+    {
+        return false;
+    }
+
+    matrix += (a->matrix) * (b->matrix.transpose());
+
+    return true;
+}
+
+bool NativeMatrixImpl::addBlock(NativeMatrixImpl *a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns, double scale)
+{
+    if(rows() < destStartRow + numberOfRows)
+    {
+        return false;
+    }
+
+    if(cols() < destStartColumn + numberOfColumns)
+    {
+        return false;
+    }
+
+    if(a->rows() < srcStartRow + numberOfRows)
+    {
+        return false;
+    }
+
+    if(a->cols() < srcStartColumn + numberOfColumns)
+    {
+        return false;
+    }
+
+    matrix.block(destStartRow, destStartColumn, numberOfRows, numberOfColumns) += scale * a->matrix.block(srcStartRow, srcStartColumn, numberOfRows, numberOfColumns);
     return true;
 }
 
@@ -78,6 +177,8 @@ bool NativeMatrixImpl::multAddBlock(NativeMatrixImpl *a, NativeMatrixImpl *b, in
     }
 
     matrix.block(rowStart, colStart, a->rows(), b->cols()) += a->matrix * b->matrix;
+
+    return true;
 
 }
 
@@ -136,7 +237,7 @@ bool NativeMatrixImpl::solveCheck(NativeMatrixImpl *a, NativeMatrixImpl *b)
     }
     else
     {
-        matrix.setConstant(std::nan(""));
+        matrix.setConstant(nan);
         return false;
     }
 
@@ -177,6 +278,19 @@ void NativeMatrixImpl::zero()
     matrix.setZero();
 }
 
+bool NativeMatrixImpl::containsNaN()
+{
+    for(int i = 0; i < matrix.size(); i++)
+    {
+        if(std::isnan(matrix.data()[i]))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool NativeMatrixImpl::scale(double scale, NativeMatrixImpl *src)
 {
     if(cols() != src->cols() || rows() != src->rows())
@@ -187,6 +301,11 @@ bool NativeMatrixImpl::scale(double scale, NativeMatrixImpl *src)
     matrix = scale * src->matrix;
 
     return true;
+}
+
+bool NativeMatrixImpl::isAprrox(NativeMatrixImpl *other, double precision)
+{
+    return matrix.isApprox(other->matrix, precision);
 }
 
 double *NativeMatrixImpl::data()

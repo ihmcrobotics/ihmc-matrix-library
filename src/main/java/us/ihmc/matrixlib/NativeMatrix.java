@@ -5,6 +5,7 @@ import java.nio.DoubleBuffer;
 import java.util.Random;
 
 import org.ejml.data.DMatrix;
+import org.ejml.data.DMatrixD1;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.RandomMatrices_DDRM;
 
@@ -28,6 +29,18 @@ public class NativeMatrix
    {
       this.impl = new NativeMatrixImpl(rows, cols);
       update();
+   }
+
+   public NativeMatrix(DMatrixRMaj matrix)
+   {
+      this(matrix.getNumRows(), matrix.getNumCols());
+      set(matrix);
+   }
+   
+   public NativeMatrix(NativeMatrix matrix)
+   {
+      this(matrix.getNumRows(), matrix.getNumCols());
+      set(matrix);
    }
 
    private void update()
@@ -64,10 +77,7 @@ public class NativeMatrix
 
    public void set(DMatrix matrix)
    {
-      if (matrix.getNumCols() != cols || matrix.getNumRows() != rows)
-      {
-         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
-      }
+      resize(matrix.getNumRows(), matrix.getNumCols());
 
       data.clear();
       for (int c = 0; c < matrix.getNumCols(); c++)
@@ -78,14 +88,18 @@ public class NativeMatrix
          }
       }
    }
-
-   public void get(DMatrix matrix)
+   
+   public void set(NativeMatrix matrix)
    {
-      if (matrix.getNumCols() != cols || matrix.getNumRows() != rows)
+      if(!impl.set(matrix.impl))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
+   }
 
+   public void get(DMatrixD1 matrix)
+   {      
+      matrix.reshape(rows, cols);
       data.clear();
       for (int c = 0; c < matrix.getNumCols(); c++)
       {
@@ -113,7 +127,44 @@ public class NativeMatrix
       impl.resize(rows, cols);
       update();
    }
+   
+   
 
+   /**
+    * Computes the matrix addition</br>
+    * this = a + b
+    * 
+    * @param a matrix in multiplication
+    * @param b matrix in multiplication
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void add(NativeMatrix a, NativeMatrix b)
+   {
+      resize(a.getNumRows(), a.getNumCols());
+      
+      if (!impl.add(a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   /**
+    * Computes the matrix subtraction</br>
+    * this = a + b
+    * 
+    * @param a matrix in multiplication
+    * @param b matrix in multiplication
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void subtract(NativeMatrix a, NativeMatrix b)
+   {
+      resize(a.getNumRows(), a.getNumCols());
+      
+      if (!impl.subtract(a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
    /**
     * Computes the matrix multiplication</br>
     * this = a * b
@@ -157,11 +208,35 @@ public class NativeMatrix
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
    }
+   public void multAddTransA(NativeMatrix a, NativeMatrix b)
+   {
+      
+      if (!impl.multAddTransA(a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   public void multAddTransB(NativeMatrix a, NativeMatrix b)
+   {
+      
+      if (!impl.multAddTransB(a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
    
    public void multAddBlock(NativeMatrix a, NativeMatrix b, int rowStart, int colStart)
    {
       
       if (!impl.multAddBlock(a.impl, b.impl, rowStart, colStart))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   public void addBlock(NativeMatrix a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns, double scale)
+   {
+      if(!impl.addBlock(a.impl, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns, scale))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
@@ -180,6 +255,24 @@ public class NativeMatrix
       resize(a.getNumRows(), b.getNumRows());
 
       if (!impl.multTransB(a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   /**
+    * Computes the matrix multiplication</br>
+    * this = a' * b
+    * 
+    * @param a matrix in multiplication
+    * @param b matrix in multiplication
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void multTransA(NativeMatrix a, NativeMatrix b)
+   {
+      resize(a.getNumRows(), b.getNumRows());
+
+      if (!impl.multTransA(a.impl, b.impl))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
@@ -287,6 +380,11 @@ public class NativeMatrix
    {
       impl.zero();
    }
+   
+   public boolean containsNaN()
+   {
+      return impl.containsNaN();
+   }
 
    public int getNumRows()
    {
@@ -296,6 +394,31 @@ public class NativeMatrix
    public int getNumCols()
    {
       return cols;
+   }
+   
+   public double min()
+   {
+      return impl.min();
+   }
+   
+   public double max()
+   {
+      return impl.max();
+   }
+   
+   public double sum()
+   {
+      return impl.sum();
+   }
+   
+   public double prod()
+   {
+      return impl.prod();
+   }
+   
+   public void scale(double scale)
+   {
+      impl.scale(scale);
    }
 
    public void print()
@@ -321,5 +444,13 @@ public class NativeMatrix
 
       System.out.println(m.data);
    }
+
+   public boolean isApprox(NativeMatrix solution, double precision)
+   {
+      // TODO Auto-generated method stub
+      return impl.isAprrox(solution.impl, precision);
+   }
+
+   
 
 }
