@@ -105,7 +105,7 @@ public:
 
     inline int size()
     {
-        return matrix.cols() * matrix.rows();
+        return matrix.size();
     }
 
     inline bool set(int row, int col, double value)

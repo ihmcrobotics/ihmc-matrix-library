@@ -250,17 +250,13 @@ public class NativeMatrixTest
       for (int i = 0; i < warmumIterations; i++)
       {
          DMatrixRMaj A = RandomMatrices_DDRM.rectangle(maxSize, maxSize, -100.0, 100.0, random);
-         DMatrixRMaj B = new DMatrixRMaj(maxSize, maxSize);
          
          
          MatrixTools.removeRow(A, 3);
          
 
          NativeMatrix nativeA = new NativeMatrix(maxSize, maxSize);
-         NativeMatrix nativeB = new NativeMatrix(maxSize, maxSize);
          nativeA.set(A);
-         nativeB.removeRow(3);
-         nativeB.get(B);
       }
 
       for (int i = 0; i < iterations; i++)
@@ -274,14 +270,13 @@ public class NativeMatrixTest
          
          NativeMatrix nativeA = new NativeMatrix(aRows, aCols);
 
-         
          int rowToRemove = aRows == 1 ? 0 : random.nextInt(aRows-1);
 
-         nativeTime -= System.nanoTime();
          nativeA.set(A);
+         nativeTime -= System.nanoTime();
          nativeA.removeRow(rowToRemove);
-         nativeA.get(nativeResult);
          nativeTime += System.nanoTime();
+         nativeA.get(nativeResult);
 
          ejmlTime -= System.nanoTime();
          MatrixTools.removeRow(A, rowToRemove);
@@ -311,17 +306,14 @@ public class NativeMatrixTest
       for (int i = 0; i < warmumIterations; i++)
       {
          DMatrixRMaj A = RandomMatrices_DDRM.rectangle(maxSize, maxSize, -100.0, 100.0, random);
-         DMatrixRMaj B = new DMatrixRMaj(maxSize, maxSize);
          
          
          MatrixTools.removeColumn(A, 3);
          
          
          NativeMatrix nativeA = new NativeMatrix(maxSize, maxSize);
-         NativeMatrix nativeB = new NativeMatrix(maxSize, maxSize);
          nativeA.set(A);
-         nativeB.removeColumn(3);
-         nativeB.get(B);
+         nativeA.removeColumn(3);
       }
       
       for (int i = 0; i < iterations; i++)
@@ -338,11 +330,11 @@ public class NativeMatrixTest
          
          int colToRemove = aCols == 1 ? 0 : random.nextInt(aCols-1);
          
-         nativeTime -= System.nanoTime();
          nativeA.set(A);
+         nativeTime -= System.nanoTime();
          nativeA.removeColumn(colToRemove);
-         nativeA.get(nativeResult);
          nativeTime += System.nanoTime();
+         nativeA.get(nativeResult);
          
          ejmlTime -= System.nanoTime();
          MatrixTools.removeColumn(A, colToRemove);

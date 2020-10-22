@@ -312,30 +312,61 @@ bool NativeMatrixImpl::transpose(NativeMatrixImpl *a)
 bool NativeMatrixImpl::removeRow(int rowToRemove)
 {
 
-    int numRows = matrix.rows()-1;
-    int numCols = matrix.cols();
+//    int numRows = matrix.rows()-1;
+//    int numCols = matrix.cols();
 
-    // Specialization for removing the last row
-    if(numRows == 0 && rowToRemove == 0)
-    {
-        new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
-        return true;
-    }
-    else if( rowToRemove < numRows )
-    {
-        matrix.block(rowToRemove,0,numRows-rowToRemove,numCols) = matrix.bottomRows(numRows-rowToRemove);
+//    // Specialization for removing the last row
+//    if(numRows == 0 && rowToRemove == 0)
+//    {
+//        new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
+//        return true;
+//    }
+//    else if( rowToRemove < numRows )
+//    {
+//        matrix.block(rowToRemove,0,numRows-rowToRemove,numCols) = matrix.bottomRows(numRows-rowToRemove);
 
-        // Copy because row-major. This is unfortunate
-        NativeMatrixView view(storage.data(), numRows, numCols);
-        view = matrix.block(0, 0, numRows, numCols).eval();
+//        // Copy because row-major. This is unfortunate
+//        NativeMatrixView view(storage.data(), numRows, numCols);
+//        view = matrix.block(0, 0, numRows, numCols).eval();
 
-        new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
-        return true;
-    }
-    else
+//        new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
+//        return true;
+//    }
+//    else
+//    {
+//        return false;
+//    }
+
+    if(rowToRemove >= rows())
     {
         return false;
     }
+
+    if(rows() == 1)
+    {
+        new (&matrix) NativeMatrixView(storage.data(), rows() - 1, cols());
+        return true;
+    }
+
+    double* data = matrix.data();
+
+    int colIndex = 1;
+    for (int index = rowToRemove + 1; index < size(); index++)
+    {
+       if (index == colIndex * rows() + rowToRemove)
+       {
+          colIndex++;
+       }
+       else
+       {
+          data[index - colIndex] = data[index];
+       }
+    }
+
+    new (&matrix) NativeMatrixView(storage.data(), rows() - 1, cols());
+    return true;
+
+
 }
 
 bool NativeMatrixImpl::removeColumn(int colToRemove)
@@ -359,6 +390,36 @@ bool NativeMatrixImpl::removeColumn(int colToRemove)
     {
         return false;
     }
+
+
+
+//    if (colToRemove >= cols())
+//    {
+//        return false;
+//    }
+
+//    if(cols() == 1)
+//    {
+//        new (&matrix) NativeMatrixView(storage.data(), rows(), 0);
+//        return true;
+//    }
+
+//    for (int rowIndex = 0; rowIndex < rows(); rowIndex++)
+//    {
+//        for(int columnIndex = colToRemove; columnIndex < cols() - 1; columnIndex++)
+//        {
+//            int nextColIndex = columnIndex + 1;
+//            double valueOfNextCol = matrix(rowIndex, nextColIndex);
+//            double valueOfCurrentCol = matrix(rowIndex, columnIndex);
+
+//            matrix(rowIndex, nextColIndex) = valueOfCurrentCol;
+//            matrix(rowIndex, columnIndex) = valueOfNextCol;
+//        }
+
+//    }
+
+//    new (&matrix) NativeMatrixView(storage.data(), rows(), cols() - 1);
+//    return true;
 }
 
 void NativeMatrixImpl::zero()
