@@ -378,6 +378,11 @@ public class NativeMatrix
       return impl.sum();
    }
    
+   public int getNumElements()
+   {
+      return impl.size();
+   }
+   
    public double prod()
    {
       return impl.prod();
