@@ -1,13 +1,6 @@
 package us.ihmc.matrixlib;
 
-import java.nio.ByteOrder;
-import java.nio.DoubleBuffer;
-import java.util.Random;
-
-import org.ejml.data.DMatrix;
-import org.ejml.data.DMatrixD1;
 import org.ejml.data.DMatrixRMaj;
-import org.ejml.dense.row.RandomMatrices_DDRM;
 
 import us.ihmc.matrixlib.jni.NativeMatrixImpl;
 import us.ihmc.tools.nativelibraries.NativeLibraryLoader;
@@ -21,14 +14,10 @@ public class NativeMatrix
 
    private final NativeMatrixImpl impl;
 
-   private int rows;
-   private int cols;
-   private DoubleBuffer data;
 
    public NativeMatrix(int rows, int cols)
    {
       this.impl = new NativeMatrixImpl(rows, cols);
-      update();
    }
 
    public NativeMatrix(DMatrixRMaj matrix)
@@ -43,28 +32,11 @@ public class NativeMatrix
       set(matrix);
    }
 
-   private void update()
-   {
-      this.rows = impl.rows();
-      this.cols = impl.cols();
-      this.data = impl.data().order(ByteOrder.nativeOrder()).asDoubleBuffer();
-   }
 
-   public void scale(double alpha, DMatrix matrix)
+   public void scale(double alpha, DMatrixRMaj matrix)
    {
-      if (matrix.getNumCols() != cols || matrix.getNumRows() != rows)
-      {
-         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
-      }
-
-      data.clear();
-      for (int c = 0; c < matrix.getNumCols(); c++)
-      {
-         for (int r = 0; r < matrix.getNumRows(); r++)
-         {
-            data.put(alpha * matrix.unsafe_get(r, c));
-         }
-      }
+      set(matrix);
+      scale(alpha);
    }
    
    public void scale(double alpha, NativeMatrix matrix)
@@ -75,17 +47,11 @@ public class NativeMatrix
       }
    }
 
-   public void set(DMatrix matrix)
+   public void set(DMatrixRMaj matrix)
    {
-      resize(matrix.getNumRows(), matrix.getNumCols());
-
-      data.clear();
-      for (int c = 0; c < matrix.getNumCols(); c++)
+      if(!impl.set(matrix.data, matrix.numRows, matrix.numCols))
       {
-         for (int r = 0; r < matrix.getNumRows(); r++)
-         {
-            data.put(matrix.unsafe_get(r, c));
-         }
+         throw new IllegalArgumentException("Cannot set matrix.");
       }
    }
    
@@ -97,39 +63,16 @@ public class NativeMatrix
       }
    }
 
-   public void get(DMatrixD1 matrix)
+   public void get(DMatrixRMaj matrix)
    {      
-      matrix.reshape(rows, cols);
-      data.clear();
-      for (int c = 0; c < matrix.getNumCols(); c++)
-      {
-         for (int r = 0; r < matrix.getNumRows(); r++)
-         {
-            matrix.unsafe_set(r, c, data.get());
-         }
-      }
-   }
-
-   public void reshape(int rows, int cols)
-   {
-      resize(rows, cols);
-   }
-
-   public void resize(int rows, int cols)
-   {
+      matrix.reshape(getNumRows(), getNumCols());
       
-      if (rows == this.rows && cols == this.cols)
+      if(!impl.get(matrix.data, matrix.numRows, matrix.numCols))
       {
-         return;
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-//      Thread.dumpStack();
-      System.err.println("Resizing matrix to " + rows + " " + cols);
-
-      impl.resize(rows, cols);
-      update();
+      
    }
-   
    
 
    /**
@@ -141,9 +84,7 @@ public class NativeMatrix
     * @throws IllegalArgumentException if the matrix dimensions are incompatible.
     */
    public void add(NativeMatrix a, NativeMatrix b)
-   {
-      resize(a.getNumRows(), a.getNumCols());
-      
+   {     
       if (!impl.add(a.impl, b.impl))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
@@ -160,8 +101,7 @@ public class NativeMatrix
     */
    public void subtract(NativeMatrix a, NativeMatrix b)
    {
-      resize(a.getNumRows(), a.getNumCols());
-      
+     
       if (!impl.subtract(a.impl, b.impl))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
@@ -177,7 +117,6 @@ public class NativeMatrix
     */
    public void mult(NativeMatrix a, NativeMatrix b)
    {
-      resize(a.getNumRows(), b.getNumCols());
 
       if (!impl.mult(a.impl, b.impl))
       {
@@ -194,7 +133,6 @@ public class NativeMatrix
     */
    public void mult(double scale, NativeMatrix a, NativeMatrix b)
    {
-      resize(a.getNumRows(), b.getNumCols());
       
       if (!impl.mult(scale, a.impl, b.impl))
       {
@@ -254,7 +192,6 @@ public class NativeMatrix
     */
    public void multTransB(NativeMatrix a, NativeMatrix b)
    {
-      resize(a.getNumRows(), b.getNumRows());
 
       if (!impl.multTransB(a.impl, b.impl))
       {
@@ -272,7 +209,6 @@ public class NativeMatrix
     */
    public void multTransA(NativeMatrix a, NativeMatrix b)
    {
-      resize(a.getNumCols(), b.getNumCols());
 
       if (!impl.multTransA(a.impl, b.impl))
       {
@@ -290,7 +226,6 @@ public class NativeMatrix
     */
    public void multQuad(NativeMatrix a, NativeMatrix b)
    {
-      resize(a.getNumCols(), a.getNumCols());
 
       if (!impl.multQuad(a.impl, b.impl))
       {
@@ -313,7 +248,6 @@ public class NativeMatrix
          throw new IllegalArgumentException("Can not invert in place. The result matrix needs to be different from the matrix to invert.");
       }
 
-      resize(a.getNumRows(), a.getNumCols());
       if (!impl.invert(a.impl))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
@@ -339,7 +273,6 @@ public class NativeMatrix
     */
    public void solve(NativeMatrix a, NativeMatrix b)
    {
-      resize(a.getNumCols(), 1);
 
       if (!impl.solve(a.impl, b.impl))
       {
@@ -349,8 +282,7 @@ public class NativeMatrix
    
    public boolean solveCheck(NativeMatrix a, NativeMatrix b)
    {
-      resize(a.getNumCols(), 1);
-      
+           
       if(impl.solveCheck(a.impl, b.impl))
       {
          return true;
@@ -378,22 +310,15 @@ public class NativeMatrix
    
    public double get(int row, int col)
    {
-      if(row >= rows || col >= cols)
-      {
-         throw new IllegalArgumentException("Index out of bounds. Requested (" + row + ", " + col + "). Dimension (" + rows + ", " + cols + ").");
-      }
-      
-      return data.get(col * rows + row);
+      return impl.get(row, col);
    }
    
    public void set(int row, int col, double value)
    {
-      if(row >= rows || col >= cols)
+      if(!impl.set(row, col, value))
       {
-         throw new IllegalArgumentException("Index out of bounds. Requested (" + row + ", " + col + "). Dimension (" + rows + ", " + cols + ").");
+         throw new IllegalArgumentException("Index out of bounds. Requested (" + row + ", " + col + "). Dimension (" + getNumRows() + ", " + getNumCols() + ").");
       }
-      
-      data.put(col * rows + row, value);
    }
    
    public void zero()
@@ -408,12 +333,12 @@ public class NativeMatrix
 
    public int getNumRows()
    {
-      return rows;
+      return impl.rows();
    }
 
    public int getNumCols()
    {
-      return cols;
+      return impl.cols();
    }
    
    public double min()
@@ -444,25 +369,6 @@ public class NativeMatrix
    public void print()
    {
       impl.print();
-   }
-
-   public static void main(String[] args)
-   {
-      NativeMatrix m = new NativeMatrix(5, 10);
-
-      System.out.println("N---");
-      m.print();
-      System.out.println("N---");
-      DMatrixRMaj A = RandomMatrices_DDRM.rectangle(5, 10, new Random());
-      m.set(A);
-      System.out.println("J---");
-      A.print();
-      System.out.println("J---");
-      System.out.println("N---");
-      m.print();
-      System.out.println("N---");
-
-      System.out.println(m.data);
    }
 
    public boolean isApprox(NativeMatrix solution, double precision)

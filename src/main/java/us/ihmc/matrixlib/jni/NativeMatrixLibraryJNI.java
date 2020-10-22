@@ -13,7 +13,7 @@ public class NativeMatrixLibraryJNI {
   public final static native double NativeMatrixImpl_nan_get(long jarg1, NativeMatrixImpl jarg1_);
   public final static native long new_NativeMatrixImpl(int jarg1, int jarg2);
   public final static native void NativeMatrixImpl_resize(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3);
-  public final static native boolean NativeMatrixImpl_set(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_);
+  public final static native boolean NativeMatrixImpl_set__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_);
   public final static native boolean NativeMatrixImpl_add(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_subtract(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_mult__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
@@ -35,7 +35,8 @@ public class NativeMatrixLibraryJNI {
   public final static native boolean NativeMatrixImpl_containsNaN(long jarg1, NativeMatrixImpl jarg1_);
   public final static native boolean NativeMatrixImpl_scale__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, double jarg2, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_isAprrox(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, double jarg3);
-  public final static native java.nio.ByteBuffer NativeMatrixImpl_data(long jarg1, NativeMatrixImpl jarg1_);
+  public final static native boolean NativeMatrixImpl_set__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4);
+  public final static native boolean NativeMatrixImpl_get__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4);
   public final static native double NativeMatrixImpl_min(long jarg1, NativeMatrixImpl jarg1_);
   public final static native double NativeMatrixImpl_max(long jarg1, NativeMatrixImpl jarg1_);
   public final static native double NativeMatrixImpl_sum(long jarg1, NativeMatrixImpl jarg1_);
@@ -44,6 +45,8 @@ public class NativeMatrixLibraryJNI {
   public final static native int NativeMatrixImpl_rows(long jarg1, NativeMatrixImpl jarg1_);
   public final static native int NativeMatrixImpl_cols(long jarg1, NativeMatrixImpl jarg1_);
   public final static native int NativeMatrixImpl_size(long jarg1, NativeMatrixImpl jarg1_);
+  public final static native boolean NativeMatrixImpl_set__SWIG_2(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, double jarg4);
+  public final static native double NativeMatrixImpl_get__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3);
   public final static native void NativeMatrixImpl_print(long jarg1, NativeMatrixImpl jarg1_);
   public final static native void delete_NativeMatrixImpl(long jarg1);
 }

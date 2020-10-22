@@ -52,7 +52,7 @@ public class NativeMatrixImpl {
   }
 
   public boolean set(NativeMatrixImpl a) {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_set(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a);
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_set__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a);
   }
 
   public boolean add(NativeMatrixImpl a, NativeMatrixImpl b) {
@@ -139,9 +139,13 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_isAprrox(swigCPtr, this, NativeMatrixImpl.getCPtr(other), other, precision);
   }
 
-  public java.nio.ByteBuffer data() {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_data(swigCPtr, this);
-}
+  public boolean set(double[] data, int rows, int cols) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_set__SWIG_1(swigCPtr, this, data, rows, cols);
+  }
+
+  public boolean get(double[] data, int rows, int cols) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_get__SWIG_0(swigCPtr, this, data, rows, cols);
+  }
 
   public double min() {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_min(swigCPtr, this);
@@ -173,6 +177,14 @@ public class NativeMatrixImpl {
 
   public int size() {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_size(swigCPtr, this);
+  }
+
+  public boolean set(int row, int col, double value) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_set__SWIG_2(swigCPtr, this, row, col, value);
+  }
+
+  public double get(int row, int col) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_get__SWIG_1(swigCPtr, this, row, col);
   }
 
   public void print() {

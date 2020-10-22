@@ -3,7 +3,7 @@
 %include "typemaps.i"
 %include "various.i"
 
-
+/*
 %typemap(jtype) double* data() "java.nio.ByteBuffer"
 %typemap(jstype) double* data() "java.nio.ByteBuffer"
 %typemap(jni) double* data() "jobject"
@@ -14,6 +14,19 @@
 %typemap(javaout) double* data() {
     return $jnicall;
 }
+*/
+
+%typemap(jtype) double* "double[]"
+%typemap(jstype) double* "double[]"
+%typemap(javain) double* "$javainput"
+%typemap(jni) double* "jdoubleArray"
+%typemap(in) double* {
+    $1 = (double*) jenv->GetPrimitiveArrayCritical($input, NULL);
+}
+%typemap(freearg) double* {
+    jenv->ReleasePrimitiveArrayCritical($input, $1, 0);
+}
+
 
 %include "NativeMatrix.h"
 

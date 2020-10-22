@@ -9,6 +9,11 @@ NativeMatrixImpl::NativeMatrixImpl(int numRows, int numCols) : matrix(numRows, n
 
 void NativeMatrixImpl::resize(int numRows, int numCols)
 {
+    if(numRows == rows() || numCols == cols())
+    {
+        return;
+    }
+
     matrix.resize(numRows, numCols);
 }
 
@@ -26,10 +31,12 @@ bool NativeMatrixImpl::set(NativeMatrixImpl *a)
 
 bool NativeMatrixImpl::add(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
-    if(a->rows() != rows() || b->cols() != cols() || a->cols() != cols() || b->rows() != rows())
+    if(a->rows() != b->rows() || a->cols() != b->cols())
     {
         return false;
     }
+
+    resize(a->rows(), a->cols());
 
     matrix = (a->matrix) + (b->matrix);
 
@@ -38,7 +45,7 @@ bool NativeMatrixImpl::add(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
 bool NativeMatrixImpl::subtract(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
-    if(a->rows() != rows() || b->cols() != cols() || a->cols() != cols() || b->rows() != rows())
+    if(a->rows() != b->rows() || a->cols() != b->cols())
     {
         return false;
     }
@@ -51,10 +58,12 @@ bool NativeMatrixImpl::subtract(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
 bool NativeMatrixImpl::mult(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
-    if(a->rows() != rows() || b->cols() != cols() || a->cols() != b->rows())
+    if(a->cols() != b->rows())
     {
         return false;
     }
+
+    resize(a->rows(), b->cols());
 
     matrix = (a->matrix) * (b->matrix);
 
@@ -63,10 +72,12 @@ bool NativeMatrixImpl::mult(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
 bool NativeMatrixImpl::mult(double scale, NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
-    if(a->rows() != rows() || b->cols() != cols() || a->cols() != b->rows())
+    if(a->cols() != b->rows())
     {
         return false;
     }
+
+    resize(a->rows(), b->cols());
 
     matrix = scale * (a->matrix) * (b->matrix);
 
@@ -87,10 +98,12 @@ bool NativeMatrixImpl::multAdd(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
 bool NativeMatrixImpl::multTransA(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
-    if(a->cols() != rows() || b->cols() != cols() || a->rows() != b->rows())
+    if( a->rows() != b->rows())
     {
         return false;
     }
+
+    resize(a->cols(), b->cols());
 
     matrix = (a->matrix.transpose()) * (b->matrix);
 
@@ -111,10 +124,12 @@ bool NativeMatrixImpl::multAddTransA(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
 bool NativeMatrixImpl::multTransB(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
-    if(a->rows() != rows() || b->rows() != cols() || a->cols() != b->cols())
+    if(a->cols() != b->cols())
     {
         return false;
     }
+
+    resize(a->rows(), b->rows());
 
     matrix = (a->matrix) * (b->matrix.transpose());
 
@@ -184,10 +199,12 @@ bool NativeMatrixImpl::multAddBlock(NativeMatrixImpl *a, NativeMatrixImpl *b, in
 
 bool NativeMatrixImpl::multQuad(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
-    if(a->rows() != b->cols() || b->cols() != b->rows() || rows() != a->cols() || cols() != a->cols())
+    if(a->rows() != b->cols() || b->cols() != b->rows())
     {
         return false;
     }
+
+    resize(a->cols(), b->cols());
 
 
     matrix = (a->matrix).transpose() * (b->matrix) * (a->matrix);
@@ -197,10 +214,12 @@ bool NativeMatrixImpl::multQuad(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
 bool NativeMatrixImpl::invert(NativeMatrixImpl *a)
 {
-    if(a->rows() != a->cols() || rows() != a->rows() || cols() != a->cols() )
+    if(a->rows() != a->cols())
     {
         return false;
     }
+
+    resize(a->rows(), a->cols());
 
     matrix = (a->matrix).lu().inverse();
 
@@ -210,10 +229,12 @@ bool NativeMatrixImpl::invert(NativeMatrixImpl *a)
 bool NativeMatrixImpl::solve(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
 
-    if(a->rows() != b->rows() || b->cols() != 1 || a->cols() != a->rows() || rows() != a->cols() || cols() != 1)
+    if(a->rows() != b->rows() || b->cols() != 1 || a->cols() != a->rows())
     {
         return false;
     }
+
+    resize(a->cols(), 1);
 
     matrix = (a->matrix).lu().solve((b->matrix));
 
@@ -223,11 +244,13 @@ bool NativeMatrixImpl::solve(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
 bool NativeMatrixImpl::solveCheck(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
-    if(a->rows() != b->rows() || b->cols() != 1 || a->cols() != a->rows() || rows() != a->cols() || cols() != 1)
+    if(a->rows() != b->rows() || b->cols() != 1 || a->cols() != a->rows())
     {
         std::cerr << "NativeMatrix::solveCheck: Invalid dimensions" << std::endl;
         return false;
     }
+
+    resize(a->cols(), 1);
 
     const Eigen::FullPivLU<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> > fullPivLu = a->matrix.fullPivLu();
     if (fullPivLu.isInvertible())
@@ -275,10 +298,7 @@ bool NativeMatrixImpl::insert(NativeMatrixImpl *src, int srcY0, int srcY1, int s
 
 bool NativeMatrixImpl::transpose(NativeMatrixImpl *a)
 {
-    if(rows() != a->cols() || cols() != a->rows())
-    {
-        return false;
-    }
+    resize(a->rows(), a->cols());
 
     matrix = a->matrix.transpose();
 
@@ -320,9 +340,39 @@ bool NativeMatrixImpl::isAprrox(NativeMatrixImpl *other, double precision)
     return matrix.isApprox(other->matrix, precision);
 }
 
-double *NativeMatrixImpl::data()
+bool NativeMatrixImpl::set(double *data, int rows, int cols)
 {
-    return matrix.data();
+    matrix.resize(rows, cols);
+
+    if(data == nullptr)
+    {
+        return false;
+    }
+
+    Eigen::MatrixXd eigenData = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(data, rows, cols);
+
+    matrix = eigenData;
+
+    return true;
+
+}
+
+bool NativeMatrixImpl::get(double *data, int rows, int cols)
+{
+    if(rows != this->rows() || cols != this->cols())
+    {
+        return false;
+    }
+
+    if(data == nullptr)
+    {
+        return false;
+    }
+
+    Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> eigenData(data, rows, cols);
+    eigenData = matrix;
+
+    return true;
 }
 
 void NativeMatrixImpl::print()

@@ -58,7 +58,9 @@ public:
 
     bool isAprrox(NativeMatrixImpl* other, double precision);
 
-    double* data();
+    bool set(double* data, int rows, int cols);
+
+    bool get(double* data, int rows, int cols);
 
     inline double min()
     {
@@ -99,6 +101,29 @@ public:
     {
         return matrix.cols() * matrix.rows();
     }
+
+    inline bool set(int row, int col, double value)
+    {
+          if(row >= rows() || col >= cols())
+          {
+              return false;
+          }
+
+          matrix(row, col) = value;
+
+          return true;
+    }
+
+    inline double get(int row, int col)
+    {
+        if(row >= rows() || col >= cols())
+        {
+            return nan;
+        }
+
+        return matrix(row, col);
+    }
+
 
     void print();
 
