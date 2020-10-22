@@ -3,8 +3,9 @@
 #include <iostream>
 #include <cmath>
 
-NativeMatrixImpl::NativeMatrixImpl(int numRows, int numCols) : matrix(numRows, numCols)
+NativeMatrixImpl::NativeMatrixImpl(int numRows, int numCols) : storage(numRows, numCols), matrix(NULL, numRows, numCols)
 {
+    new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
 }
 
 void NativeMatrixImpl::resize(int numRows, int numCols)
@@ -14,7 +15,13 @@ void NativeMatrixImpl::resize(int numRows, int numCols)
         return;
     }
 
-    matrix.resize(numRows, numCols);
+    if(numRows * numCols > storage.size())
+    {
+        std::cerr << "Growing storage to " << (numRows * numCols) << "." << std::endl;
+        storage.resize(numRows, numCols);
+    }
+
+    new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
 }
 
 bool NativeMatrixImpl::set(NativeMatrixImpl *a)
@@ -202,8 +209,7 @@ bool NativeMatrixImpl::multQuad(NativeMatrixImpl *a, NativeMatrixImpl *b)
         return false;
     }
 
-    resize(a->cols(), b->cols());
-
+    resize(a->cols(), a->cols());
 
     matrix = (a->matrix).transpose() * (b->matrix) * (a->matrix);
 
@@ -296,7 +302,7 @@ bool NativeMatrixImpl::insert(NativeMatrixImpl *src, int srcY0, int srcY1, int s
 
 bool NativeMatrixImpl::transpose(NativeMatrixImpl *a)
 {
-    resize(a->rows(), a->cols());
+    resize(a->cols(), a->rows());
 
     matrix = a->matrix.transpose();
 

@@ -3,6 +3,8 @@
 
 #include <Eigen/Dense>
 
+typedef Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>, Eigen::Aligned16> NativeMatrixView;
+
 class NativeMatrixImpl
 {
 public:
@@ -128,7 +130,8 @@ public:
     void print();
 
 private:
-    Eigen::MatrixXd matrix;
+    Eigen::MatrixXd storage;
+    NativeMatrixView matrix;
 };
 
 #endif // NATIVEMATRIX_H

@@ -150,6 +150,12 @@ public class NativeMatrixTest
          NativeMatrix nativeB = new NativeMatrix(aRows, aRows);
          NativeMatrix nativeAtBA = new NativeMatrix(aCols, aCols);
 
+         ejmlTime -= System.nanoTime();
+         CommonOps_DDRM.mult(B, A, tempBA);
+         CommonOps_DDRM.multTransA(A, tempBA, expected);
+         ejmlTime += System.nanoTime();
+         
+         
          nativeTime -= System.nanoTime();
          nativeA.set(A);
          nativeB.set(B);
@@ -157,10 +163,6 @@ public class NativeMatrixTest
          nativeAtBA.get(actual);
          nativeTime += System.nanoTime();
 
-         ejmlTime -= System.nanoTime();
-         CommonOps_DDRM.mult(B, A, tempBA);
-         CommonOps_DDRM.multTransA(A, tempBA, expected);
-         ejmlTime += System.nanoTime();
 
          MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
       }
@@ -818,10 +820,10 @@ public class NativeMatrixTest
    @Test
    public void testSize()
    {
-      NativeMatrix nativeA = new NativeMatrix(10, 10);
+      NativeMatrix nativeA = new NativeMatrix(0, 0);
       
-      assertEquals(10, nativeA.getNumRows());
-      assertEquals(10, nativeA.getNumCols());
+      assertEquals(0, nativeA.getNumRows());
+      assertEquals(0, nativeA.getNumCols());
       
       for(int r = 0; r < 10; r++)
       {
