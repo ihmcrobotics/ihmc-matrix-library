@@ -1,5 +1,6 @@
 package us.ihmc.matrixlib;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
@@ -650,22 +651,74 @@ public class NativeMatrixTest
          
       }
    }
-
-
    
-   public static void main(String[] args)
+   @Test
+   public void testGet()
    {
-      int size = 500;
-      Random random = new Random(40L);
-      DMatrixRMaj A = RandomMatrices_DDRM.rectangle(size, size, random);
-      DMatrixRMaj B = RandomMatrices_DDRM.rectangle(size, size, random);
-      DMatrixRMaj AtBA = new DMatrixRMaj(size, size);
-
-      System.out.println("Running...");
-
-      while (true)
+      
+      
+      Random random = new Random(124L);
+      
+      int iters = 100;
+      
+      for (int i = 0; i < iters; i++)
       {
-         NativeCommonOps.multQuad(A, B, AtBA);
+         int Arows = RandomNumbers.nextInt(random, 1, 100);
+         int Acols = RandomNumbers.nextInt(random, 1, 100);
+         
+         
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
+         
+         
+         
+         NativeMatrix nativeA = new NativeMatrix(A);
+         
+         
+         
+         for(int j = 0; j < iters; j++)
+         {
+            int row = RandomNumbers.nextInt(random, 0, Arows - 1);
+            int col = RandomNumbers.nextInt(random, 0, Acols - 1);
+            
+            assertEquals(A.get(row, col), nativeA.get(row, col), 1e-10);
+         }
+         
       }
    }
+   
+   @Test
+   public void testSet()
+   {
+      
+      
+      Random random = new Random(124L);
+      
+      int iters = 100;
+      
+      for (int i = 0; i < iters; i++)
+      {
+         int Arows = RandomNumbers.nextInt(random, 1, 100);
+         int Acols = RandomNumbers.nextInt(random, 1, 100);
+         
+         NativeMatrix nativeA = new NativeMatrix(Arows, Acols);
+         
+         
+         
+         for(int j = 0; j < iters; j++)
+         {
+            
+            int row = RandomNumbers.nextInt(random, 0, Arows - 1);
+            int col = RandomNumbers.nextInt(random, 0, Acols - 1);
+            
+            double next =  RandomNumbers.nextDouble(random, 10000.0);
+            nativeA.set(row, col, next);
+            
+            
+            assertEquals(next, nativeA.get(row, col), 1e-10);
+         }
+         
+      }
+   }
+
+
 }

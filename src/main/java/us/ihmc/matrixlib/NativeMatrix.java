@@ -123,8 +123,8 @@ public class NativeMatrix
          return;
       }
 
-      Thread.dumpStack();
-//      System.err.println("Resizing matrix to " + rows + " " + cols);
+//      Thread.dumpStack();
+      System.err.println("Resizing matrix to " + rows + " " + cols);
 
       impl.resize(rows, cols);
       update();
@@ -370,12 +370,22 @@ public class NativeMatrix
    
    public double get(int row, int col)
    {
-      return data.get(col * cols + row);
+      if(row >= rows || col >= cols)
+      {
+         throw new IllegalArgumentException("Index out of bounds. Requested (" + row + ", " + col + "). Dimension (" + rows + ", " + cols + ").");
+      }
+      
+      return data.get(col * rows + row);
    }
    
    public void set(int row, int col, double value)
    {
-      data.put(col * cols + row, value);
+      if(row >= rows || col >= cols)
+      {
+         throw new IllegalArgumentException("Index out of bounds. Requested (" + row + ", " + col + "). Dimension (" + rows + ", " + cols + ").");
+      }
+      
+      data.put(col * rows + row, value);
    }
    
    public void zero()
