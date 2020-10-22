@@ -325,26 +325,21 @@ public class NativeMatrixTest
          int rowStart = RandomNumbers.nextInt(random, 0, fullRows - rows);
          int colStart = RandomNumbers.nextInt(random, 0, fullCols - cols);
 
-         double scale = RandomNumbers.nextDouble(random, 1000.0);
          NativeMatrix randomMatrixA = new NativeMatrix(RandomMatrices_DDRM.rectangle(rows, taskSize, -50.0, 50.0, random));
          NativeMatrix randomMatrixB = new NativeMatrix(RandomMatrices_DDRM.rectangle(taskSize, cols, -50.0, 50.0, random));
 
          NativeMatrix solution = new NativeMatrix(RandomMatrices_DDRM.rectangle(fullRows, fullCols, -50.0, 50.0, random));
-         NativeMatrix solutionB = new NativeMatrix(solution);
+
          NativeMatrix expectedSolution = new NativeMatrix(solution);
-         NativeMatrix expectedSolutionB = new NativeMatrix(solution);
 
          NativeMatrix temp = new NativeMatrix(rows, cols);
          temp.mult(randomMatrixA, randomMatrixB);
          
          expectedSolution.addBlock(temp, rowStart, colStart, 0, 0, rows, cols, 1.0);
-         expectedSolutionB.addBlock(temp, rowStart, colStart, 0, 0, rows, cols, scale);
 
          solution.multAddBlock(randomMatrixA, randomMatrixB, rowStart, colStart);
-//         solutionB.multAddBlock(scale, randomMatrixA, randomMatrixB, rowStart, colStart);
 
          assertTrue(expectedSolution.isApprox(solution, 1e-6));
-//         MatrixTestTools.assertMatrixEquals(expectedSolutionB, solutionB, 1e-6);
       }
    }
    
