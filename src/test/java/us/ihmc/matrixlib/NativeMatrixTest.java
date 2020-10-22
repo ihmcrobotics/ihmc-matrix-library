@@ -506,6 +506,12 @@ public class NativeMatrixTest
          int Brows = RandomNumbers.nextInt(random, 1, Arows);
          int Bcols = RandomNumbers.nextInt(random, 1, Acols);
          
+         int BrowOffset = RandomNumbers.nextInt(random, 0, Brows);
+         int BcolOffset = RandomNumbers.nextInt(random, 0, Bcols);
+         
+         int ArowOffset = RandomNumbers.nextInt(random, 0, Arows - Brows);
+         int AcolOffset = RandomNumbers.nextInt(random, 0, Acols - Bcols);
+         
          DMatrixRMaj A = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
          DMatrixRMaj B = RandomMatrices_DDRM.rectangle(Brows, Bcols, random);
          
@@ -513,8 +519,8 @@ public class NativeMatrixTest
          NativeMatrix nativeB = new NativeMatrix(B);
          
          
-         CommonOps_DDRM.extract(B, 0, Brows, 0, Bcols, A, 0, 0);
-         nativeA.insert(nativeB, 0, Brows, 0, Bcols, 0, 0);
+         CommonOps_DDRM.extract(B, BrowOffset, Brows, BcolOffset, Bcols, A, ArowOffset, AcolOffset);
+         nativeA.insert(nativeB, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset);
          
          
          
