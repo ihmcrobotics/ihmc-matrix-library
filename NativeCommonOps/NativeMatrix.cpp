@@ -343,7 +343,7 @@ bool NativeMatrixImpl::isAprrox(NativeMatrixImpl *other, double precision)
 
 bool NativeMatrixImpl::set(double *data, int rows, int cols)
 {
-    matrix.resize(rows, cols);
+    resize(rows, cols);
 
     if(data == nullptr)
     {
