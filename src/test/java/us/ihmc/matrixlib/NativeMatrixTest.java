@@ -235,6 +235,128 @@ public class NativeMatrixTest
       System.out.println("Average matrix size was " + matrixSizes / iterations);
       System.out.println("Native takes " + 100.0 * nativeTime / ejmlTime + "% of EJML time.\n");
    }
+   
+   @Test
+   public void testRemoveRow()
+   {
+      Random random = new Random(40L);
+
+      System.out.println("Testing removing row with random matrices...");
+
+      nativeTime = 0;
+      ejmlTime = 0;
+      double matrixSizes = 0;
+
+      for (int i = 0; i < warmumIterations; i++)
+      {
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(maxSize, maxSize, -100.0, 100.0, random);
+         DMatrixRMaj B = new DMatrixRMaj(maxSize, maxSize);
+         
+         
+         MatrixTools.removeRow(A, 3);
+         
+
+         NativeMatrix nativeA = new NativeMatrix(maxSize, maxSize);
+         NativeMatrix nativeB = new NativeMatrix(maxSize, maxSize);
+         nativeA.set(A);
+         nativeB.removeRow(3);
+         nativeB.get(B);
+      }
+
+      for (int i = 0; i < iterations; i++)
+      {
+         int aRows = random.nextInt(maxSize) + 1;
+         int aCols = random.nextInt(maxSize) + 1;
+         matrixSizes += aRows;
+
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(aRows, aCols, -100.0, 100.0, random);
+         DMatrixRMaj nativeResult = new DMatrixRMaj(aRows, aCols);
+         
+         NativeMatrix nativeA = new NativeMatrix(aRows, aCols);
+
+         
+         int rowToRemove = aRows == 1 ? 0 : random.nextInt(aRows-1);
+
+         nativeTime -= System.nanoTime();
+         nativeA.set(A);
+         nativeA.removeRow(rowToRemove);
+         nativeA.get(nativeResult);
+         nativeTime += System.nanoTime();
+
+         ejmlTime -= System.nanoTime();
+         MatrixTools.removeRow(A, rowToRemove);
+         ejmlTime += System.nanoTime();
+         
+
+         MatrixTestTools.assertMatrixEquals(A, nativeResult, epsilon);
+      }
+
+      System.out.println("Native took " + Conversions.nanosecondsToMilliseconds((double) (nativeTime / iterations)) + " ms on average");
+      System.out.println("EJML took " + Conversions.nanosecondsToMilliseconds((double) (ejmlTime / iterations)) + " ms on average");
+      System.out.println("Average matrix size was " + matrixSizes / iterations);
+      System.out.println("Native takes " + 100.0 * nativeTime / ejmlTime + "% of EJML time.\n");
+   }
+   
+   @Test
+   public void testRemoveColumn()
+   {
+      Random random = new Random(40L);
+      
+      System.out.println("Testing removing column with random matrices...");
+      
+      nativeTime = 0;
+      ejmlTime = 0;
+      double matrixSizes = 0;
+      
+      for (int i = 0; i < warmumIterations; i++)
+      {
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(maxSize, maxSize, -100.0, 100.0, random);
+         DMatrixRMaj B = new DMatrixRMaj(maxSize, maxSize);
+         
+         
+         MatrixTools.removeColumn(A, 3);
+         
+         
+         NativeMatrix nativeA = new NativeMatrix(maxSize, maxSize);
+         NativeMatrix nativeB = new NativeMatrix(maxSize, maxSize);
+         nativeA.set(A);
+         nativeB.removeColumn(3);
+         nativeB.get(B);
+      }
+      
+      for (int i = 0; i < iterations; i++)
+      {
+         int aRows = random.nextInt(maxSize) + 1;
+         int aCols = random.nextInt(maxSize) + 1;
+         matrixSizes += aRows;
+         
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(aRows, aCols, -100.0, 100.0, random);
+         DMatrixRMaj nativeResult = new DMatrixRMaj(aRows, aCols);
+         
+         NativeMatrix nativeA = new NativeMatrix(aRows, aCols);
+         
+         
+         int colToRemove = aCols == 1 ? 0 : random.nextInt(aCols-1);
+         
+         nativeTime -= System.nanoTime();
+         nativeA.set(A);
+         nativeA.removeColumn(colToRemove);
+         nativeA.get(nativeResult);
+         nativeTime += System.nanoTime();
+         
+         ejmlTime -= System.nanoTime();
+         MatrixTools.removeColumn(A, colToRemove);
+         ejmlTime += System.nanoTime();
+         
+         
+         MatrixTestTools.assertMatrixEquals(A, nativeResult, epsilon);
+      }
+      
+      System.out.println("Native took " + Conversions.nanosecondsToMilliseconds((double) (nativeTime / iterations)) + " ms on average");
+      System.out.println("EJML took " + Conversions.nanosecondsToMilliseconds((double) (ejmlTime / iterations)) + " ms on average");
+      System.out.println("Average matrix size was " + matrixSizes / iterations);
+      System.out.println("Native takes " + 100.0 * nativeTime / ejmlTime + "% of EJML time.\n");
+   }
 
    @Test
    public void testSolve()

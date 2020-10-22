@@ -123,6 +123,14 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_transpose(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a);
   }
 
+  public boolean removeRow(int indexToRemove) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_removeRow(swigCPtr, this, indexToRemove);
+  }
+
+  public boolean removeColumn(int indexToRemove) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_removeColumn(swigCPtr, this, indexToRemove);
+  }
+
   public void zero() {
     NativeMatrixLibraryJNI.NativeMatrixImpl_zero(swigCPtr, this);
   }

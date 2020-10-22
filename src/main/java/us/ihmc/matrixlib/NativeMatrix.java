@@ -326,6 +326,23 @@ public class NativeMatrix
       }
    }
    
+   public void removeRow(int row)
+   {
+      if(!impl.removeRow(row))
+      {
+         throw new IllegalArgumentException("Row out of bounds.");
+      }
+   }
+   
+
+   public void removeColumn(int col)
+   {
+      if(!impl.removeColumn(col))
+      {
+         throw new IllegalArgumentException("Col out of bounds.");
+      }
+   }
+   
    public void zero()
    {
       impl.zero();
@@ -385,5 +402,6 @@ public class NativeMatrix
    {
       return "NativeMatrix: " + getNumRows() + " x " + getNumCols();
    }
+
 
 }

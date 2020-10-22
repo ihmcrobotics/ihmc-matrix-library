@@ -52,6 +52,10 @@ public:
 
     bool transpose(NativeMatrixImpl* a);
 
+    bool removeRow(int indexToRemove);
+
+    bool removeColumn(int indexToRemove);
+
     void zero();
 
     bool containsNaN();
