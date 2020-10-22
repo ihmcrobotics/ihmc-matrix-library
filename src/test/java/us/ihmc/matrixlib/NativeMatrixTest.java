@@ -530,8 +530,126 @@ public class NativeMatrixTest
          
          MatrixTestTools.assertMatrixEquals(A, nativeADMatrix, 1.0e-10);
          
+         
+         
+         CommonOps_DDRM.insert(B, A, ArowOffset, AcolOffset);
+         nativeA.insert(nativeB, ArowOffset, AcolOffset);
+         nativeA.get(nativeADMatrix);
+         
+         MatrixTestTools.assertMatrixEquals(A, nativeADMatrix, 1.0e-10);
       }
    }   
+
+   
+   @Test
+   public void testMultScale()
+   {
+      
+
+      Random random = new Random(124L);
+
+      int iters = 100;
+
+      for (int i = 0; i < iters; i++)
+      {
+         int Arows = RandomNumbers.nextInt(random, 1, 100);
+         int Acols = RandomNumbers.nextInt(random, 1, 100);
+         int Bcols = RandomNumbers.nextInt(random, 1, 100);
+         
+         double scale = RandomNumbers.nextDouble(random, 10000.0);
+
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(Acols, Bcols, random);
+         DMatrixRMaj solution = new DMatrixRMaj(Arows, Bcols);
+         
+         NativeMatrix nativeA = new NativeMatrix(A);
+         NativeMatrix nativeB = new NativeMatrix(B);
+         NativeMatrix nativeSolution = new NativeMatrix(solution);
+         
+         
+         CommonOps_DDRM.mult(scale, A, B, solution);
+         nativeSolution.mult(scale, nativeA, nativeB);
+         
+         DMatrixRMaj nativeSolutionDMatrix = new DMatrixRMaj(Arows, Bcols);
+         nativeSolution.get(nativeSolutionDMatrix);
+         
+         
+         MatrixTestTools.assertMatrixEquals(solution, nativeSolutionDMatrix, 1.0e-7);
+         
+      }
+   }
+
+   @Test
+   public void testAdd()
+   {
+      
+      
+      Random random = new Random(124L);
+      
+      int iters = 100;
+      
+      for (int i = 0; i < iters; i++)
+      {
+         int Arows = RandomNumbers.nextInt(random, 1, 100);
+         int Acols = RandomNumbers.nextInt(random, 1, 100);
+         
+       
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
+         DMatrixRMaj solution = new DMatrixRMaj(Arows, Acols);
+         
+         NativeMatrix nativeA = new NativeMatrix(A);
+         NativeMatrix nativeB = new NativeMatrix(B);
+         NativeMatrix nativeSolution = new NativeMatrix(solution);
+         
+         
+         CommonOps_DDRM.add(A, B, solution);
+         nativeSolution.add(nativeA, nativeB);
+         
+         DMatrixRMaj nativeSolutionDMatrix = new DMatrixRMaj(Arows, Acols);
+         nativeSolution.get(nativeSolutionDMatrix);
+         
+         
+         MatrixTestTools.assertMatrixEquals(solution, nativeSolutionDMatrix, 1.0e-7);
+         
+      }
+   }
+
+   @Test
+   public void testSubtract()
+   {
+      
+      
+      Random random = new Random(124L);
+      
+      int iters = 100;
+      
+      for (int i = 0; i < iters; i++)
+      {
+         int Arows = RandomNumbers.nextInt(random, 1, 100);
+         int Acols = RandomNumbers.nextInt(random, 1, 100);
+         
+         
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
+         DMatrixRMaj solution = new DMatrixRMaj(Arows, Acols);
+         
+         NativeMatrix nativeA = new NativeMatrix(A);
+         NativeMatrix nativeB = new NativeMatrix(B);
+         NativeMatrix nativeSolution = new NativeMatrix(solution);
+         
+         
+         CommonOps_DDRM.subtract(A, B, solution);
+         nativeSolution.subtract(nativeA, nativeB);
+         
+         DMatrixRMaj nativeSolutionDMatrix = new DMatrixRMaj(Arows, Acols);
+         nativeSolution.get(nativeSolutionDMatrix);
+         
+         
+         MatrixTestTools.assertMatrixEquals(solution, nativeSolutionDMatrix, 1.0e-7);
+         
+      }
+   }
 
 
    
