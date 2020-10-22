@@ -380,7 +380,7 @@ bool NativeMatrixImpl::removeColumn(int colToRemove)
         new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
         return true;
     }
-    else if( colToRemove < numCols )
+    else if( colToRemove <= numCols )
     {
         matrix.block(0,colToRemove,numRows,numCols-colToRemove) = matrix.rightCols(numCols-colToRemove);
         new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
