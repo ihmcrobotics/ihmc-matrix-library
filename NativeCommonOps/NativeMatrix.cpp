@@ -87,7 +87,7 @@ bool NativeMatrixImpl::multAdd(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
 bool NativeMatrixImpl::multTransA(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
-    if(a->cols() != rows() || b->cols() != cols() || a->cols() != b->rows())
+    if(a->cols() != rows() || b->cols() != cols() || a->rows() != b->rows())
     {
         return false;
     }
