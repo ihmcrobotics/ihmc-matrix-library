@@ -117,12 +117,14 @@ public class NativeMatrix
 
    public void resize(int rows, int cols)
    {
+      
       if (rows == this.rows && cols == this.cols)
       {
          return;
       }
 
-      System.err.println("Resizing matrix to " + rows + " " + cols);
+      Thread.dumpStack();
+//      System.err.println("Resizing matrix to " + rows + " " + cols);
 
       impl.resize(rows, cols);
       update();
@@ -270,7 +272,7 @@ public class NativeMatrix
     */
    public void multTransA(NativeMatrix a, NativeMatrix b)
    {
-      resize(a.getNumRows(), b.getNumRows());
+      resize(a.getNumCols(), b.getNumCols());
 
       if (!impl.multTransA(a.impl, b.impl))
       {
@@ -447,7 +449,6 @@ public class NativeMatrix
 
    public boolean isApprox(NativeMatrix solution, double precision)
    {
-      // TODO Auto-generated method stub
       return impl.isAprrox(solution.impl, precision);
    }
 
