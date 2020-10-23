@@ -3,7 +3,19 @@
 
 #include <Eigen/Dense>
 
-typedef Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>, Eigen::Aligned16> NativeMatrixView;
+/**
+  * Uncomment ROW_MAJOR to enable row-major mode. This might give a small performance benefit in set/get with EJML matrices.
+  *
+  */
+//#define ROW_MAJOR
+
+#ifdef ROW_MAJOR
+#define STORAGE_FORMAT Eigen::RowMajor
+#else
+#define STORAGE_FORMAT Eigen::ColMajor
+#endif
+
+typedef Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, STORAGE_FORMAT>, Eigen::Aligned16> NativeMatrixView;
 
 class NativeMatrixImpl
 {
@@ -93,20 +105,6 @@ public:
         matrix *= scale;
     }
 
-    inline int rows()
-    {
-        return matrix.rows();
-    }
-
-    inline int cols()
-    {
-        return matrix.cols();
-    }
-
-    inline int size()
-    {
-        return matrix.size();
-    }
 
     inline bool set(int row, int col, double value)
     {
@@ -130,12 +128,41 @@ public:
         return matrix(row, col);
     }
 
+    inline int* dims()
+    {
+        return dimensions;
+    }
+
 
     void print();
 
 private:
-    Eigen::MatrixXd storage;
+    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, STORAGE_FORMAT>  storage;
     NativeMatrixView matrix;
+    int dimensions[3];
+
+    inline void updateView(int numRows, int numCols)
+    {
+        new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
+        dimensions[0] = numRows;
+        dimensions[1] = numCols;
+        dimensions[2] = numRows * numCols;
+    }
+
+    inline int rows()
+    {
+        return matrix.rows();
+    }
+
+    inline int cols()
+    {
+        return matrix.cols();
+    }
+
+    inline int size()
+    {
+        return matrix.size();
+    }
 };
 
 #endif // NATIVEMATRIX_H

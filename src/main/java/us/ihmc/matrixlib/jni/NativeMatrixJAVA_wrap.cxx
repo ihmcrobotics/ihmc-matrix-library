@@ -916,51 +916,6 @@ SWIGEXPORT void JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Native
 }
 
 
-SWIGEXPORT jint JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1rows(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jint jresult = 0 ;
-  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
-  int result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(NativeMatrixImpl **)&jarg1; 
-  result = (int)(arg1)->rows();
-  jresult = (jint)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jint JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1cols(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jint jresult = 0 ;
-  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
-  int result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(NativeMatrixImpl **)&jarg1; 
-  result = (int)(arg1)->cols();
-  jresult = (jint)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jint JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jint jresult = 0 ;
-  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
-  int result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(NativeMatrixImpl **)&jarg1; 
-  result = (int)(arg1)->size();
-  jresult = (jint)result; 
-  return jresult;
-}
-
-
 SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1set_1_1SWIG_12(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3, jdouble jarg4) {
   jboolean jresult = 0 ;
   NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
@@ -997,6 +952,23 @@ SWIGEXPORT jdouble JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Nat
   arg3 = (int)jarg3; 
   result = (double)(arg1)->get(arg2,arg3);
   jresult = (jdouble)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jobject JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1dims(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jobject jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  int *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  result = (int *)(arg1)->dims();
+  
+  jresult = jenv->NewDirectByteBuffer(result, 3 * sizeof(int));
+  
   return jresult;
 }
 

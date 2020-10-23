@@ -3,18 +3,18 @@
 %include "typemaps.i"
 %include "various.i"
 
-/*
-%typemap(jtype) double* data() "java.nio.ByteBuffer"
-%typemap(jstype) double* data() "java.nio.ByteBuffer"
-%typemap(jni) double* data() "jobject"
-%typemap(out) double* data()
+
+%typemap(jtype) int* dims() "java.nio.ByteBuffer"
+%typemap(jstype) int* dims() "java.nio.ByteBuffer"
+%typemap(jni) int* dims() "jobject"
+%typemap(out) int* dims()
 %{
-    $result = jenv->NewDirectByteBuffer($1, arg1->size() * sizeof(double));
+    $result = jenv->NewDirectByteBuffer($1, 3 * sizeof(int));
 %}
-%typemap(javaout) double* data() {
+%typemap(javaout) int* dims() {
     return $jnicall;
 }
-*/
+
 
 %typemap(jtype) double* "double[]"
 %typemap(jstype) double* "double[]"

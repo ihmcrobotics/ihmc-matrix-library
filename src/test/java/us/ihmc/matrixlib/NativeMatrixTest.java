@@ -871,19 +871,33 @@ public class NativeMatrixTest
       
       
       Random random = new Random(124L);
+      nativeTime = 0;
       
-      int iters = 100;
       
-      for (int i = 0; i < iters; i++)
+
+      for(int i = 0; i < warmumIterations; i++)
       {
-         int Arows = RandomNumbers.nextInt(random, 1, 100);
-         int Acols = RandomNumbers.nextInt(random, 1, 100);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+         NativeMatrix nativeA = new NativeMatrix(maxSize, maxSize);
+         
+         nativeA.set(A);
+         
+      }
+      double matrixSizes = 0;
+      
+      for (int i = 0; i < iterations; i++)
+      {
+         int Arows = RandomNumbers.nextInt(random, 1, maxSize);
+         int Acols = RandomNumbers.nextInt(random, 1, maxSize);
+         
+         matrixSizes += (Arows + Acols) / 2.0;
    
          DMatrixRMaj A = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
          NativeMatrix nativeA = new NativeMatrix(Arows, Acols);
          
-         
+         nativeTime -= System.nanoTime();
          nativeA.set(A);
+         nativeTime += System.nanoTime();
          
          
          for(int r = 0; r < Arows; r++)
@@ -898,6 +912,10 @@ public class NativeMatrixTest
          }
          
       }
+      
+      System.out.println("Native took " + Conversions.nanosecondsToMilliseconds((double) (nativeTime / iterations)) + " ms on average");
+      System.out.println("Average matrix size was " + matrixSizes / iterations);
+
    }
    
    

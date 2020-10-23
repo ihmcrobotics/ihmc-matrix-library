@@ -175,18 +175,6 @@ public class NativeMatrixImpl {
     NativeMatrixLibraryJNI.NativeMatrixImpl_scale__SWIG_1(swigCPtr, this, scale);
   }
 
-  public int rows() {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_rows(swigCPtr, this);
-  }
-
-  public int cols() {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_cols(swigCPtr, this);
-  }
-
-  public int size() {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_size(swigCPtr, this);
-  }
-
   public boolean set(int row, int col, double value) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_set__SWIG_2(swigCPtr, this, row, col, value);
   }
@@ -194,6 +182,10 @@ public class NativeMatrixImpl {
   public double get(int row, int col) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_get__SWIG_1(swigCPtr, this, row, col);
   }
+
+  public java.nio.ByteBuffer dims() {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_dims(swigCPtr, this);
+}
 
   public void print() {
     NativeMatrixLibraryJNI.NativeMatrixImpl_print(swigCPtr, this);

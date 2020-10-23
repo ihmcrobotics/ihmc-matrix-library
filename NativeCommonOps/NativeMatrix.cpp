@@ -7,6 +7,10 @@
 NativeMatrixImpl::NativeMatrixImpl(int numRows, int numCols) : storage(numRows, numCols), matrix(NULL, numRows, numCols)
 {
     new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
+
+    dimensions[0] = rows();
+    dimensions[1] = cols();
+    dimensions[2] = size();
 }
 
 void NativeMatrixImpl::resize(int numRows, int numCols)
@@ -18,11 +22,10 @@ void NativeMatrixImpl::resize(int numRows, int numCols)
 
     if(numRows * numCols > storage.size())
     {
-        std::cerr << "Growing storage to " << (numRows * numCols) << "." << std::endl;
         storage.resize(numRows, numCols);
     }
 
-    new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
+    updateView(numRows, numCols);
 }
 
 bool NativeMatrixImpl::set(NativeMatrixImpl *a)
@@ -257,7 +260,7 @@ bool NativeMatrixImpl::solveCheck(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
     resize(a->cols(), 1);
 
-    const Eigen::FullPivLU<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> > fullPivLu = a->matrix.fullPivLu();
+    const Eigen::FullPivLU<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, STORAGE_FORMAT> > fullPivLu = a->matrix.fullPivLu();
     if (fullPivLu.isInvertible())
     {
         matrix = fullPivLu.solve(b->matrix);
@@ -313,36 +316,6 @@ bool NativeMatrixImpl::transpose(NativeMatrixImpl *a)
 bool NativeMatrixImpl::removeRow(int rowToRemove)
 {
 
-    /*
-     * Eigen implementation with a whole matrix copy
-     *
-     * Seems to be the slowest
-     */
-//    int numRows = matrix.rows()-1;
-//    int numCols = matrix.cols();
-
-//    // Specialization for removing the last row
-//    if(numRows == 0 && rowToRemove == 0)
-//    {
-//        new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
-//        return true;
-//    }
-//    else if( rowToRemove < numRows )
-//    {
-//        matrix.block(rowToRemove,0,numRows-rowToRemove,numCols) = matrix.bottomRows(numRows-rowToRemove);
-
-//        // Copy because row-major. This is unfortunate
-//        NativeMatrixView view(storage.data(), numRows, numCols);
-//        view = matrix.block(0, 0, numRows, numCols).eval();
-
-//        new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
-//        return true;
-//    }
-//    else
-//    {
-//        return false;
-//    }
-
     if(rowToRemove >= rows())
     {
         return false;
@@ -350,19 +323,28 @@ bool NativeMatrixImpl::removeRow(int rowToRemove)
 
     if(rows() <= 1)
     {
-        new (&matrix) NativeMatrixView(storage.data(), rows() - 1, cols());
+        updateView(0, cols());
         return true;
     }
 
+    int oldRows = rows();
+    int newRows = oldRows - 1;
+    int newCols = cols();
 
+#ifdef ROW_MAJOR
+    double* data = storage.data();
+    double* dst = data + (rowToRemove * newCols);
+    double* src = data + ( (rowToRemove + 1) * newCols);
+    size_t size = (newRows - rowToRemove) * newCols * sizeof(double);
+
+    memmove(dst, src, size);
+
+#else
     /*
      * Algorithm based on memmove
      *
      * Very fast compared to eigen directly.
      */
-    int oldRows = rows();
-    int newRows = rows() - 1;
-    int newCols = cols();
 
     double* data = storage.data();
 
@@ -382,29 +364,9 @@ bool NativeMatrixImpl::removeRow(int rowToRemove)
     double* dst = data + (lastCol * newRows + rowToRemove);
     double* src = data + (lastCol * oldRows + rowToRemove + 1);
     memmove((void*)(dst), (void*)(src), remaining * sizeof(double));
+#endif
 
-    /*
-     * Naive algorithm copying each element
-     *
-     * Reasonable performance
-     *
-     */
-//    double* data = matrix.data();
-
-//    int colIndex = 1;
-//    for (int index = rowToRemove + 1; index < size(); index++)
-//    {
-//       if (index == colIndex * rows() + rowToRemove)
-//       {
-//          colIndex++;
-//       }
-//       else
-//       {
-//          data[index - colIndex] = data[index];
-//       }
-//    }
-
-    new (&matrix) NativeMatrixView(storage.data(), rows() - 1, cols());
+    updateView(newRows, newCols);
     return true;
 
 
@@ -412,72 +374,61 @@ bool NativeMatrixImpl::removeRow(int rowToRemove)
 
 bool NativeMatrixImpl::removeColumn(int colToRemove)
 {
-    Eigen::Index numRows = matrix.rows();
-    Eigen::Index numCols = matrix.cols()  - 1;
-
-    // Specialization for removing the last column
-    if(numCols == 0 && colToRemove == 0)
-    {
-        new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
-        return true;
-    }
-    else if( colToRemove <= numCols )
-    {
-        /*
-         *  Use eigen blocks to move the data
-         */
-//        matrix.block(0,colToRemove,numRows,numCols-colToRemove) = matrix.rightCols(numCols-colToRemove);
-
-
-        /*
-         *  Memmove is guaranteed not to have aliasing effects, while matrix.block needs .eval().
-         */
-
-        double* data = storage.data();
-        double* dst = data + (colToRemove * numRows);
-        double* src = data + ( (colToRemove + 1) * numRows);
-        size_t size = (numCols - colToRemove) * numRows * sizeof(double);
-
-        memmove(dst, src, size);
-
-
-        new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
-        return true;
-    }
-    else
+    if(colToRemove >= cols())
     {
         return false;
     }
 
+    if(cols() <= 1)
+    {
+        updateView(rows(), 0);
+        return true;
+    }
 
 
-//    if (colToRemove >= cols())
-//    {
-//        return false;
-//    }
+    int newRows = rows();
+    int oldCols = cols();
+    int newCols = oldCols - 1;
 
-//    if(cols() == 1)
-//    {
-//        new (&matrix) NativeMatrixView(storage.data(), rows(), 0);
-//        return true;
-//    }
 
-//    for (int rowIndex = 0; rowIndex < rows(); rowIndex++)
-//    {
-//        for(int columnIndex = colToRemove; columnIndex < cols() - 1; columnIndex++)
-//        {
-//            int nextColIndex = columnIndex + 1;
-//            double valueOfNextCol = matrix(rowIndex, nextColIndex);
-//            double valueOfCurrentCol = matrix(rowIndex, columnIndex);
+#ifdef ROW_MAJOR
+    /*
+     * Algorithm based on memmove
+     *
+     * Very fast compared to eigen directly.
+     */
 
-//            matrix(rowIndex, nextColIndex) = valueOfCurrentCol;
-//            matrix(rowIndex, columnIndex) = valueOfNextCol;
-//        }
+    double* data = storage.data();
 
-//    }
+    size_t newStride = (size_t)newCols * sizeof(double);
 
-//    new (&matrix) NativeMatrixView(storage.data(), rows(), cols() - 1);
-//    return true;
+
+    for (int row = 0; row < newRows - 1; row++)
+    {
+        double* dst = data + (row * newCols + colToRemove);
+        double* src = data + (row * oldCols + colToRemove + 1);
+
+        memmove((void*)(dst), (void*)(src), newStride);
+    }
+
+    int lastRow = rows() - 1;
+    int remaining = newCols - colToRemove;
+    double* dst = data + (lastRow * newCols + colToRemove);
+    double* src = data + (lastRow * oldCols + colToRemove + 1);
+    memmove((void*)(dst), (void*)(src), remaining * sizeof(double));
+
+#else
+    double* data = storage.data();
+    double* dst = data + (colToRemove * newRows);
+    double* src = data + ( (colToRemove + 1) * newRows);
+    size_t size = (newCols - colToRemove) * newRows * sizeof(double);
+
+    memmove(dst, src, size);
+
+#endif
+
+    updateView(newRows, newCols);
+    return true;
 }
 
 void NativeMatrixImpl::zero()
@@ -514,15 +465,14 @@ bool NativeMatrixImpl::isAprrox(NativeMatrixImpl *other, double precision)
 
 bool NativeMatrixImpl::set(double *data, int rows, int cols)
 {
-    resize(rows, cols);
-
     if(data == nullptr)
     {
         return false;
     }
+    resize(rows, cols);
 
-    Eigen::MatrixXd eigenData = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(data, rows, cols);
 
+    Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> eigenData(data, rows, cols);
     matrix = eigenData;
 
     return true;
