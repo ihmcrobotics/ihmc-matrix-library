@@ -651,6 +651,102 @@ public class NativeMatrixTest
          MatrixTestTools.assertMatrixEquals(A, nativeADMatrix, 1.0e-10);
       }
    }   
+   
+   
+   @Test
+   public void testEJMLInsert()
+   {
+      
+      
+      Random random = new Random(124L);
+      
+      int iters = 100;
+      
+      for (int i = 0; i < iters; i++)
+      {
+         int Arows = RandomNumbers.nextInt(random, 1, 100);
+         int Acols = RandomNumbers.nextInt(random, 1, 100);
+         int Brows = RandomNumbers.nextInt(random, 1, Arows);
+         int Bcols = RandomNumbers.nextInt(random, 1, Acols);
+         
+         int BrowOffset = RandomNumbers.nextInt(random, 0, Brows);
+         int BcolOffset = RandomNumbers.nextInt(random, 0, Bcols);
+         
+         int ArowOffset = RandomNumbers.nextInt(random, 0, Arows - Brows);
+         int AcolOffset = RandomNumbers.nextInt(random, 0, Acols - Bcols);
+         
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(Brows, Bcols, random);
+         
+         NativeMatrix nativeA = new NativeMatrix(A);
+         
+         
+         CommonOps_DDRM.extract(B, BrowOffset, Brows, BcolOffset, Bcols, A, ArowOffset, AcolOffset);
+         nativeA.insert(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset);
+         
+         
+         
+         DMatrixRMaj nativeADMatrix = new DMatrixRMaj(A.getNumRows(), A.getNumCols());
+         nativeA.get(nativeADMatrix);
+         
+         
+         MatrixTestTools.assertMatrixEquals(A, nativeADMatrix, 1.0e-10);
+         
+         
+         
+         CommonOps_DDRM.insert(B, A, ArowOffset, AcolOffset);
+         nativeA.insert(B, ArowOffset, AcolOffset);
+         nativeA.get(nativeADMatrix);
+         
+         MatrixTestTools.assertMatrixEquals(A, nativeADMatrix, 1.0e-10);
+      }
+   }
+   
+   @Test
+   public void testEJMLExtract()
+   {
+      
+      
+      Random random = new Random(124L);
+      
+      int iters = 100;
+      
+      for (int i = 0; i < iters; i++)
+      {
+         int Arows = RandomNumbers.nextInt(random, 1, 100);
+         int Acols = RandomNumbers.nextInt(random, 1, 100);
+         int Brows = RandomNumbers.nextInt(random, 1, Arows);
+         int Bcols = RandomNumbers.nextInt(random, 1, Acols);
+         
+         int BrowOffset = RandomNumbers.nextInt(random, 0, Brows);
+         int BcolOffset = RandomNumbers.nextInt(random, 0, Bcols);
+         
+         int ArowOffset = RandomNumbers.nextInt(random, 0, Arows - Brows);
+         int AcolOffset = RandomNumbers.nextInt(random, 0, Acols - Bcols);
+         
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(Brows, Bcols, random);
+         DMatrixRMaj nativeADMatrix = new DMatrixRMaj(A);
+         
+         NativeMatrix nativeB = new NativeMatrix(B);
+         
+         
+         CommonOps_DDRM.extract(B, BrowOffset, Brows, BcolOffset, Bcols, A, ArowOffset, AcolOffset);
+         nativeB.extract(BrowOffset, Brows, BcolOffset, Bcols, nativeADMatrix, ArowOffset, AcolOffset);
+         
+         
+         
+         MatrixTestTools.assertMatrixEquals(A, nativeADMatrix, 1.0e-10);
+         
+         
+         
+         CommonOps_DDRM.insert(B, A, ArowOffset, AcolOffset);
+         nativeB.extract(nativeADMatrix, ArowOffset, AcolOffset);
+         
+         
+         MatrixTestTools.assertMatrixEquals(A, nativeADMatrix, 1.0e-10);
+      }
+   }
 
    
    @Test

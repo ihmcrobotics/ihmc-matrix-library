@@ -300,6 +300,76 @@ bool NativeMatrixImpl::insert(NativeMatrixImpl *src, int srcY0, int srcY1, int s
     return true;
 }
 
+bool NativeMatrixImpl::insert(double *src, int srcRows, int srcCols, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0)
+{
+    if(src == nullptr)
+    {
+        return false;
+    }
+
+    if( srcY1 < srcY0 || srcY0 < 0 || srcY1 > srcRows )
+    {
+        return false;
+    }
+    if( srcX1 < srcX0 || srcX0 < 0 || srcX1 > srcCols )
+    {
+        return false;
+    }
+
+    int w = srcX1-srcX0;
+    int h = srcY1-srcY0;
+
+    if( dstY0+h > rows() )
+    {
+        return false;
+    }
+    if( dstX0+w > cols() )
+    {
+        return false;
+    }
+
+    Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> eigenData(src, srcRows, srcCols);
+    matrix.block(dstY0, dstX0, h, w) = eigenData.block(srcY0, srcX0, h, w);
+
+    return true;
+
+}
+
+bool NativeMatrixImpl::extract(int srcY0, int srcY1, int srcX0, int srcX1, double *dst, int dstRows, int dstCols, int dstY0, int dstX0)
+{
+    if(dst == nullptr)
+    {
+        return false;
+    }
+
+    if( srcY1 < srcY0 || srcY0 < 0 || srcY1 > rows() )
+    {
+        return false;
+    }
+    if( srcX1 < srcX0 || srcX0 < 0 || srcX1 > cols() )
+    {
+        return false;
+    }
+
+    int w = srcX1-srcX0;
+    int h = srcY1-srcY0;
+
+    if( dstY0+h > dstRows )
+    {
+        return false;
+    }
+    if( dstX0+w > dstCols )
+    {
+        return false;
+    }
+
+    Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> eigenData(dst, dstRows, dstCols);
+    eigenData.block(dstY0, dstX0, h, w) = matrix.block(srcY0, srcX0, h, w);
+
+    return true;
+
+}
+
 bool NativeMatrixImpl::transpose(NativeMatrixImpl *a)
 {
     resize(a->cols(), a->rows());

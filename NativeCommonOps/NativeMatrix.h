@@ -51,6 +51,10 @@ public:
 
     bool insert(NativeMatrixImpl* src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0);
 
+    bool insert(double* src, int rows, int cols, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0);
+
+    bool extract(int srcY0, int srcY1, int srcX0, int srcX1, double *dst, int dstRows, int dstCols, int dstY0, int dstX0);
+
     bool transpose(NativeMatrixImpl* a);
 
     bool removeRow(int indexToRemove);

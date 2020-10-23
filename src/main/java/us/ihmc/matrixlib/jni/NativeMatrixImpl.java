@@ -116,7 +116,15 @@ public class NativeMatrixImpl {
   }
 
   public boolean insert(NativeMatrixImpl src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0) {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_insert(swigCPtr, this, NativeMatrixImpl.getCPtr(src), src, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0);
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_insert__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(src), src, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0);
+  }
+
+  public boolean insert(double[] src, int rows, int cols, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_insert__SWIG_1(swigCPtr, this, src, rows, cols, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0);
+  }
+
+  public boolean extract(int srcY0, int srcY1, int srcX0, int srcX1, double[] dst, int dstRows, int dstCols, int dstY0, int dstX0) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_extract(swigCPtr, this, srcY0, srcY1, srcX0, srcX1, dst, dstRows, dstCols, dstY0, dstX0);
   }
 
   public boolean transpose(NativeMatrixImpl a) {

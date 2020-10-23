@@ -307,10 +307,39 @@ public class NativeMatrix
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
    }
-   
+
+
    public void insert(NativeMatrix src, int destY0, int destX0)
    {
       insert(src, 0, src.getNumRows(), 0, src.getNumCols(), destY0, destX0);
+   }
+
+   public void insert(DMatrixRMaj src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0)
+   {
+      if(!impl.insert(src.data, src.numRows, src.numCols, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+      
+   }
+   
+   public void insert(DMatrixRMaj src, int destY0, int destX0)
+   {
+      insert(src, 0, src.getNumRows(), 0, src.getNumCols(), destY0, destX0);
+   }
+   
+
+   public void extract(int srcY0, int srcY1, int srcX0, int srcX1, DMatrixRMaj dst, int dstY0, int dstX0)
+   {
+      if(!impl.extract(srcY0, srcY1, srcX0, srcX1, dst.data, dst.numRows, dst.numCols, dstY0, dstX0))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions");
+      }
+   }
+   
+   public void extract(DMatrixRMaj dst, int destY0, int destX0)
+   {
+      extract(0, getNumRows(), 0, getNumCols(), dst, destY0, destX0);
    }
    
    public double get(int row, int col)
@@ -407,6 +436,8 @@ public class NativeMatrix
    {
       return "NativeMatrix: " + getNumRows() + " x " + getNumCols();
    }
+
+
 
 
 }
