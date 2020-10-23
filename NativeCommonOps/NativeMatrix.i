@@ -27,10 +27,13 @@
     jenv->ReleasePrimitiveArrayCritical($input, $1, 0);
 }
 
+%ignore matrix;
 
 %include "NativeMatrix.h"
+%include "NullspaceProjector.h"
 
 %{
 #include "NativeMatrix.h"
+#include "NullspaceProjector.h"
 %}
 

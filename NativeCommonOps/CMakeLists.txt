@@ -16,7 +16,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -s")
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCE_FILES NativeCommonOps.cpp NativeMatrix.cpp)
+set(SOURCE_FILES NativeCommonOps.cpp NativeMatrix.cpp NullspaceProjector.cpp)
 
 
 

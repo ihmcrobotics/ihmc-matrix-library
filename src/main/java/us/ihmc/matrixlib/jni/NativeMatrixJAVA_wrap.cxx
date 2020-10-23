@@ -231,6 +231,7 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 
 
 #include "NativeMatrix.h"
+#include "NullspaceProjector.h"
 
 
 #ifdef __cplusplus
@@ -749,29 +750,6 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1projectOnNullSpace(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_, jdouble jarg4) {
-  jboolean jresult = 0 ;
-  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
-  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
-  NativeMatrixImpl *arg3 = (NativeMatrixImpl *) 0 ;
-  double arg4 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg2_;
-  (void)jarg3_;
-  arg1 = *(NativeMatrixImpl **)&jarg1; 
-  arg2 = *(NativeMatrixImpl **)&jarg2; 
-  arg3 = *(NativeMatrixImpl **)&jarg3; 
-  arg4 = (double)jarg4; 
-  result = (bool)(arg1)->projectOnNullSpace(arg2,arg3,arg4);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
 SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1transpose(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
   jboolean jresult = 0 ;
   NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
@@ -1117,6 +1095,56 @@ SWIGEXPORT void JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_delete
   (void)jenv;
   (void)jcls;
   arg1 = *(NativeMatrixImpl **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_new_1NullspaceProjectorImpl(JNIEnv *jenv, jclass jcls, jint jarg1) {
+  jlong jresult = 0 ;
+  int arg1 ;
+  NullspaceProjectorImpl *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = (int)jarg1; 
+  result = (NullspaceProjectorImpl *)new NullspaceProjectorImpl(arg1);
+  *(NullspaceProjectorImpl **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NullspaceProjectorImpl_1projectOnNullSpace(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jdouble jarg5) {
+  jboolean jresult = 0 ;
+  NullspaceProjectorImpl *arg1 = (NullspaceProjectorImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg3 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg4 = (NativeMatrixImpl *) 0 ;
+  double arg5 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  (void)jarg4_;
+  arg1 = *(NullspaceProjectorImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  arg3 = *(NativeMatrixImpl **)&jarg3; 
+  arg4 = *(NativeMatrixImpl **)&jarg4; 
+  arg5 = (double)jarg5; 
+  result = (bool)(arg1)->projectOnNullSpace(arg2,arg3,arg4,arg5);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_delete_1NullspaceProjectorImpl(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  NullspaceProjectorImpl *arg1 = (NullspaceProjectorImpl *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(NullspaceProjectorImpl **)&jarg1; 
   delete arg1;
 }
 

@@ -127,10 +127,6 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_extract(swigCPtr, this, srcY0, srcY1, srcX0, srcX1, dst, dstRows, dstCols, dstY0, dstX0);
   }
 
-  public boolean projectOnNullSpace(NativeMatrixImpl A, NativeMatrixImpl B, double alpha) {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_projectOnNullSpace(swigCPtr, this, NativeMatrixImpl.getCPtr(A), A, NativeMatrixImpl.getCPtr(B), B, alpha);
-  }
-
   public boolean transpose(NativeMatrixImpl a) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_transpose(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a);
   }
