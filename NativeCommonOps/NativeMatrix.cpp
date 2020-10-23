@@ -370,6 +370,25 @@ bool NativeMatrixImpl::extract(int srcY0, int srcY1, int srcX0, int srcX1, doubl
 
 }
 
+bool NativeMatrixImpl::projectOnNullSpace(NativeMatrixImpl* A, NativeMatrixImpl* B, double alpha)
+{
+    int aCols = A->cols();
+
+    if(aCols != B->cols())
+    {
+        return false;
+    }
+
+    matrix.resize(A->rows(), aCols);
+
+    Eigen::MatrixXd BtB = B->matrix.transpose() * B->matrix;
+    Eigen::MatrixXd outer = BtB + Eigen::MatrixXd::Identity(aCols, aCols) * alpha * alpha;
+
+    matrix = A->matrix * (Eigen::MatrixXd::Identity(aCols, aCols) - outer.llt().solve(BtB));
+
+    return true;
+}
+
 bool NativeMatrixImpl::transpose(NativeMatrixImpl *a)
 {
     resize(a->cols(), a->rows());

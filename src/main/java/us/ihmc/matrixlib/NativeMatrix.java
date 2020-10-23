@@ -296,8 +296,32 @@ public class NativeMatrix
       {
          return false;
       }
-      
+   }
+   
 
+   /**
+    * Projects the matrix {@code a} onto the null-space of {@code b} and stores the result in {@code c}
+    * such that</br>
+    * b * c == 0</br>
+    * This method uses a damped least square approach causing the null-space to grow gradually.
+    * 
+    * @param a     matrix to project
+    * @param b     matrix to compute the null-space of
+    * @param c     where the result is stored (modified)
+    * @param alpha damping value
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void projectOnNullspace(NativeMatrix a, NativeMatrix b, double alpha)
+   {
+      if (a == this)
+      {
+         throw new IllegalArgumentException("Can not project in place. The result matrix needs to be different from the matrix to project.");
+      }
+
+      if(!impl.projectOnNullSpace(a.impl, b.impl, alpha))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
    }
 
    public void insert(NativeMatrix src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0)

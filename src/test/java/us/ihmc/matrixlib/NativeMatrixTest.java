@@ -424,6 +424,59 @@ public class NativeMatrixTest
    }
    
    @Test
+   public void testProjectOnNullspace()
+   {
+      Random random = new Random(40L);
+
+      System.out.println("Testing projecting nullspace with random matrices...");
+
+      nativeTime = 0;
+      ejmlTime = 0;
+      double matrixSizes = 0;
+
+      for (int i = 0; i < iterations; i++)
+      {
+         int aRows = random.nextInt(maxSize) + 1;
+         int bRows = random.nextInt(maxSize) + 1;
+         int abCols = random.nextInt(maxSize) + 1;
+         
+         matrixSizes += (aRows + bRows + 2 * abCols) / 4.0;
+
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(aRows, abCols, random);
+         DMatrixRMaj b = new DMatrixRMaj(bRows, abCols);
+         
+         NativeMatrix nativeResultMatrix = new NativeMatrix(aRows, abCols);
+         DMatrixRMaj nativeResult = new DMatrixRMaj(aRows, abCols);
+
+         DMatrixRMaj ejmlResult = new DMatrixRMaj(aRows, abCols);
+         
+         NativeMatrix nativeA = new NativeMatrix(aRows, aRows);
+         NativeMatrix nativeb = new NativeMatrix(aRows, 1);
+         
+         double alpha = 0.5;
+         
+         nativeTime -= System.nanoTime();
+         nativeA.set(A);
+         nativeb.set(b);
+         nativeResultMatrix.projectOnNullspace(nativeA, nativeb, alpha);
+         nativeResultMatrix.get(nativeResult);
+         nativeTime += System.nanoTime();
+
+         ejmlTime -= System.nanoTime();
+         NativeCommonOps.projectOnNullspace(A, b, ejmlResult, alpha);
+         ejmlTime += System.nanoTime();
+
+         MatrixTestTools.assertMatrixEquals(ejmlResult, nativeResult, epsilon);
+      }
+
+      System.out.println("NativeMatrix took " + Conversions.nanosecondsToMilliseconds((double) (nativeTime / iterations)) + " ms on average");
+      System.out.println("NativeCommonOps took " + Conversions.nanosecondsToMilliseconds((double) (ejmlTime / iterations)) + " ms on average");
+      System.out.println("Average matrix size was " + matrixSizes / iterations);
+      System.out.println("NativeMatrix takes " + 100.0 * nativeTime / ejmlTime + "% of NativeCommonOps time.\n");
+   }
+
+   
+   @Test
    public void testMultAddBlock()
    {
       Random random = new Random(124L);

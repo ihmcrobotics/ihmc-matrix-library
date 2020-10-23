@@ -32,6 +32,7 @@ public class NativeMatrixLibraryJNI {
   public final static native boolean NativeMatrixImpl_insert__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8);
   public final static native boolean NativeMatrixImpl_insert__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8, int jarg9, int jarg10);
   public final static native boolean NativeMatrixImpl_extract(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, double[] jarg6, int jarg7, int jarg8, int jarg9, int jarg10);
+  public final static native boolean NativeMatrixImpl_projectOnNullSpace(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, double jarg4);
   public final static native boolean NativeMatrixImpl_transpose(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_);
   public final static native boolean NativeMatrixImpl_removeRow(long jarg1, NativeMatrixImpl jarg1_, int jarg2);
   public final static native boolean NativeMatrixImpl_removeColumn(long jarg1, NativeMatrixImpl jarg1_, int jarg2);

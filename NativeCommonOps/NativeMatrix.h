@@ -55,6 +55,8 @@ public:
 
     bool extract(int srcY0, int srcY1, int srcX0, int srcX1, double *dst, int dstRows, int dstCols, int dstY0, int dstX0);
 
+    bool projectOnNullSpace(NativeMatrixImpl *A, NativeMatrixImpl *B, double alpha);
+
     bool transpose(NativeMatrixImpl* a);
 
     bool removeRow(int indexToRemove);
