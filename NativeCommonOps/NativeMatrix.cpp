@@ -415,7 +415,7 @@ bool NativeMatrixImpl::removeColumn(int colToRemove)
     Eigen::Index numRows = matrix.rows();
     Eigen::Index numCols = matrix.cols()  - 1;
 
-    // Specialization for removing the last row
+    // Specialization for removing the last column
     if(numCols == 0 && colToRemove == 0)
     {
         new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
@@ -423,7 +423,24 @@ bool NativeMatrixImpl::removeColumn(int colToRemove)
     }
     else if( colToRemove <= numCols )
     {
-        matrix.block(0,colToRemove,numRows,numCols-colToRemove) = matrix.rightCols(numCols-colToRemove);
+        /*
+         *  Use eigen blocks to move the data
+         */
+//        matrix.block(0,colToRemove,numRows,numCols-colToRemove) = matrix.rightCols(numCols-colToRemove);
+
+
+        /*
+         *  Memmove is guaranteed not to have aliasing effects, while matrix.block needs .eval().
+         */
+
+        double* data = storage.data();
+        double* dst = data + (colToRemove * numRows);
+        double* src = data + ( (colToRemove + 1) * numRows);
+        size_t size = (numCols - colToRemove) * numRows * sizeof(double);
+
+        memmove(dst, src, size);
+
+
         new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
         return true;
     }
