@@ -6,11 +6,7 @@
 
 NativeMatrixImpl::NativeMatrixImpl(int numRows, int numCols) : storage(numRows, numCols), matrix(NULL, numRows, numCols)
 {
-    new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
-
-    dimensions[0] = rows();
-    dimensions[1] = cols();
-    dimensions[2] = size();
+    updateView(numRows, numCols);
 }
 
 void NativeMatrixImpl::resize(int numRows, int numCols)
@@ -260,7 +256,7 @@ bool NativeMatrixImpl::solveCheck(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
     resize(a->cols(), 1);
 
-    const Eigen::FullPivLU<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, STORAGE_FORMAT> > fullPivLu = a->matrix.fullPivLu();
+    const Eigen::FullPivLU<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> > fullPivLu = a->matrix.fullPivLu();
     if (fullPivLu.isInvertible())
     {
         matrix = fullPivLu.solve(b->matrix);
@@ -331,15 +327,6 @@ bool NativeMatrixImpl::removeRow(int rowToRemove)
     int newRows = oldRows - 1;
     int newCols = cols();
 
-#ifdef ROW_MAJOR
-    double* data = storage.data();
-    double* dst = data + (rowToRemove * newCols);
-    double* src = data + ( (rowToRemove + 1) * newCols);
-    size_t size = (newRows - rowToRemove) * newCols * sizeof(double);
-
-    memmove(dst, src, size);
-
-#else
     /*
      * Algorithm based on memmove
      *
@@ -364,7 +351,6 @@ bool NativeMatrixImpl::removeRow(int rowToRemove)
     double* dst = data + (lastCol * newRows + rowToRemove);
     double* src = data + (lastCol * oldRows + rowToRemove + 1);
     memmove((void*)(dst), (void*)(src), remaining * sizeof(double));
-#endif
 
     updateView(newRows, newCols);
     return true;
@@ -390,42 +376,12 @@ bool NativeMatrixImpl::removeColumn(int colToRemove)
     int oldCols = cols();
     int newCols = oldCols - 1;
 
-
-#ifdef ROW_MAJOR
-    /*
-     * Algorithm based on memmove
-     *
-     * Very fast compared to eigen directly.
-     */
-
-    double* data = storage.data();
-
-    size_t newStride = (size_t)newCols * sizeof(double);
-
-
-    for (int row = 0; row < newRows - 1; row++)
-    {
-        double* dst = data + (row * newCols + colToRemove);
-        double* src = data + (row * oldCols + colToRemove + 1);
-
-        memmove((void*)(dst), (void*)(src), newStride);
-    }
-
-    int lastRow = rows() - 1;
-    int remaining = newCols - colToRemove;
-    double* dst = data + (lastRow * newCols + colToRemove);
-    double* src = data + (lastRow * oldCols + colToRemove + 1);
-    memmove((void*)(dst), (void*)(src), remaining * sizeof(double));
-
-#else
     double* data = storage.data();
     double* dst = data + (colToRemove * newRows);
     double* src = data + ( (colToRemove + 1) * newRows);
     size_t size = (newCols - colToRemove) * newRows * sizeof(double);
 
     memmove(dst, src, size);
-
-#endif
 
     updateView(newRows, newCols);
     return true;

@@ -1,8 +1,5 @@
 package us.ihmc.matrixlib;
 
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
-
 import org.ejml.data.DMatrixRMaj;
 
 import us.ihmc.matrixlib.jni.NativeMatrixImpl;
@@ -16,13 +13,11 @@ public class NativeMatrix
    }
 
    private final NativeMatrixImpl impl;
-   private final IntBuffer dimensions;
 
 
    public NativeMatrix(int rows, int cols)
    {
       this.impl = new NativeMatrixImpl(rows, cols);
-      this.dimensions = impl.dims().order(ByteOrder.nativeOrder()).asIntBuffer();
    }
 
    public NativeMatrix(DMatrixRMaj matrix)
@@ -360,12 +355,12 @@ public class NativeMatrix
 
    public int getNumRows()
    {
-      return dimensions.get(0);
+      return impl.rows();
    }
 
    public int getNumCols()
    {
-      return dimensions.get(1);
+      return impl.cols();
    }
    
    public double min()
@@ -385,7 +380,7 @@ public class NativeMatrix
    
    public int getNumElements()
    {
-      return dimensions.get(2);
+      return impl.size();
    }
    
    public double prod()

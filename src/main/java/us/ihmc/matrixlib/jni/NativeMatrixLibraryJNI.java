@@ -46,7 +46,9 @@ public class NativeMatrixLibraryJNI {
   public final static native void NativeMatrixImpl_scale__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, double jarg2);
   public final static native boolean NativeMatrixImpl_set__SWIG_2(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, double jarg4);
   public final static native double NativeMatrixImpl_get__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3);
-  public final static native java.nio.ByteBuffer NativeMatrixImpl_dims(long jarg1, NativeMatrixImpl jarg1_);
+  public final static native int NativeMatrixImpl_rows(long jarg1, NativeMatrixImpl jarg1_);
+  public final static native int NativeMatrixImpl_cols(long jarg1, NativeMatrixImpl jarg1_);
+  public final static native int NativeMatrixImpl_size(long jarg1, NativeMatrixImpl jarg1_);
   public final static native void NativeMatrixImpl_print(long jarg1, NativeMatrixImpl jarg1_);
   public final static native void delete_NativeMatrixImpl(long jarg1);
 }

@@ -183,9 +183,17 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_get__SWIG_1(swigCPtr, this, row, col);
   }
 
-  public java.nio.ByteBuffer dims() {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_dims(swigCPtr, this);
-}
+  public int rows() {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_rows(swigCPtr, this);
+  }
+
+  public int cols() {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_cols(swigCPtr, this);
+  }
+
+  public int size() {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_size(swigCPtr, this);
+  }
 
   public void print() {
     NativeMatrixLibraryJNI.NativeMatrixImpl_print(swigCPtr, this);
