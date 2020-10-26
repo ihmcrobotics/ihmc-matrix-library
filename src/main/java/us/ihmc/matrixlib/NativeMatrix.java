@@ -436,6 +436,11 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     */
    public void transpose(NativeMatrix a)
    {
+      if (a == this)
+      {
+         throw new IllegalArgumentException("Can not transpose in place. The result matrix needs to be different from the matrix to transpose.");
+      }
+
       if (!impl.transpose(a.impl))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
