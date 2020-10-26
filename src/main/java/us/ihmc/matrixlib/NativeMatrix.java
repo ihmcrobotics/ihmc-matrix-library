@@ -1,6 +1,14 @@
 package us.ihmc.matrixlib;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
+import org.ejml.data.Matrix;
+import org.ejml.data.MatrixType;
+import org.ejml.data.ReshapeMatrix;
+import org.ejml.ops.MatrixIO;
 
 import us.ihmc.matrixlib.jni.NativeMatrixImpl;
 import us.ihmc.tools.nativelibraries.NativeLibraryLoader;
@@ -25,8 +33,10 @@ import us.ihmc.tools.nativelibraries.NativeLibraryLoader;
  *
  * @author Jesper Smith
  */
-public class NativeMatrix
+public class NativeMatrix implements ReshapeMatrix, DMatrix
 {
+   private static final long serialVersionUID = -6143897236850269840L;
+
    static
    {
       NativeLibraryLoader.loadLibrary("", "NativeCommonOps");
@@ -83,6 +93,7 @@ public class NativeMatrix
     * @param rows The new number of rows in the matrix.
     * @param cols The new number of columns in the matrix.
     */
+   @Override
    public void reshape(int rows, int cols)
    {
       impl.resize(rows, cols);
@@ -583,6 +594,7 @@ public class NativeMatrix
     * @param col The column of the element.
     * @return The value of the element.
     */
+   @Override
    public double get(int row, int col)
    {
       return impl.get(row, col);
@@ -601,6 +613,7 @@ public class NativeMatrix
     * @param col   The column of the element.
     * @param value The element's new value.
     */
+   @Override
    public void set(int row, int col, double value)
    {
       if (!impl.set(row, col, value))
@@ -639,6 +652,7 @@ public class NativeMatrix
    /**
     * Sets all elements equal to zero.
     */
+   @Override
    public void zero()
    {
       impl.zero();
@@ -659,6 +673,7 @@ public class NativeMatrix
     *
     * @return Number of rows.
     */
+   @Override
    public int getNumRows()
    {
       return impl.rows();
@@ -669,6 +684,7 @@ public class NativeMatrix
     *
     * @return Number of columns.
     */
+   @Override
    public int getNumCols()
    {
       return impl.cols();
@@ -710,6 +726,7 @@ public class NativeMatrix
     *
     * @return The number of elements in the matrix.
     */
+   @Override
    public int getNumElements()
    {
       return impl.size();
@@ -732,20 +749,104 @@ public class NativeMatrix
    }
 
    // TODO Add doc
-   public void print()
-   {
-      impl.print();
-   }
-
-   // TODO Add doc
    public boolean isApprox(NativeMatrix other, double precision)
    {
       return impl.isAprrox(other.impl, precision);
    }
 
+   /**
+    * Converts the array into a string format for display purposes. The conversion is done using
+    * {@link MatrixIO#print(java.io.PrintStream, DMatrix)}.
+    *
+    * @return String representation of the matrix.
+    */
    @Override
    public String toString()
    {
-      return "NativeMatrix: " + getNumRows() + " x " + getNumCols();
+      ByteArrayOutputStream stream = new ByteArrayOutputStream();
+      MatrixIO.print(new PrintStream(stream), this);
+      return stream.toString();
+   }
+
+   // -------- Implementation of DMatrix API ----------------------
+
+   @Override
+   public void print()
+   {
+      MatrixIO.printFancy(System.out, this, MatrixIO.DEFAULT_LENGTH);
+   }
+
+   @Override
+   public void print(String format)
+   {
+      MatrixIO.print(System.out, this, format);
+   }
+
+   @SuppressWarnings("unchecked")
+   @Override
+   public NativeMatrix copy()
+   {
+      return new NativeMatrix(this);
+   }
+
+   @SuppressWarnings("unchecked")
+   @Override
+   public NativeMatrix createLike()
+   {
+      return new NativeMatrix(getNumRows(), getNumCols());
+   }
+
+   @SuppressWarnings("unchecked")
+   @Override
+   public NativeMatrix create(int numRows, int numCols)
+   {
+      return new NativeMatrix(numRows, numCols);
+   }
+
+   /**
+    * {@inheritDoc}
+    * <p>
+    * This implementation only supports {@link NativeMatrix} and {@link DMatrixRMaj}.
+    * </p>
+    * 
+    * @param original The matrix which is to be copied. This is not modified or saved.
+    * @throws NullPointerException          if the argument is {@code null}.
+    * @throws UnsupportedOperationException if the implementation of the argument is not supported.
+    */
+   @Override
+   public void set(Matrix original)
+   {
+      if (original instanceof NativeMatrix)
+         set((NativeMatrix) original);
+      else if (original instanceof DMatrixRMaj)
+         set((DMatrixRMaj) original);
+      else if (original == null)
+         throw new NullPointerException();
+      else
+         throw new UnsupportedOperationException("Unsupported matrix type: " + original.getClass().getSimpleName());
+   }
+
+   @Override
+   public MatrixType getType()
+   {
+      return MatrixType.UNSPECIFIED;
+   }
+
+   /**
+    * Redirects to {@link #get(int, int)}.
+    */
+   @Override
+   public double unsafe_get(int row, int col)
+   {
+      return get(row, col);
+   }
+
+   /**
+    * Redirects to {@link #set(int, int, double)}.
+    */
+   @Override
+   public void unsafe_set(int row, int col, double value)
+   {
+      set(row, col, value);
    }
 }
