@@ -27,6 +27,94 @@ public class NativeMatrixTest
    private volatile long ejmlTime = 0;
 
    @Test
+   public void testScale()
+   {
+      Random random = new Random(40L);
+
+      System.out.println("Testing matrix set-and-scale with random matrices...");
+
+      nativeTime = 0;
+      ejmlTime = 0;
+      double matrixSizes = 0.0;
+
+      for (int i = 0; i < warmumIterations; i++)
+      {
+         double alpha = RandomNumbers.nextDouble(random, 10.0);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+         DMatrixRMaj B = new DMatrixRMaj(1, 1);
+         CommonOps_DDRM.scale(alpha, A, B);
+
+         NativeMatrix nativeA = new NativeMatrix(maxSize, maxSize);
+         NativeMatrix nativeB = new NativeMatrix(maxSize, maxSize);
+
+         nativeA.set(A);
+         nativeB.scale(alpha, nativeA);
+      }
+
+      for (int i = 0; i < iterations; i++)
+      {
+         int rows = random.nextInt(maxSize) + 1;
+         int cols = random.nextInt(maxSize) + 1;
+         matrixSizes += (rows + cols) / 2.0;
+
+         double alpha = RandomNumbers.nextDouble(random, 10.0);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(rows, cols, random);
+         DMatrixRMaj actual = new DMatrixRMaj(rows, cols);
+         DMatrixRMaj expected = new DMatrixRMaj(rows, cols);
+
+         NativeMatrix nativeA = new NativeMatrix(rows, cols);
+         NativeMatrix nativeB = new NativeMatrix(rows, cols);
+
+         nativeTime -= System.nanoTime();
+         nativeA.set(A);
+         nativeB.scale(alpha, nativeA);
+         nativeB.get(actual);
+         nativeTime += System.nanoTime();
+
+         ejmlTime -= System.nanoTime();
+         CommonOps_DDRM.scale(alpha, A, expected);
+         ejmlTime += System.nanoTime();
+
+         MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
+      }
+
+      System.out.println("Test A:");
+      printTimings(nativeTime, ejmlTime, matrixSizes, iterations);
+
+      nativeTime = 0;
+      ejmlTime = 0;
+      matrixSizes = 0.0;
+
+      for (int i = 0; i < iterations; i++)
+      {
+         int rows = random.nextInt(maxSize) + 1;
+         int cols = random.nextInt(maxSize) + 1;
+         matrixSizes += (rows + cols) / 2.0;
+
+         double alpha = RandomNumbers.nextDouble(random, 10.0);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(rows, cols, random);
+         DMatrixRMaj actual = new DMatrixRMaj(rows, cols);
+         DMatrixRMaj expected = new DMatrixRMaj(rows, cols);
+
+         NativeMatrix nativeB = new NativeMatrix(rows, cols);
+
+         nativeTime -= System.nanoTime();
+         nativeB.scale(alpha, A);
+         nativeB.get(actual);
+         nativeTime += System.nanoTime();
+
+         ejmlTime -= System.nanoTime();
+         CommonOps_DDRM.scale(alpha, A, expected);
+         ejmlTime += System.nanoTime();
+
+         MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
+      }
+
+      System.out.println("Test B:");
+      printTimings(nativeTime, ejmlTime, matrixSizes, iterations);
+   }
+
+   @Test
    public void testMult()
    {
       Random random = new Random(40L);
