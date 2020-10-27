@@ -598,10 +598,16 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     * @param row The row of the element.
     * @param col The column of the element.
     * @return The value of the element.
+    * @throws IllegalArgumentException if either index is out of bound.
     */
    @Override
    public double get(int row, int col)
    {
+      if (row < 0 || col < 0 || row >= getNumRows() || col >= getNumCols())
+      {
+         throw new IllegalArgumentException("Index out of bounds. Requested (" + row + ", " + col + "). Dimension (" + getNumRows() + ", " + getNumCols()
+               + ").");
+      }
       return impl.get(row, col);
    }
 
@@ -617,6 +623,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     * @param row   The row of the element.
     * @param col   The column of the element.
     * @param value The element's new value.
+    * @throws IllegalArgumentException if either index is out of bound.
     */
    @Override
    public void set(int row, int col, double value)
@@ -726,6 +733,16 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    }
 
    /**
+    * Computes the product of all the elements in this matrix and returns the result.
+    * 
+    * @return the product of all this matrix elements.
+    */
+   public double prod()
+   {
+      return impl.prod();
+   }
+
+   /**
     * Returns the number of elements in this matrix, which is equal to the number of rows times the
     * number of columns.
     *
@@ -735,12 +752,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    public int getNumElements()
    {
       return impl.size();
-   }
-
-   // TODO Add doc
-   public double prod()
-   {
-      return impl.prod();
    }
 
    /**
