@@ -454,6 +454,11 @@ public class NativeMatrixTest
 
       printTimings(nativeTime, ejmlTime, matrixSizes, iterations);
       System.out.println("--------------------------------------------------------------");
+
+      { // Text exception
+         NativeMatrix nativeMatrix = new NativeMatrix(RandomMatrices_DDRM.rectangle(random.nextInt(maxSize), random.nextInt(maxSize), random));
+         assertThrows(IllegalArgumentException.class, () -> nativeMatrix.invert(nativeMatrix));
+      }
    }
 
    @Test
@@ -641,6 +646,15 @@ public class NativeMatrixTest
 
       printTimings(nativeTime, ejmlTime, matrixSizes, iterations);
       System.out.println("--------------------------------------------------------------");
+
+      { // Test exceptions
+         assertDoesNotThrow(() -> new NativeMatrix(15, 11).solve(new NativeMatrix(5, 5), new NativeMatrix(5, 1)));
+         Class<IllegalArgumentException> expectedType = IllegalArgumentException.class;
+         assertThrows(expectedType, () -> new NativeMatrix(15, 11).solve(new NativeMatrix(5, 5), new NativeMatrix(5, 2)));
+         assertThrows(expectedType, () -> new NativeMatrix(15, 11).solve(new NativeMatrix(5, 5), new NativeMatrix(4, 1)));
+         assertThrows(expectedType, () -> new NativeMatrix(15, 11).solve(new NativeMatrix(5, 4), new NativeMatrix(5, 1)));
+         assertThrows(expectedType, () -> new NativeMatrix(15, 11).solve(new NativeMatrix(6, 5), new NativeMatrix(5, 1)));
+      }
    }
 
    private static void printTimings(long nativeTotalTime, long ejmlTotalTime, double summedMatrixSizes, int iterations)
@@ -683,8 +697,14 @@ public class NativeMatrixTest
 
          assertTrue(expectedSolution.isApprox(solution, 1e-6));
       }
+   }
 
-      {
+   @Test
+   public void testAddBlock()
+   {
+      Random random = new Random(349754);
+
+      { // Test exceptions
          int rows = RandomNumbers.nextInt(random, 1, 100);
          int cols = RandomNumbers.nextInt(random, 1, 100);
          int fullRows = RandomNumbers.nextInt(random, rows, 500);
@@ -715,7 +735,6 @@ public class NativeMatrixTest
          assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn + 1, rows, cols, 1.0));
          assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows + 1, cols, 1.0));
          assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, cols + 1, 1.0));
-
       }
    }
 
