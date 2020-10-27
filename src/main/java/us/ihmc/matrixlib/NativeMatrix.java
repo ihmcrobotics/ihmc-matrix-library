@@ -849,12 +849,14 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    }
 
    /**
-    * Redirects to {@link #get(int, int)}.
+    * Unsafe get an element at row,col.
+    * 
+    * If the index is out of bounds, Double.NaN is returned.
     */
    @Override
    public double unsafe_get(int row, int col)
    {
-      return get(row, col);
+      return impl.get(row, col);
    }
 
    /**

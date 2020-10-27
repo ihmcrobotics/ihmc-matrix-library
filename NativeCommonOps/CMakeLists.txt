@@ -11,10 +11,11 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 include(${SWIG_USE_FILE})
 
 set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -s")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -s -mavx")
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 
 set(SOURCE_FILES NativeCommonOps.cpp NativeMatrix.cpp NullspaceProjector.cpp)
 

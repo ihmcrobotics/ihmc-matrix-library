@@ -155,6 +155,11 @@ bool NativeMatrixImpl::multAddTransB(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
 bool NativeMatrixImpl::addBlock(NativeMatrixImpl *a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns, double scale)
 {
+    if(destStartRow < 0 || destStartColumn < 0 || srcStartRow < 0 || srcStartColumn < 0 || numberOfRows < 0 || numberOfColumns < 0)
+    {
+        return false;
+    }
+
     if(rows() < destStartRow + numberOfRows)
     {
         return false;
@@ -181,6 +186,11 @@ bool NativeMatrixImpl::addBlock(NativeMatrixImpl *a, int destStartRow, int destS
 
 bool NativeMatrixImpl::multAddBlock(NativeMatrixImpl *a, NativeMatrixImpl *b, int rowStart, int colStart)
 {
+    if(rowStart < 0 || colStart < 0)
+    {
+        return false;
+    }
+
     if(a->cols() != b->rows())
     {
         return false;
@@ -272,6 +282,11 @@ bool NativeMatrixImpl::solveCheck(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
 bool NativeMatrixImpl::insert(NativeMatrixImpl *src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0)
 {
+    if(srcY0 < 0 || srcY1 < 0 || srcX0 < 0 || srcX1 < 0 || dstY0 < 0 || dstX0 < 0)
+    {
+        return false;
+    }
+
 
     if( srcY1 < srcY0 || srcY0 < 0 || srcY1 > src->rows() )
     {
@@ -307,6 +322,11 @@ bool NativeMatrixImpl::insert(double *src, int srcRows, int srcCols, int srcY0, 
         return false;
     }
 
+    if(srcY0 < 0 || srcY1 < 0 || srcX0 < 0 || srcX1 < 0 || dstY0 < 0 || dstX0 < 0)
+    {
+        return false;
+    }
+
     if( srcY1 < srcY0 || srcY0 < 0 || srcY1 > srcRows )
     {
         return false;
@@ -338,6 +358,11 @@ bool NativeMatrixImpl::insert(double *src, int srcRows, int srcCols, int srcY0, 
 bool NativeMatrixImpl::extract(int srcY0, int srcY1, int srcX0, int srcX1, double *dst, int dstRows, int dstCols, int dstY0, int dstX0)
 {
     if(dst == nullptr)
+    {
+        return false;
+    }
+
+    if(srcY0 < 0 || srcY1 < 0 || srcX0 < 0 || srcX1 < 0 || dstY0 < 0 || dstX0 < 0)
     {
         return false;
     }
@@ -383,7 +408,7 @@ bool NativeMatrixImpl::transpose(NativeMatrixImpl *a)
 bool NativeMatrixImpl::removeRow(int rowToRemove)
 {
 
-    if(rowToRemove >= rows())
+    if(rowToRemove >= rows() || rowToRemove < 0)
     {
         return false;
     }
@@ -431,7 +456,7 @@ bool NativeMatrixImpl::removeRow(int rowToRemove)
 
 bool NativeMatrixImpl::removeColumn(int colToRemove)
 {
-    if(colToRemove >= cols())
+    if(colToRemove >= cols() || colToRemove < 0)
     {
         return false;
     }
@@ -496,6 +521,7 @@ bool NativeMatrixImpl::set(double *data, int rows, int cols)
     {
         return false;
     }
+
     resize(rows, cols);
 
 

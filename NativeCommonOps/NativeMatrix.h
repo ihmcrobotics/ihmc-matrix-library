@@ -4,7 +4,7 @@
 #include <Eigen/Dense>
 
 
-typedef Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>, Eigen::Aligned16> NativeMatrixView;
+typedef Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>, Eigen::AlignedMax> NativeMatrixView;
 
 class NativeMatrixImpl
 {
@@ -101,7 +101,7 @@ public:
 
     inline bool set(int row, int col, double value)
     {
-          if(row >= rows() || col >= cols())
+          if(row >= rows() || col >= cols() || row < 0 || col < 0)
           {
               return false;
           }
@@ -113,7 +113,7 @@ public:
 
     inline double get(int row, int col)
     {
-        if(row >= rows() || col >= cols())
+        if(row >= rows() || col >= cols() || row < 0 || col < 0)
         {
             return nan;
         }
