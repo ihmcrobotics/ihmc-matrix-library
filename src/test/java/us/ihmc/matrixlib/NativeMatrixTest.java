@@ -390,14 +390,13 @@ public class NativeMatrixTest
       System.out.println("--------------------------------------------------------------");
 
       { // Test exceptions
-         assertDoesNotThrow(() -> new NativeMatrix(5, 7).multQuad(new NativeMatrix(5, 3), new NativeMatrix(3, 7)));
-         assertDoesNotThrow(() -> new NativeMatrix(0, 7).multQuad(new NativeMatrix(0, 3), new NativeMatrix(3, 7)));
-         assertDoesNotThrow(() -> new NativeMatrix(5, 0).multQuad(new NativeMatrix(5, 3), new NativeMatrix(3, 0)));
+         assertDoesNotThrow(() -> new NativeMatrix(3, 3).multQuad(new NativeMatrix(5, 3), new NativeMatrix(5, 5)));
+         assertDoesNotThrow(() -> new NativeMatrix(8, 8).multQuad(new NativeMatrix(5, 3), new NativeMatrix(5, 5)));
+         assertDoesNotThrow(() -> new NativeMatrix(3, 3).multQuad(new NativeMatrix(0, 3), new NativeMatrix(0, 0)));
+         assertDoesNotThrow(() -> new NativeMatrix(0, 0).multQuad(new NativeMatrix(5, 0), new NativeMatrix(5, 5)));
          Class<IllegalArgumentException> expectedType = IllegalArgumentException.class;
-         assertThrows(expectedType, () -> new NativeMatrix(5, 7).multQuad(new NativeMatrix(5, 3), new NativeMatrix(8, 7)));
-         assertThrows(expectedType, () -> new NativeMatrix(5, 7).multQuad(new NativeMatrix(5, 13), new NativeMatrix(8, 7)));
-         assertThrows(expectedType, () -> new NativeMatrix(5, 7).multQuad(new NativeMatrix(6, 3), new NativeMatrix(3, 7)));
-         assertThrows(expectedType, () -> new NativeMatrix(5, 7).multQuad(new NativeMatrix(5, 3), new NativeMatrix(3, 5)));
+         assertThrows(expectedType, () -> new NativeMatrix(3, 3).multQuad(new NativeMatrix(5, 3), new NativeMatrix(6, 5)));
+         assertThrows(expectedType, () -> new NativeMatrix(3, 3).multQuad(new NativeMatrix(5, 3), new NativeMatrix(5, 6)));
       }
    }
 
