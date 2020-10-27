@@ -603,12 +603,26 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    @Override
    public double get(int row, int col)
    {
-      if (row < 0 || col < 0 || row >= getNumRows() || col >= getNumCols())
+      if (row < 0 || col < 0)
       {
-         throw new IllegalArgumentException("Index out of bounds. Requested (" + row + ", " + col + "). Dimension (" + getNumRows() + ", " + getNumCols()
-               + ").");
+         throwIndexOutOfBoundsException(row, col);
       }
-      return impl.get(row, col);
+
+      double value = impl.get(row, col);
+
+      // When the index is out-of-bounds, the native layer will return NaN.
+      // By performing this second check only if the result is NaN, we can reduce the overhead due to getNumRows() and getNumCols().
+      if (Double.isNaN(value) && (row >= getNumRows() || col >= getNumCols()))
+      {
+         throwIndexOutOfBoundsException(row, col);
+      }
+
+      return value;
+   }
+
+   private void throwIndexOutOfBoundsException(int row, int col)
+   {
+      throw new IllegalArgumentException("Index out of bounds. Requested (" + row + ", " + col + "). Dimension (" + getNumRows() + ", " + getNumCols() + ").");
    }
 
    /**
@@ -630,8 +644,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    {
       if (!impl.set(row, col, value))
       {
-         throw new IllegalArgumentException("Index out of bounds. Requested (" + row + ", " + col + "). Dimension (" + getNumRows() + ", " + getNumCols()
-               + ").");
+         throwIndexOutOfBoundsException(row, col);
       }
    }
 
@@ -849,9 +862,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    }
 
    /**
-    * Unsafe get an element at row,col.
-    * 
-    * If the index is out of bounds, Double.NaN is returned.
+    * Unsafe get an element at row,col. If the index is out of bounds, Double.NaN is returned.
     */
    @Override
    public double unsafe_get(int row, int col)
