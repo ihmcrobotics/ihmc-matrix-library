@@ -923,9 +923,9 @@ public class NativeMatrixTest
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols, -1, AcolOffset));
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, -1));
 
-         assertThrows(expectedType, () -> A.insert(B, Brows, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset));
+         assertThrows(expectedType, () -> A.insert(B, Brows + 1, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset));
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows + 1, BcolOffset, Bcols, ArowOffset, AcolOffset));
-         assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, Bcols, Bcols, ArowOffset, AcolOffset));
+         assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, Bcols + 1, Bcols, ArowOffset, AcolOffset));
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols + 1, ArowOffset, AcolOffset));
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols, Arows - blockRows + 1, AcolOffset));
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, Acols - blockCols + 1));
@@ -997,9 +997,9 @@ public class NativeMatrixTest
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols, -1, AcolOffset));
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, -1));
 
-         assertThrows(expectedType, () -> A.insert(B, Brows, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset));
+         assertThrows(expectedType, () -> A.insert(B, Brows + 1, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset));
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows + 1, BcolOffset, Bcols, ArowOffset, AcolOffset));
-         assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, Bcols, Bcols, ArowOffset, AcolOffset));
+         assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, Bcols + 1, Bcols, ArowOffset, AcolOffset));
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols + 1, ArowOffset, AcolOffset));
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols, Arows - blockRows + 1, AcolOffset));
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, Acols - blockCols + 1));
@@ -1065,12 +1065,12 @@ public class NativeMatrixTest
          assertThrows(expectedType, () -> B.extract(BrowOffset, Brows, BcolOffset, Bcols, A, -1, AcolOffset));
          assertThrows(expectedType, () -> B.extract(BrowOffset, Brows, BcolOffset, Bcols, A, ArowOffset, -1));
 
-         assertThrows(expectedType, () -> B.extract(Brows, Brows, BcolOffset, Bcols, A, ArowOffset, AcolOffset));
+         assertThrows(expectedType, () -> B.extract(Brows + 1, Brows, BcolOffset, Bcols, A, ArowOffset, AcolOffset));
          assertThrows(expectedType, () -> B.extract(BrowOffset, Brows + 1, BcolOffset, Bcols, A, ArowOffset, AcolOffset));
-         assertThrows(expectedType, () -> B.extract(BrowOffset, Brows, Bcols, Bcols, A, ArowOffset, AcolOffset));
+         assertThrows(expectedType, () -> B.extract(BrowOffset, Brows, Bcols + 1, Bcols, A, ArowOffset, AcolOffset));
          assertThrows(expectedType, () -> B.extract(BrowOffset, Brows, BcolOffset, Bcols + 1, A, ArowOffset, AcolOffset));
-         assertThrows(expectedType, () -> B.extract(BrowOffset, Brows, BcolOffset, Bcols, A, Arows - Brows + 1, AcolOffset));
-         assertThrows(expectedType, () -> B.extract(BrowOffset, Brows, BcolOffset, Bcols, A, ArowOffset, Acols - Brows + 1));
+         assertThrows(expectedType, () -> B.extract(BrowOffset, Brows, BcolOffset, Bcols, A, Arows - (Brows - BrowOffset) + 1, AcolOffset));
+         assertThrows(expectedType, () -> B.extract(BrowOffset, Brows, BcolOffset, Bcols, A, ArowOffset, Acols - (Bcols - BcolOffset) + 1));
       }
    }
 
