@@ -1,5 +1,8 @@
 package us.ihmc.matrixlib;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Random;
 
 import org.ejml.data.DMatrixRMaj;
@@ -14,12 +17,11 @@ public class NativeNullspaceProjectorTest
    private static final int maxSize = 80;
    private static final int iterations = 5000;
    private static final double epsilon = 1.0e-8;
-   
 
    // Make volatile to force operation order
    private volatile long nativeTime = 0;
    private volatile long ejmlTime = 0;
-   
+
    @Test
    public void testProjectOnNullspace()
    {
@@ -35,24 +37,24 @@ public class NativeNullspaceProjectorTest
       {
          int aRows = random.nextInt(maxSize) + 1;
          int dofs = random.nextInt(maxSize) + 1;
-         
+
          matrixSizes += (aRows + dofs + 2 * dofs) / 4.0;
 
          DMatrixRMaj A = RandomMatrices_DDRM.rectangle(aRows, dofs, random);
-         DMatrixRMaj b =  RandomMatrices_DDRM.rectangle(dofs, dofs, random);
-         
+         DMatrixRMaj b = RandomMatrices_DDRM.rectangle(dofs, dofs, random);
+
          NativeMatrix nativeResultMatrix = new NativeMatrix(aRows, dofs);
          DMatrixRMaj nativeResult = new DMatrixRMaj(aRows, dofs);
 
          DMatrixRMaj ejmlResult = new DMatrixRMaj(aRows, dofs);
-         
+
          NativeMatrix nativeA = new NativeMatrix(A);
          NativeMatrix nativeb = new NativeMatrix(aRows, 1);
-         
+
          NativeNullspaceProjector nullspaceProjector = new NativeNullspaceProjector(dofs);
-         
+
          double alpha = 0.5;
-         
+
          nativeTime -= System.nanoTime();
          nativeA.set(A);
          nativeb.set(b);
@@ -71,5 +73,16 @@ public class NativeNullspaceProjectorTest
       System.out.println("NativeCommonOps took " + Conversions.nanosecondsToMilliseconds((double) (ejmlTime / iterations)) + " ms on average");
       System.out.println("Average matrix size was " + matrixSizes / iterations);
       System.out.println("NativeMatrix takes " + 100.0 * nativeTime / ejmlTime + "% of NativeCommonOps time.\n");
+
+      { // Test exceptions
+         Class<IllegalArgumentException> expectedType = IllegalArgumentException.class;
+         assertThrows(expectedType, () -> new NativeNullspaceProjector(-1));
+         int m = 10;
+         NativeNullspaceProjector projector = new NativeNullspaceProjector(m);
+         assertDoesNotThrow(() -> projector.project(new NativeMatrix(7, m), new NativeMatrix(12, m), new NativeMatrix(3, 3), 1.0));
+         assertThrows(expectedType, () -> projector.project(new NativeMatrix(7, m), new NativeMatrix(12, m + 1), new NativeMatrix(3, 3), 1.0));
+         assertThrows(expectedType, () -> projector.project(new NativeMatrix(7, m + 1), new NativeMatrix(12, m), new NativeMatrix(3, 3), 1.0));
+         assertThrows(expectedType, () -> projector.project(new NativeMatrix(7, m + 1), new NativeMatrix(12, m + 1), new NativeMatrix(3, 3), 1.0));
+      }
    }
 }

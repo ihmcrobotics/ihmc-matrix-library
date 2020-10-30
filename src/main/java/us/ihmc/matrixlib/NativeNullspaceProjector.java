@@ -19,6 +19,8 @@ public class NativeNullspaceProjector
     */
    public NativeNullspaceProjector(int matrixSize)
    {
+      if (matrixSize < 0)
+         throw new IllegalArgumentException("Matrix size cannot be negative");
       impl = new NativeNullspaceProjectorImpl(matrixSize);
    }
 
