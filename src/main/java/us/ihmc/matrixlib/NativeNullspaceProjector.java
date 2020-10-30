@@ -1,14 +1,14 @@
 package us.ihmc.matrixlib;
 
-import us.ihmc.matrixlib.jni.NullspaceProjectorImpl;
+import us.ihmc.matrixlib.jni.NativeNullspaceProjectorImpl;
 
-public class NullspaceProjector
+public class NativeNullspaceProjector
 {
-   private final NullspaceProjectorImpl impl;
+   private final NativeNullspaceProjectorImpl impl;
    
-   public NullspaceProjector(int degreesOfFreedom)
+   public NativeNullspaceProjector(int degreesOfFreedom)
    {
-      impl = new NullspaceProjectorImpl(degreesOfFreedom);
+      impl = new NativeNullspaceProjectorImpl(degreesOfFreedom);
    }
    
 

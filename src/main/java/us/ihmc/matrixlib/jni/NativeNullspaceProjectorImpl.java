@@ -8,16 +8,16 @@
 
 package us.ihmc.matrixlib.jni;
 
-public class NullspaceProjectorImpl {
+public class NativeNullspaceProjectorImpl {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 
-  protected NullspaceProjectorImpl(long cPtr, boolean cMemoryOwn) {
+  protected NativeNullspaceProjectorImpl(long cPtr, boolean cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = cPtr;
   }
 
-  protected static long getCPtr(NullspaceProjectorImpl obj) {
+  protected static long getCPtr(NativeNullspaceProjectorImpl obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 
@@ -29,18 +29,18 @@ public class NullspaceProjectorImpl {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        NativeMatrixLibraryJNI.delete_NullspaceProjectorImpl(swigCPtr);
+        NativeMatrixLibraryJNI.delete_NativeNullspaceProjectorImpl(swigCPtr);
       }
       swigCPtr = 0;
     }
   }
 
-  public NullspaceProjectorImpl(int degreesOfFreedom) {
-    this(NativeMatrixLibraryJNI.new_NullspaceProjectorImpl(degreesOfFreedom), true);
+  public NativeNullspaceProjectorImpl(int degreesOfFreedom) {
+    this(NativeMatrixLibraryJNI.new_NativeNullspaceProjectorImpl(degreesOfFreedom), true);
   }
 
   public boolean projectOnNullSpace(NativeMatrixImpl A, NativeMatrixImpl B, NativeMatrixImpl x, double alpha) {
-    return NativeMatrixLibraryJNI.NullspaceProjectorImpl_projectOnNullSpace(swigCPtr, this, NativeMatrixImpl.getCPtr(A), A, NativeMatrixImpl.getCPtr(B), B, NativeMatrixImpl.getCPtr(x), x, alpha);
+    return NativeMatrixLibraryJNI.NativeNullspaceProjectorImpl_projectOnNullSpace(swigCPtr, this, NativeMatrixImpl.getCPtr(A), A, NativeMatrixImpl.getCPtr(B), B, NativeMatrixImpl.getCPtr(x), x, alpha);
   }
 
 }

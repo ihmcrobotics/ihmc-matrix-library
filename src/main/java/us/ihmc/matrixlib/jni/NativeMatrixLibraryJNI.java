@@ -53,7 +53,7 @@ public class NativeMatrixLibraryJNI {
   public final static native int NativeMatrixImpl_size(long jarg1, NativeMatrixImpl jarg1_);
   public final static native void NativeMatrixImpl_print(long jarg1, NativeMatrixImpl jarg1_);
   public final static native void delete_NativeMatrixImpl(long jarg1);
-  public final static native long new_NullspaceProjectorImpl(int jarg1);
-  public final static native boolean NullspaceProjectorImpl_projectOnNullSpace(long jarg1, NullspaceProjectorImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_, double jarg5);
-  public final static native void delete_NullspaceProjectorImpl(long jarg1);
+  public final static native long new_NativeNullspaceProjectorImpl(int jarg1);
+  public final static native boolean NativeNullspaceProjectorImpl_projectOnNullSpace(long jarg1, NativeNullspaceProjectorImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_, double jarg5);
+  public final static native void delete_NativeNullspaceProjectorImpl(long jarg1);
 }

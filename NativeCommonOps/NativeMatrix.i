@@ -30,10 +30,10 @@
 %ignore matrix;
 
 %include "NativeMatrix.h"
-%include "NullspaceProjector.h"
+%include "NativeNullspaceProjector.h"
 
 %{
 #include "NativeMatrix.h"
-#include "NullspaceProjector.h"
+#include "NativeNullspaceProjector.h"
 %}
 

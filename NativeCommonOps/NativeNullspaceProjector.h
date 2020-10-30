@@ -4,10 +4,10 @@
 #include <Eigen/Dense>
 #include "NativeMatrix.h"
 
-class NullspaceProjectorImpl
+class NativeNullspaceProjectorImpl
 {
 public:
-    NullspaceProjectorImpl(int degreesOfFreedom);
+    NativeNullspaceProjectorImpl(int degreesOfFreedom);
     bool projectOnNullSpace(NativeMatrixImpl *A, NativeMatrixImpl *B, NativeMatrixImpl *x, double alpha);
 
 

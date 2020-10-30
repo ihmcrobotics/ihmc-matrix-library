@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-set(SOURCE_FILES NativeCommonOps.cpp NativeMatrix.cpp NullspaceProjector.cpp)
+set(SOURCE_FILES NativeCommonOps.cpp NativeMatrix.cpp NativeNullspaceProjector.cpp)
 
 
 

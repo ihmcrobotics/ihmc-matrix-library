@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.commons.Conversions;
 
-public class NullspaceProjectorTest
+public class NativeNullspaceProjectorTest
 {
 
    private static final int maxSize = 80;
@@ -49,7 +49,7 @@ public class NullspaceProjectorTest
          NativeMatrix nativeA = new NativeMatrix(A);
          NativeMatrix nativeb = new NativeMatrix(aRows, 1);
          
-         NullspaceProjector nullspaceProjector = new NullspaceProjector(dofs);
+         NativeNullspaceProjector nullspaceProjector = new NativeNullspaceProjector(dofs);
          
          double alpha = 0.5;
          

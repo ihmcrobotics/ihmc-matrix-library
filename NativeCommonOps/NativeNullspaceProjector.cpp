@@ -1,7 +1,7 @@
-#include "NullspaceProjector.h"
+#include "NativeNullspaceProjector.h"
 #include <iostream>
 
-NullspaceProjectorImpl::NullspaceProjectorImpl(int degreesOfFreedom) :
+NativeNullspaceProjectorImpl::NativeNullspaceProjectorImpl(int degreesOfFreedom) :
     degreesOfFreedom_(degreesOfFreedom),
     identity(Eigen::MatrixXd::Identity(degreesOfFreedom, degreesOfFreedom)),
     BtB(degreesOfFreedom, degreesOfFreedom),
@@ -12,7 +12,7 @@ NullspaceProjectorImpl::NullspaceProjectorImpl(int degreesOfFreedom) :
 
 
 
-bool NullspaceProjectorImpl::projectOnNullSpace(NativeMatrixImpl* A, NativeMatrixImpl* B, NativeMatrixImpl* x, double alpha)
+bool NativeNullspaceProjectorImpl::projectOnNullSpace(NativeMatrixImpl* A, NativeMatrixImpl* B, NativeMatrixImpl* x, double alpha)
 {
 
 
