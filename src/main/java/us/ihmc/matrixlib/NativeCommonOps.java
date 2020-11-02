@@ -3,7 +3,6 @@ package us.ihmc.matrixlib;
 import org.ejml.data.DMatrix1Row;
 import org.ejml.dense.row.CommonOps_DDRM;
 
-import us.ihmc.robotics.linearAlgebra.commonOps.NativeCommonOpsWrapper;
 import us.ihmc.tools.nativelibraries.NativeLibraryLoader;
 
 public class NativeCommonOps
