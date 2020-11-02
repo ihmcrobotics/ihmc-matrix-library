@@ -54,7 +54,20 @@ make
 make install
 ```
 
+## Windows
+Use CMake GUI to create the Visual Studio makefiles.
+- Start the x64 Native Tools Command Prompt for VS 2019
 
+```
+cd [Source directory]\ihmc-matrix-library\NativeCommonOps
+md buildc
+cd buildc
+"C:\Program Files\CMake\bin\cmake.exe" -G "Visual Studio 16 2019" -A x64 -DSWIG_EXECUTABLE="C:\swigwin-3.0.12\swig.exe"  -DSTANDALONE_PLUGIN=ON ..
+"C:\Program Files\CMake\bin\cmake.exe" --build . --config Release --target install
+```
+
+
+Note: On Windows, only the Release configuration builds.
 
 ## Mac OS X
 
