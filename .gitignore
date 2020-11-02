@@ -31,7 +31,6 @@
 **/.metadata
 **/.DS_Store
 **/.svn
-**/.metadata
 **/CVS
 **/tmp
 **/.idea_modules
@@ -90,3 +89,4 @@
 **/.apdisk
 **/rebel.xml
 **/generatedTestSuites/*TestSuite.java
+*.user
