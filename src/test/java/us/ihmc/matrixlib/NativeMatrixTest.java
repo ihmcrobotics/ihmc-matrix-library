@@ -1133,6 +1133,46 @@ public class NativeMatrixTest
       }
 
       for (int i = 0; i < iterations; i++)
+      { // Test with one of the arguments being the same instance as the owner on which the operation is performed.
+         int rows = RandomNumbers.nextInt(random, 1, 100);
+         int cols = RandomNumbers.nextInt(random, 1, 100);
+
+         NativeMatrix A = new NativeMatrix(RandomMatrices_DDRM.rectangle(rows, cols, random));
+         NativeMatrix B = new NativeMatrix(RandomMatrices_DDRM.rectangle(rows, cols, random));
+         NativeMatrix expected = new NativeMatrix(0, 0);
+         NativeMatrix actual = new NativeMatrix(0, 0);
+
+         expected.add(A, B);
+         DMatrixRMaj ejmlExpected = new DMatrixRMaj(rows, cols);
+         expected.get(ejmlExpected);
+
+         actual.set(B);
+         actual.add(A, actual);
+
+         DMatrixRMaj ejmlActual = new DMatrixRMaj(rows, cols);
+         actual.get(ejmlActual);
+
+         MatrixTestTools.assertMatrixEquals(expected, actual, 1.0e-7);
+
+         actual.set(A);
+         actual.add(actual, B);
+
+         actual.get(ejmlActual);
+
+         MatrixTestTools.assertMatrixEquals(expected, actual, 1.0e-7);
+
+         B.set(A);
+         expected.add(A, B);
+         actual.set(A);
+         actual.add(actual, actual);
+
+         actual.get(ejmlActual);
+
+         MatrixTestTools.assertMatrixEquals(expected, actual, 1.0e-7);
+
+      }
+
+      for (int i = 0; i < iterations; i++)
       { // Test exceptions
          int Arows = RandomNumbers.nextInt(random, 1, 100);
          int Acols = RandomNumbers.nextInt(random, 1, 100);
