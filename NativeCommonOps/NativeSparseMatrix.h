@@ -57,9 +57,9 @@ public:
 
     bool transpose(NativeSparseMatrixImpl* a);
 
-    bool removeRow(int indexToRemove);
+    // bool removeRow(int indexToRemove);
 
-    bool removeColumn(int indexToRemove);
+    // bool removeColumn(int indexToRemove);
 
     void zero();
 
@@ -69,9 +69,9 @@ public:
 
     bool isAprrox(NativeSparseMatrixImpl* other, double precision);
 
-    bool set(double* data, int *nz_rows, int *col_idx, int rows, int cols, int nnz);
+    bool set(double* data, int* nz_rows, int* col_idx, int rows, int cols, int nnz);
 
-    bool get(double* data, int *nz_rows, int *col_idx, int rows, int cols, int *nnz);
+    bool get(double* data, int* nz_rows, int* col_idx, int rows, int cols, int* nnz);
 
     // inline double min()
     // {

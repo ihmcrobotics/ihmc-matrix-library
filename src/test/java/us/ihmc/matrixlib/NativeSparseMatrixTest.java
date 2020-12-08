@@ -480,6 +480,7 @@ public class NativeSparseMatrixTest
       }
    }
 
+   /*
    @Test
    public void testRemoveRow()
    {
@@ -598,6 +599,8 @@ public class NativeSparseMatrixTest
          assertThrows(expectedType, () -> nativeMatrix.removeColumn(nativeMatrix.getNumRows()));
       }
    }
+
+    */
 
    @Test
    public void testSolve()

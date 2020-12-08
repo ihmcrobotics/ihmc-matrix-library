@@ -77,8 +77,6 @@ public class NativeMatrixLibraryJNI {
   public final static native boolean NativeSparseMatrixImpl_insert__SWIG_1(long jarg1, NativeSparseMatrixImpl jarg1_, int[] jarg2, int[] jarg3, double[] jarg4, int jarg5, int jarg6, int jarg7, int jarg8, int jarg9, int jarg10, int jarg11, int jarg12, int jarg13);
   public final static native boolean NativeSparseMatrixImpl_extract(long jarg1, NativeSparseMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, int[] jarg6, int[] jarg7, double[] jarg8, int[] jarg9, int jarg10, int jarg11, int jarg12, int jarg13);
   public final static native boolean NativeSparseMatrixImpl_transpose(long jarg1, NativeSparseMatrixImpl jarg1_, long jarg2, NativeSparseMatrixImpl jarg2_);
-  public final static native boolean NativeSparseMatrixImpl_removeRow(long jarg1, NativeSparseMatrixImpl jarg1_, int jarg2);
-  public final static native boolean NativeSparseMatrixImpl_removeColumn(long jarg1, NativeSparseMatrixImpl jarg1_, int jarg2);
   public final static native void NativeSparseMatrixImpl_zero(long jarg1, NativeSparseMatrixImpl jarg1_);
   public final static native boolean NativeSparseMatrixImpl_containsNaN(long jarg1, NativeSparseMatrixImpl jarg1_);
   public final static native boolean NativeSparseMatrixImpl_scale__SWIG_0(long jarg1, NativeSparseMatrixImpl jarg1_, double jarg2, long jarg3, NativeSparseMatrixImpl jarg3_);

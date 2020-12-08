@@ -651,26 +651,26 @@ public class NativeSparseMatrix implements ReshapeMatrix, DMatrix
     *
     * @param row the index of the row to remove.
     */
-   public void removeRow(int row)
-   {
-      if (!impl.removeRow(row))
-      {
-         throw new IllegalArgumentException("Row out of bounds.");
-      }
-   }
+//   public void removeRow(int row)
+//   {
+//      if (!impl.removeRow(row))
+//      {
+//         throw new IllegalArgumentException("Row out of bounds.");
+//      }
+//   }
 
    /**
     * Removes a column from this and shifts the subsequent columns left by one.
     *
     * @param col the index of the column to remove.
     */
-   public void removeColumn(int col)
-   {
-      if (!impl.removeColumn(col))
-      {
-         throw new IllegalArgumentException("Col out of bounds.");
-      }
-   }
+//   public void removeColumn(int col)
+//   {
+//      if (!impl.removeColumn(col))
+//      {
+//         throw new IllegalArgumentException("Col out of bounds.");
+//      }
+//   }
 
    /**
     * Sets all elements equal to zero.
