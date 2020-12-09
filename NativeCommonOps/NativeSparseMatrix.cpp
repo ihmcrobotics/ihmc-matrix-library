@@ -434,11 +434,6 @@ bool NativeSparseMatrixImpl::transpose(NativeSparseMatrixImpl *a)
     return true;
 }
 
-void NativeSparseMatrixImpl::zero()
-{
-    data.setZero();
-}
-
 bool NativeSparseMatrixImpl::containsNaN()
 {
     for(int i = 0; i < matrix.size(); i++)
@@ -465,7 +460,7 @@ bool NativeSparseMatrixImpl::isAprrox(NativeSparseMatrixImpl *other, double prec
 {
     return matrix.isApprox(other->matrix, precision);
 }
-
+ 
 bool NativeSparseMatrixImpl::set(double *valuePtr, int *nz_rows, int *col_idx, int rows, int cols, int nnz)
 {
     if(valuePtr == nullptr || nz_rows == nullptr || col_idx == nullptr)
@@ -475,9 +470,23 @@ bool NativeSparseMatrixImpl::set(double *valuePtr, int *nz_rows, int *col_idx, i
 
     resize(rows, cols);
 
+    std::vector<T> values;
+    values.reserve(nnz);
+    for (int col = 0; col < cols; col++)
+    {
+        for (int idx = col_idx[col]; idx < col_idx[col + 1]; idx++)
+        {
+            values.push_back(T(nz_rows[idx], col, valuePtr[idx]));
+        }
+    }
 
-    Eigen::Map<Eigen::SparseMatrix<double, Eigen::RowMajor>> eigenData(rows, cols, nnz, col_idx, nz_rows, valuePtr);
-    data = eigenData;
+    std::cout << "input length " << values.size() << std::endl;
+
+    data.setZero();
+    data.setFromTriplets(values.begin(), values.end());
+
+        std::cout << "data size " << data.nonZeros() << std::endl;
+
 
     return true;
 
@@ -490,15 +499,22 @@ bool NativeSparseMatrixImpl::get(double *data, int *nz_rows, int *col_idx, int r
         return false;
     }
 
-    if(data == nullptr || nz_rows == nullptr || col_idx == nullptr)
+    if(data == nullptr || nz_rows == nullptr || col_idx == nullptr || nnz == nullptr)
     {
         return false;
     }
 
-    data = matrix.valuePtr();
-    nz_rows = matrix.innerIndexPtr();
-    col_idx = matrix.outerIndexPtr();
-    nnz[0] = matrix.nonZeros();
+    this->data.makeCompressed();
+    data = this->data.valuePtr();
+    nz_rows = this->data.innerIndexPtr();
+    col_idx = this->data.outerIndexPtr();
+    nnz[0] = this->data.nonZeros();
+    for (int i = 0; i < nnz[0]; i++)
+    {
+        std::cout << "value " << this->data.valuePtr()[i] << std::endl;
+        std::cout << "value alt " << data[i] << std::endl;
+
+    }
 
     return true;
 }

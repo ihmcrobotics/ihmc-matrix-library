@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class NativeSparseMatrixTest
 {
-   private static final int maxSize = 80;
-   private static final int sparsity = 50 * 50;
+   private static final int maxSize = 4;
+   private static final int sparsity = 3 * 3;
    private static final int warmumIterations = 2000;
    private static final int iterations = 2000;
    private static final double epsilon = 1.0e-8;
@@ -31,6 +31,99 @@ public class NativeSparseMatrixTest
    // Make volatile to force operation order
    private volatile long nativeTime = 0;
    private volatile long ejmlTime = 0;
+
+   @Test
+   public void testCreation()
+   {
+      NativeSparseMatrix matrix = new NativeSparseMatrix(maxSize, maxSize);
+      double value = 0.5;
+      matrix.set(34, 40, value);
+      assertEquals(value, matrix.get(34, 40));
+   }
+
+   @Test
+   public void testSetFromIndex()
+   {
+      Random random = new Random(98264L);
+
+      for (int i = 0; i < iterations; i++)
+      {
+         DMatrixSparseCSC expected = RandomMatrices_DSCC.rectangle(maxSize, maxSize, sparsity, random);
+         NativeSparseMatrix nativeMatrix = new NativeSparseMatrix(maxSize, maxSize);
+
+         for (int row = 0; row < maxSize; row++)
+         {
+            for (int col = 0; col < maxSize; col++)
+            {
+               assertEquals(0.0, nativeMatrix.get(row, col), epsilon);
+
+               nativeMatrix.set(row, col, expected.get(row, col));
+
+               assertEquals(expected.get(row, col), nativeMatrix.get(row, col), epsilon);
+            }
+         }
+      }
+   }
+
+   @Test
+   public void testSetMatrix1()
+   {
+      Random random = new Random(98264L);
+
+      for (int i = 0; i < iterations; i++)
+      {
+         DMatrixSparseCSC expected = RandomMatrices_DSCC.rectangle(maxSize, maxSize, sparsity, random);
+         NativeSparseMatrix nativeMatrix = new NativeSparseMatrix(maxSize, maxSize);
+
+         for (int row = 0; row < maxSize; row++)
+         {
+            for (int col = 0; col < maxSize; col++)
+            {
+               assertEquals(0.0, nativeMatrix.get(row, col), epsilon);
+            }
+         }
+
+         nativeMatrix.set(expected);
+
+         for (int row = 0; row < maxSize; row++)
+         {
+            for (int col = 0; col < maxSize; col++)
+            {
+               assertEquals(expected.get(row, col), nativeMatrix.get(row, col), epsilon);
+            }
+         }
+      }
+
+   }
+
+   @Test
+   public void testConstruction()
+   {
+      Random random = new Random(98264L);
+
+      for (int i = 0; i < iterations; i++)
+      {
+         DMatrixSparseCSC expected = RandomMatrices_DSCC.rectangle(maxSize, maxSize, sparsity, random);
+         DMatrixSparseCSC actual = RandomMatrices_DSCC.rectangle(maxSize, maxSize, sparsity, random);
+
+         NativeSparseMatrix nativeMatrix = new NativeSparseMatrix(expected);
+
+         for (int row = 0; row < maxSize; row++)
+         {
+            for (int col = 0; col < maxSize; col++)
+            {
+               assertEquals(expected.get(row, col), nativeMatrix.get(row, col), epsilon);
+            }
+         }
+
+         // redo it, because getting the non-zero values grows the internal structure
+         nativeMatrix = new NativeSparseMatrix(expected);
+
+         //
+         nativeMatrix.get(actual);
+         MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
+      }
+   }
 
    @Test
    public void testZero()
@@ -48,6 +141,15 @@ public class NativeSparseMatrixTest
 
          expected.zero();
          nativeMatrix.zero();
+
+         for (int row = 0; row < maxSize; row++)
+         {
+            for (int col = 0; col < maxSize; col++)
+            {
+               assertEquals(0.0, nativeMatrix.get(row, col), epsilon);
+            }
+         }
+
          nativeMatrix.get(actual);
          MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
       }

@@ -120,6 +120,11 @@ public:
         return data.size();
     }
 
+    inline int nonZeros()
+    {
+        return data.nonZeros();
+    }
+
 
     void print();
 
