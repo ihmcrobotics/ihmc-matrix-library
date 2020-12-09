@@ -4,7 +4,7 @@
 #include <cmath>
 #include <cstring>
 
-NativeSparseMatrixImpl::NativeSparseMatrixImpl(int numRows, int numCols) : storage(numRows, numCols), matrix(NULL, numRows, numCols)
+NativeSparseMatrixImpl::NativeSparseMatrixImpl(int numRows, int numCols) : data(numRows, numCols), matrix(numRows, numCols, 0, NULL, NULL, NULL)
 {
     updateView(numRows, numCols);
 }
@@ -16,9 +16,9 @@ void NativeSparseMatrixImpl::resize(int numRows, int numCols)
         return;
     }
 
-    if(numRows * numCols > storage.size())
+    if(numRows * numCols > data.size())
     {
-        storage.resize(numRows, numCols);
+        data.resize(numRows, numCols);
     }
 
     updateView(numRows, numCols);
@@ -42,7 +42,7 @@ bool NativeSparseMatrixImpl::add(NativeSparseMatrixImpl *a, NativeSparseMatrixIm
 
     resize(a->rows(), a->cols());
 
-    matrix = (a->matrix) + (b->matrix);
+    data = (a->matrix) + (b->matrix);
 
     return true;
 }
@@ -55,7 +55,7 @@ bool NativeSparseMatrixImpl::subtract(NativeSparseMatrixImpl *a, NativeSparseMat
     }
     resize(a->rows(), a->cols());
 
-    matrix = (a->matrix) - (b->matrix);
+    data = (a->matrix) - (b->matrix);
 
     return true;
 }
@@ -70,7 +70,7 @@ bool NativeSparseMatrixImpl::mult(NativeSparseMatrixImpl *a, NativeSparseMatrixI
 
     resize(a->rows(), b->cols());
 
-    matrix = (a->matrix) * (b->matrix);
+    data = (a->matrix) * (b->matrix);
 
     return true;
 }
@@ -84,7 +84,7 @@ bool NativeSparseMatrixImpl::mult(double scale, NativeSparseMatrixImpl *a, Nativ
 
     resize(a->rows(), b->cols());
 
-    matrix = scale * (a->matrix) * (b->matrix);
+    data = scale * (a->matrix) * (b->matrix);
 
     return true;
 }
@@ -96,7 +96,7 @@ bool NativeSparseMatrixImpl::multAdd(NativeSparseMatrixImpl *a, NativeSparseMatr
         return false;
     }
 
-    matrix += (a->matrix) * (b->matrix);
+    data += (a->matrix) * (b->matrix);
 
     return true;
 }
@@ -110,7 +110,7 @@ bool NativeSparseMatrixImpl::multTransA(NativeSparseMatrixImpl *a, NativeSparseM
 
     resize(a->cols(), b->cols());
 
-    matrix = (a->matrix.transpose()) * (b->matrix);
+    data = (a->matrix.transpose()) * (b->matrix);
 
     return true;
 }
@@ -122,7 +122,7 @@ bool NativeSparseMatrixImpl::multAddTransA(NativeSparseMatrixImpl *a, NativeSpar
         return false;
     }
 
-    matrix += (a->matrix.transpose()) * (b->matrix);
+    data += (a->matrix.transpose()) * (b->matrix);
 
     return true;
 }
@@ -136,7 +136,7 @@ bool NativeSparseMatrixImpl::multTransB(NativeSparseMatrixImpl *a, NativeSparseM
 
     resize(a->rows(), b->rows());
 
-    matrix = (a->matrix) * (b->matrix.transpose());
+    data = (a->matrix) * (b->matrix.transpose());
 
     return true;
 }
@@ -148,7 +148,7 @@ bool NativeSparseMatrixImpl::multAddTransB(NativeSparseMatrixImpl *a, NativeSpar
         return false;
     }
 
-    matrix += (a->matrix) * (b->matrix.transpose());
+    data += (a->matrix) * (b->matrix.transpose());
 
     return true;
 }
@@ -180,7 +180,17 @@ bool NativeSparseMatrixImpl::addBlock(NativeSparseMatrixImpl *a, int destStartRo
         return false;
     }
 
-    matrix.block(destStartRow, destStartColumn, numberOfRows, numberOfColumns) += scale * a->matrix.block(srcStartRow, srcStartColumn, numberOfRows, numberOfColumns);
+    int rowOffset = destStartRow - srcStartRow;
+    int colOffset = destStartColumn - srcStartColumn;
+
+    for (int k = 0; k < a->data.outerSize(); ++k)
+    {
+        for (Eigen::SparseMatrix<double>::InnerIterator it(a->data, k); it; ++it)
+        {
+            data.coeffRef(rowOffset + it.row(), colOffset + it.col()) += scale * it.value();
+        }
+    }
+
     return true;
 }
 
@@ -206,7 +216,15 @@ bool NativeSparseMatrixImpl::multAddBlock(NativeSparseMatrixImpl *a, NativeSpars
         return false;
     }
 
-    matrix.block(rowStart, colStart, a->rows(), b->cols()) += a->matrix * b->matrix;
+    Eigen::SparseMatrix<double> res = a->matrix * b->matrix;
+
+    for (int k = 0; k < res.outerSize(); ++k)
+    {
+        for (Eigen::SparseMatrix<double>::InnerIterator it(res, k); it; ++it)
+        {
+            data.coeffRef(rowStart + it.row(), colStart + it.col()) += it.value();
+        }
+    }
 
     return true;
 
@@ -221,7 +239,7 @@ bool NativeSparseMatrixImpl::multQuad(NativeSparseMatrixImpl *a, NativeSparseMat
 
     resize(a->cols(), a->cols());
 
-    matrix = (a->matrix).transpose() * (b->matrix) * (a->matrix);
+    data = (a->matrix).transpose() * (b->matrix) * (a->matrix);
 
     return true;
 }
@@ -235,7 +253,11 @@ bool NativeSparseMatrixImpl::invert(NativeSparseMatrixImpl *a)
 
     resize(a->rows(), a->cols());
 
-    matrix = (a->matrix).lu().inverse();
+    Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> solver;
+    Eigen::SparseMatrix<double> identity(a->matrix.rows(), a->matrix.rows());
+    identity.setIdentity();
+    solver.compute(a->matrix);
+    data = solver.solve(identity);;
 
     return true;
 }
@@ -250,33 +272,11 @@ bool NativeSparseMatrixImpl::solve(NativeSparseMatrixImpl *a, NativeSparseMatrix
 
     resize(a->cols(), 1);
 
-    matrix = (a->matrix).lu().solve((b->matrix));
+    Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> solver;
+    solver.compute(a->matrix);
+    data = (solver.solve(b->matrix));
 
     return true;
-
-}
-
-bool NativeSparseMatrixImpl::solveCheck(NativeSparseMatrixImpl *a, NativeSparseMatrixImpl *b)
-{
-    if(a->rows() != b->rows() || b->cols() != 1 || a->cols() != a->rows())
-    {
-        std::cerr << "NativeSparseMatrix::solveCheck: Invalid dimensions" << std::endl;
-        return false;
-    }
-
-    resize(a->cols(), 1);
-
-    const Eigen::FullPivLU<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> > fullPivLu = a->matrix.fullPivLu();
-    if (fullPivLu.isInvertible())
-    {
-        matrix = fullPivLu.solve(b->matrix);
-        return true;
-    }
-    else
-    {
-        matrix.setConstant(nan);
-        return false;
-    }
 
 }
 
@@ -310,14 +310,21 @@ bool NativeSparseMatrixImpl::insert(NativeSparseMatrixImpl *src, int srcY0, int 
     }
 
 
-    matrix.block(dstY0, dstX0, h, w) = src->matrix.block(srcY0, srcX0, h, w);
+    Eigen::SparseMatrix<double> val = src->data.block(srcY0, srcX0, h, w);
+    for (int k = 0; k < val.outerSize(); ++k)
+    {
+        for (Eigen::SparseMatrix<double>::InnerIterator it(src->data, k); it; ++it)
+        {
+            data.coeffRef(dstY0 + it.row(), dstX0 + it.col()) = it.value();
+        }
+    }
 
     return true;
 }
 
 bool NativeSparseMatrixImpl::insert(int *srcColIndexPtr, int *srcNzRowPtr, double *srcValuePtr, int srcRows, int srcCols, int srcNnz, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0)
 {
-    if(src == nullptr)
+    if(srcColIndexPtr == nullptr || srcNzRowPtr == nullptr || srcValuePtr == nullptr)
     {
         return false;
     }
@@ -336,6 +343,11 @@ bool NativeSparseMatrixImpl::insert(int *srcColIndexPtr, int *srcNzRowPtr, doubl
         return false;
     }
 
+    if (srcNnz == 0)
+    {
+        return true;
+    }
+
     int w = srcX1-srcX0;
     int h = srcY1-srcY0;
 
@@ -348,16 +360,25 @@ bool NativeSparseMatrixImpl::insert(int *srcColIndexPtr, int *srcNzRowPtr, doubl
         return false;
     }
 
+        
     Eigen::Map<Eigen::SparseMatrix<double, Eigen::RowMajor>> eigenData(srcRows, srcCols, srcNnz, srcColIndexPtr, srcNzRowPtr, srcValuePtr);
-    matrix.block(dstY0, dstX0, h, w) = eigenData.block(srcY0, srcX0, h, w);
+    Eigen::SparseMatrix<double> values = eigenData.block(srcY0, srcX0, h, w);
+
+    for (int k = 0; k < values.outerSize(); ++k)
+    {
+        for (Eigen::SparseMatrix<double>::InnerIterator it(values, k); it; ++it)
+        {
+            data.coeffRef(dstY0 + it.row(), dstX0 + it.col()) = it.value();
+        }
+    }
+    
 
     return true;
-
 }
 
 bool NativeSparseMatrixImpl::extract(int srcY0, int srcY1, int srcX0, int srcX1, int *dstColIndexPtr, int *dstNzRowPtr, double *dstValuePtr, int *dstNnz, int dstRows, int dstCols, int dstY0, int dstX0)
 {
-    if(dst == nullptr)
+    if(dstColIndexPtr == nullptr || dstNzRowPtr == nullptr || dstValuePtr == nullptr || dstNnz == nullptr)
     {
         return false;
     }
@@ -389,8 +410,15 @@ bool NativeSparseMatrixImpl::extract(int srcY0, int srcY1, int srcX0, int srcX1,
     }
 
     Eigen::Map<Eigen::SparseMatrix<double, Eigen::RowMajor>> eigenData(dstRows, dstCols, dstNnz[0], dstColIndexPtr, dstNzRowPtr, dstValuePtr);
+    Eigen::SparseMatrix<double> ref = data.block(srcY0, srcX0, h, w);
 
-    eigenData.block(dstY0, dstX0, h, w) = matrix.block(srcY0, srcX0, h, w);
+    for (int k = 0; k < ref.outerSize(); ++k)
+    {
+        for (Eigen::SparseMatrix<double>::InnerIterator it(ref, k); it; ++it)
+        {
+            eigenData.coeffRef(dstY0 + it.row(), dstX0 + it.col()) = it.value();
+        }
+    }
 
     return true;
 
@@ -401,103 +429,21 @@ bool NativeSparseMatrixImpl::transpose(NativeSparseMatrixImpl *a)
 {
     resize(a->cols(), a->rows());
 
-    matrix = a->matrix.transpose();
+    data = a->matrix.transpose();
 
     return true;
 }
-
-/*
-bool NativeSparseMatrixImpl::removeRow(int rowToRemove)
-{
-
-    if(rowToRemove >= rows() || rowToRemove < 0)
-    {
-        return false;
-    }
-
-    if(rows() <= 1)
-    {
-        updateView(0, cols());
-        return true;
-    }
-
-    int oldRows = rows();
-    int newRows = oldRows - 1;
-    int newCols = cols();
-    */
-
-    /*
-     * Algorithm based on memmove
-     *
-     * Very fast compared to eigen directly.
-     */
-
-/*
-    double* data = storage.data();
-
-    size_t newStride = (size_t)newRows * sizeof(double);
-
-
-    for (int col = 0; col < newCols - 1; col++)
-    {
-        double* dst = data + (col * newRows + rowToRemove);
-        double* src = data + (col * oldRows + rowToRemove + 1);
-
-        memmove((void*)(dst), (void*)(src), newStride);
-    }
-
-    int lastCol = cols() - 1;
-    int remaining = newRows - rowToRemove;
-    double* dst = data + (lastCol * newRows + rowToRemove);
-    double* src = data + (lastCol * oldRows + rowToRemove + 1);
-    memmove((void*)(dst), (void*)(src), remaining * sizeof(double));
-
-    updateView(newRows, newCols);
-    return true;
-
-
-}
-
-bool NativeSparseMatrixImpl::removeColumn(int colToRemove)
-{
-    if(colToRemove >= cols() || colToRemove < 0)
-    {
-        return false;
-    }
-
-    if(cols() <= 1)
-    {
-        updateView(rows(), 0);
-        return true;
-    }
-
-
-    int newRows = rows();
-    int oldCols = cols();
-    int newCols = oldCols - 1;
-
-    double* data = storage.data();
-    double* dst = data + (colToRemove * newRows);
-    double* src = data + ( (colToRemove + 1) * newRows);
-    size_t size = (newCols - colToRemove) * newRows * sizeof(double);
-
-    memmove(dst, src, size);
-
-    updateView(newRows, newCols);
-    return true;
-}
-*/
 
 void NativeSparseMatrixImpl::zero()
 {
-    matrix.setZero();
+    data.setZero();
 }
 
 bool NativeSparseMatrixImpl::containsNaN()
 {
     for(int i = 0; i < matrix.size(); i++)
     {
-        if(std::isnan(matrix.data()[i]))
+        if(std::isnan(matrix.valuePtr()[i]))
         {
             return true;
         }
@@ -510,7 +456,7 @@ bool NativeSparseMatrixImpl::scale(double scale, NativeSparseMatrixImpl *src)
 {
     resize(src->rows(), src->cols());
 
-    matrix = scale * src->matrix;
+    data = scale * src->matrix;
 
     return true;
 }
@@ -522,7 +468,7 @@ bool NativeSparseMatrixImpl::isAprrox(NativeSparseMatrixImpl *other, double prec
 
 bool NativeSparseMatrixImpl::set(double *valuePtr, int *nz_rows, int *col_idx, int rows, int cols, int nnz)
 {
-    if(data == nullptr)
+    if(valuePtr == nullptr || nz_rows == nullptr || col_idx == nullptr)
     {
         return false;
     }
@@ -531,7 +477,7 @@ bool NativeSparseMatrixImpl::set(double *valuePtr, int *nz_rows, int *col_idx, i
 
 
     Eigen::Map<Eigen::SparseMatrix<double, Eigen::RowMajor>> eigenData(rows, cols, nnz, col_idx, nz_rows, valuePtr);
-    matrix = eigenData;
+    data = eigenData;
 
     return true;
 
@@ -544,13 +490,15 @@ bool NativeSparseMatrixImpl::get(double *data, int *nz_rows, int *col_idx, int r
         return false;
     }
 
-    if(data == nullptr)
+    if(data == nullptr || nz_rows == nullptr || col_idx == nullptr)
     {
         return false;
     }
 
-    Eigen::Map<Eigen::SparseMatrix<double, Eigen::RowMajor>> eigenData(rows, cols, nnz[0], col_idx, nz_rows, data);
-    eigenData = matrix;
+    data = matrix.valuePtr();
+    nz_rows = matrix.innerIndexPtr();
+    col_idx = matrix.outerIndexPtr();
+    nnz[0] = matrix.nonZeros();
 
     return true;
 }

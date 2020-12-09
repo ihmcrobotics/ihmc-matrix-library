@@ -5,6 +5,7 @@
 
 
 typedef Eigen::Map<Eigen::SparseMatrix<double>, Eigen::AlignedMax> NativeSparseMatrixView;
+typedef Eigen::Triplet<double> T;
 
 class NativeSparseMatrixImpl
 {
@@ -47,8 +48,6 @@ public:
 
     bool solve(NativeSparseMatrixImpl* a, NativeSparseMatrixImpl* b);
 
-    bool solveCheck(NativeSparseMatrixImpl* a, NativeSparseMatrixImpl* b);
-
     bool insert(NativeSparseMatrixImpl* src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0);
 
     bool insert(int *srcColIdexPtr, int *srcNzRowPtr, double *srcValuePtr, int srcRows, int srcCols, int srcNnz, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0);
@@ -57,9 +56,6 @@ public:
 
     bool transpose(NativeSparseMatrixImpl* a);
 
-    // bool removeRow(int indexToRemove);
-
-    // bool removeColumn(int indexToRemove);
 
     void zero();
 
@@ -73,29 +69,14 @@ public:
 
     bool get(double* data, int* nz_rows, int* col_idx, int rows, int cols, int* nnz);
 
-    // inline double min()
-    // {
-       // return matrix.minCoeff();
-    // }
-
-    // inline double max()
-    // {
-        // return matrix.maxCoeff();
-    // }
-
     inline double sum()
     {
-        return matrix.sum();
+        return data.sum();
     }
-
-    // inline double prod()
-    // {
-        // return matrix.prod();
-    // }
 
     inline void scale(double scale)
     {
-        matrix *= scale;
+        data *= scale;
     }
 
 
@@ -107,7 +88,7 @@ public:
           }
 
           // FIXME is this right?
-          matrix.coeffRef(row, col) = value;
+          data.coeffRef(row, col) = value;
 
           return true;
     }
@@ -120,23 +101,23 @@ public:
         }
 
         // FIXME is this right?
-        return matrix.coeffRef(row, col);
+        return data.coeffRef(row, col);
     }
 
 
     inline int rows()
     {
-        return matrix.rows();
+        return data.rows();
     }
 
     inline int cols()
     {
-        return matrix.cols();
+        return data.cols();
     }
 
     inline int size()
     {
-        return matrix.size();
+        return data.size();
     }
 
 
@@ -144,13 +125,14 @@ public:
 
     NativeSparseMatrixView matrix;
 
+
 private:
-    Eigen::SparseMatrix<double>  storage;
+    Eigen::SparseMatrix<double> data;
 
 
     inline void updateView(int numRows, int numCols)
     {
-        new (&matrix) NativeSparseMatrixView(numRows, numCols, storage.nonZeros(), storage.innerIndexPtr(), storage.outerIndexPtr(), storage.valuePtr());
+        new (&matrix) NativeSparseMatrixView(numRows, numCols, data.nonZeros(), data.innerIndexPtr(), data.outerIndexPtr(), data.valuePtr());
     }
 
 };
