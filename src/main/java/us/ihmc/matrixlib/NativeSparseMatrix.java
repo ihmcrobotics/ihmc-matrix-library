@@ -167,6 +167,7 @@ public class NativeSparseMatrix implements ReshapeMatrix, DMatrix
    public void get(DMatrixSparseCSC matrixToPack)
    {
       matrixToPack.reshape(getNumRows(), getNumCols());
+      matrixToPack.growMaxLength(impl.nonZeros(), false);
 
       if (!impl.get(matrixToPack.nz_values, matrixToPack.nz_rows, matrixToPack.col_idx, matrixToPack.numRows, matrixToPack.numCols, nz_length))
       {
@@ -459,22 +460,6 @@ public class NativeSparseMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-   }
-
-   /**
-    * Computes the solution to the linear equation</br>
-    * a * this == b</br>
-    * This method requires that the matrix a is square and invertible and uses a LU decomposition. This
-    * method will check the invertability of the matrix a and return false if it is not invertible.
-    *
-    * @param a matrix in equation. Not modified.
-    * @param b matrix in equation. Not modified.
-    * @return whether a solution was found.
-    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
-    */
-   public boolean solveCheck(NativeSparseMatrix a, NativeSparseMatrix b)
-   {
-      return impl.solveCheck(a.impl, b.impl);
    }
 
    /**

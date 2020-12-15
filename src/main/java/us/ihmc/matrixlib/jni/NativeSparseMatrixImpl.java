@@ -111,10 +111,6 @@ public class NativeSparseMatrixImpl {
     return NativeMatrixLibraryJNI.NativeSparseMatrixImpl_solve(swigCPtr, this, NativeSparseMatrixImpl.getCPtr(a), a, NativeSparseMatrixImpl.getCPtr(b), b);
   }
 
-  public boolean solveCheck(NativeSparseMatrixImpl a, NativeSparseMatrixImpl b) {
-    return NativeMatrixLibraryJNI.NativeSparseMatrixImpl_solveCheck(swigCPtr, this, NativeSparseMatrixImpl.getCPtr(a), a, NativeSparseMatrixImpl.getCPtr(b), b);
-  }
-
   public boolean insert(NativeSparseMatrixImpl src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0) {
     return NativeMatrixLibraryJNI.NativeSparseMatrixImpl_insert__SWIG_0(swigCPtr, this, NativeSparseMatrixImpl.getCPtr(src), src, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0);
   }
@@ -181,6 +177,10 @@ public class NativeSparseMatrixImpl {
 
   public int size() {
     return NativeMatrixLibraryJNI.NativeSparseMatrixImpl_size(swigCPtr, this);
+  }
+
+  public int nonZeros() {
+    return NativeMatrixLibraryJNI.NativeSparseMatrixImpl_nonZeros(swigCPtr, this);
   }
 
   public void print() {

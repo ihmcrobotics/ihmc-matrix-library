@@ -72,7 +72,6 @@ public class NativeMatrixLibraryJNI {
   public final static native boolean NativeSparseMatrixImpl_multQuad(long jarg1, NativeSparseMatrixImpl jarg1_, long jarg2, NativeSparseMatrixImpl jarg2_, long jarg3, NativeSparseMatrixImpl jarg3_);
   public final static native boolean NativeSparseMatrixImpl_invert(long jarg1, NativeSparseMatrixImpl jarg1_, long jarg2, NativeSparseMatrixImpl jarg2_);
   public final static native boolean NativeSparseMatrixImpl_solve(long jarg1, NativeSparseMatrixImpl jarg1_, long jarg2, NativeSparseMatrixImpl jarg2_, long jarg3, NativeSparseMatrixImpl jarg3_);
-  public final static native boolean NativeSparseMatrixImpl_solveCheck(long jarg1, NativeSparseMatrixImpl jarg1_, long jarg2, NativeSparseMatrixImpl jarg2_, long jarg3, NativeSparseMatrixImpl jarg3_);
   public final static native boolean NativeSparseMatrixImpl_insert__SWIG_0(long jarg1, NativeSparseMatrixImpl jarg1_, long jarg2, NativeSparseMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8);
   public final static native boolean NativeSparseMatrixImpl_insert__SWIG_1(long jarg1, NativeSparseMatrixImpl jarg1_, int[] jarg2, int[] jarg3, double[] jarg4, int jarg5, int jarg6, int jarg7, int jarg8, int jarg9, int jarg10, int jarg11, int jarg12, int jarg13);
   public final static native boolean NativeSparseMatrixImpl_extract(long jarg1, NativeSparseMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, int[] jarg6, int[] jarg7, double[] jarg8, int[] jarg9, int jarg10, int jarg11, int jarg12, int jarg13);
@@ -90,6 +89,7 @@ public class NativeMatrixLibraryJNI {
   public final static native int NativeSparseMatrixImpl_rows(long jarg1, NativeSparseMatrixImpl jarg1_);
   public final static native int NativeSparseMatrixImpl_cols(long jarg1, NativeSparseMatrixImpl jarg1_);
   public final static native int NativeSparseMatrixImpl_size(long jarg1, NativeSparseMatrixImpl jarg1_);
+  public final static native int NativeSparseMatrixImpl_nonZeros(long jarg1, NativeSparseMatrixImpl jarg1_);
   public final static native void NativeSparseMatrixImpl_print(long jarg1, NativeSparseMatrixImpl jarg1_);
   public final static native void delete_NativeSparseMatrixImpl(long jarg1);
   public final static native long new_NativeNullspaceProjectorImpl(int jarg1);

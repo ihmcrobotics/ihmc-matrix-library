@@ -57,7 +57,10 @@ public:
     bool transpose(NativeSparseMatrixImpl* a);
 
 
-    void zero();
+    inline void zero()
+    {
+        data.setZero();
+    }
 
     bool containsNaN();
 
@@ -128,17 +131,10 @@ public:
 
     void print();
 
-    NativeSparseMatrixView matrix;
-
 
 private:
     Eigen::SparseMatrix<double> data;
 
-
-    inline void updateView(int numRows, int numCols)
-    {
-        new (&matrix) NativeSparseMatrixView(numRows, numCols, data.nonZeros(), data.innerIndexPtr(), data.outerIndexPtr(), data.valuePtr());
-    }
 
 };
 

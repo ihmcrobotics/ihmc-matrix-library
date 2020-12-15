@@ -1485,27 +1485,6 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeSparseMatrixImpl_1solveCheck(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_) {
-  jboolean jresult = 0 ;
-  NativeSparseMatrixImpl *arg1 = (NativeSparseMatrixImpl *) 0 ;
-  NativeSparseMatrixImpl *arg2 = (NativeSparseMatrixImpl *) 0 ;
-  NativeSparseMatrixImpl *arg3 = (NativeSparseMatrixImpl *) 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg2_;
-  (void)jarg3_;
-  arg1 = *(NativeSparseMatrixImpl **)&jarg1; 
-  arg2 = *(NativeSparseMatrixImpl **)&jarg2; 
-  arg3 = *(NativeSparseMatrixImpl **)&jarg3; 
-  result = (bool)(arg1)->solveCheck(arg2,arg3);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
 SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeSparseMatrixImpl_1insert_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jint jarg3, jint jarg4, jint jarg5, jint jarg6, jint jarg7, jint jarg8) {
   jboolean jresult = 0 ;
   NativeSparseMatrixImpl *arg1 = (NativeSparseMatrixImpl *) 0 ;
@@ -1930,6 +1909,21 @@ SWIGEXPORT jint JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Native
   (void)jarg1_;
   arg1 = *(NativeSparseMatrixImpl **)&jarg1; 
   result = (int)(arg1)->size();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeSparseMatrixImpl_1nonZeros(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  NativeSparseMatrixImpl *arg1 = (NativeSparseMatrixImpl *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(NativeSparseMatrixImpl **)&jarg1; 
+  result = (int)(arg1)->nonZeros();
   jresult = (jint)result; 
   return jresult;
 }
