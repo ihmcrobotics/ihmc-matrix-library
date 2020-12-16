@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import us.ihmc.commons.Conversions;
 import us.ihmc.commons.RandomNumbers;
+import us.ihmc.log.LogTools;
 
 import java.util.Random;
 import java.util.stream.DoubleStream;
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class NativeSparseMatrixTest
 {
    private static final int maxSize = 4;
-   private static final int sparsity = 3 * 3;
+   private static final int sparsity = (maxSize - 1) * (maxSize - 1);
    private static final int warmumIterations = 2000;
    private static final int iterations = 2000;
    private static final double epsilon = 1.0e-8;
@@ -593,8 +594,6 @@ public class NativeSparseMatrixTest
       }
    }
 
-
-   @Disabled
    @Test
    public void testSolve()
    {
@@ -994,6 +993,7 @@ public class NativeSparseMatrixTest
          DMatrixSparseCSC nativeADMatrix = new DMatrixSparseCSC(A.getNumRows(), A.getNumCols());
          nativeA.get(nativeADMatrix);
 
+         LogTools.info("src col = " + BcolOffset + ":" + Bcols);
          MatrixTestTools.assertMatrixEquals(A, nativeADMatrix, 1.0e-10);
 
          CommonOps_DDRM.insert(B, A, ArowOffset, AcolOffset);

@@ -248,9 +248,13 @@ bool NativeSparseMatrixImpl::invert(NativeSparseMatrixImpl *a)
     resize(a->rows(), a->cols());
 
     Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> solver;
+    Eigen::SparseMatrix<double> A = a->data;
+    A.makeCompressed();
     Eigen::SparseMatrix<double> identity(a->data.rows(), a->data.rows());
     identity.setIdentity();
-    solver.compute(a->data);
+    // solver.compute(a->data);
+    solver.analyzePattern(A);
+    solver.factorize(A);
     data = solver.solve(identity);;
 
     return true;
@@ -354,15 +358,25 @@ bool NativeSparseMatrixImpl::insert(int *srcColIndexPtr, int *srcNzRowPtr, doubl
         return false;
     }
 
-        
-    Eigen::Map<Eigen::SparseMatrix<double, Eigen::RowMajor>> eigenData(srcRows, srcCols, srcNnz, srcColIndexPtr, srcNzRowPtr, srcValuePtr);
-    Eigen::SparseMatrix<double> values = eigenData.block(srcY0, srcX0, h, w);
+    int rowOffset = dstY0-srcY0;
+    int colOffset = dstX0-srcX0;
 
-    for (int k = 0; k < values.outerSize(); ++k)
+    for (int col = srcX0; col < srcX1 + 1; col++)
     {
-        for (Eigen::SparseMatrix<double>::InnerIterator it(values, k); it; ++it)
+        int startDataRow = srcColIndexPtr[col];
+        int endDataRow = srcColIndexPtr[col + 1];
+
+
+        for (int dataRow = startDataRow; dataRow < endDataRow; dataRow++)
         {
-            data.coeffRef(dstY0 + it.row(), dstX0 + it.col()) = it.value();
+            int row = srcNzRowPtr[dataRow];
+            if (row < srcY0 || row > srcY1)
+                continue;
+
+            std::cout << "source " << row << ", " << col << " = " << srcValuePtr[dataRow] << std::endl;
+            std::cout << "data row " << dataRow << std::endl;
+            std::cout << "dst " << row + rowOffset << ", " << col + colOffset << std::endl;
+            data.coeffRef(row + rowOffset, col + colOffset) = srcValuePtr[dataRow];
         }
     }
     
