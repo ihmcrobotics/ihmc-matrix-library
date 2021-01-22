@@ -11,7 +11,15 @@ public class NativeCommonOps
 
    static NativeCommonOpsWrapper loadNativeOps()
    {
-      NativeLibraryLoader.loadLibrary("", "NativeCommonOps");
+      try
+      {
+         NativeLibraryLoader.loadLibrary("", "NativeCommonOps");
+      }
+      catch (UnsatisfiedLinkError e)
+      {
+         System.out.println("See IHMC Matrix Tools README.");
+         throw e; 
+      }
       return new NativeCommonOpsWrapper();
    }
 
