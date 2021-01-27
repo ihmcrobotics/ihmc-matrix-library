@@ -19,10 +19,10 @@ mainDependencies {
    api("org.ejml:ejml-ddense:0.39")
 
    api("us.ihmc:ihmc-commons:0.30.4")
-   api("us.ihmc:euclid:0.16.1")
+   api("us.ihmc:euclid:0.16.2")
    api("us.ihmc:ihmc-native-library-loader:1.3.1")
 }
 
 testDependencies {
-   api("us.ihmc:euclid-frame:0.16.1")
+   api("us.ihmc:euclid-frame:0.16.2")
 }
