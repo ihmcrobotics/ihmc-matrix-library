@@ -3,6 +3,11 @@
 
 IHMC Matrix Library gathers utilities to improve experience the matrix library EJML.
 
+# Usage
+
+## Windows
+
+Requires the installation of Visual C++ 2019 Redistributable (https://aka.ms/vs/16/release/VC_redist.x64.exe).
 
 # Compilation
 

@@ -53,6 +53,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    public NativeMatrix(int rows, int cols)
    {
       impl = new NativeMatrixImpl(rows, cols);
+      zero();
    }
 
    /**
