@@ -10,7 +10,7 @@ import org.ejml.data.MatrixType;
 import org.ejml.data.ReshapeMatrix;
 import org.ejml.ops.MatrixIO;
 
-import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.matrixlib.jni.NativeMatrixImpl;
 import us.ihmc.tools.nativelibraries.NativeLibraryLoader;
@@ -530,7 +530,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     * @param startRow
     * @param startCol
     */
-   public void insert(Matrix3D src, int startRow, int startCol)
+   public void insert(Matrix3DReadOnly src, int startRow, int startCol)
    {
       if(!impl.insert(startRow, startCol, src.getM00(), src.getM01(), src.getM02(), src.getM10(), src.getM11(), src.getM12(), src.getM20(), src.getM21(), src.getM22()))
       {
@@ -546,7 +546,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     * @param startCol
     * @param scale
     */
-   public void insertScaled(Matrix3D src, int startRow, int startCol, double scale)
+   public void insertScaled(Matrix3DReadOnly src, int startRow, int startCol, double scale)
    {
       if(!impl.insert(startRow, startCol, scale * src.getM00(), scale * src.getM01(), scale * src.getM02(), scale * src.getM10(), scale * src.getM11(), scale * src.getM12(), scale * src.getM20(), scale * src.getM21(), scale * src.getM22()))
       {
