@@ -569,6 +569,36 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
 }
 
 
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1subtractBlock(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jint jarg3, jint jarg4, jint jarg5, jint jarg6, jint jarg7, jint jarg8) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int arg6 ;
+  int arg7 ;
+  int arg8 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  arg3 = (int)jarg3; 
+  arg4 = (int)jarg4; 
+  arg5 = (int)jarg5; 
+  arg6 = (int)jarg6; 
+  arg7 = (int)jarg7; 
+  arg8 = (int)jarg8; 
+  result = (bool)(arg1)->subtractBlock(arg2,arg3,arg4,arg5,arg6,arg7,arg8);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1multAddBlock(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_, jint jarg4, jint jarg5) {
   jboolean jresult = 0 ;
   NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;

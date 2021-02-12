@@ -25,6 +25,7 @@ public class NativeMatrixLibraryJNI {
   public final static native boolean NativeMatrixImpl_multAddTransB(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_addBlock__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8, double jarg9);
   public final static native boolean NativeMatrixImpl_addBlock__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8);
+  public final static native boolean NativeMatrixImpl_subtractBlock(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8);
   public final static native boolean NativeMatrixImpl_multAddBlock(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, int jarg4, int jarg5);
   public final static native boolean NativeMatrixImpl_multQuad(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_invert(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_);

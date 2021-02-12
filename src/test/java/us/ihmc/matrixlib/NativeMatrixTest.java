@@ -700,11 +700,99 @@ public class NativeMatrixTest
          assertTrue(expectedSolution.isApprox(solution, 1e-6));
       }
    }
+   
+   @Test
+   public void testAddBlock()
+   {
+      Random random = new Random(349754);
+      
+      for (int i = 0; i < iterations; i++)
+      {
+         int rows = RandomNumbers.nextInt(random, 1, 100);
+         int cols = RandomNumbers.nextInt(random, 1, 100);
+         int fullRows = RandomNumbers.nextInt(random, rows, 500);
+         int fullCols = RandomNumbers.nextInt(random, cols, 500);
+
+         int rowStart = RandomNumbers.nextInt(random, 0, fullRows - rows);
+         int colStart = RandomNumbers.nextInt(random, 0, fullCols - cols);
+
+         NativeMatrix randomMatrixA = new NativeMatrix(RandomMatrices_DDRM.rectangle(rows, cols, -50.0, 50.0, random));
+
+         NativeMatrix solution = new NativeMatrix(RandomMatrices_DDRM.rectangle(fullRows, fullCols, -50.0, 50.0, random));
+
+         NativeMatrix expectedSolution = new NativeMatrix(solution);
+
+
+         double scale = RandomNumbers.nextDouble(random, 10.0);
+         expectedSolution.addBlock(randomMatrixA, rowStart, colStart, 0, 0, rows, cols, scale);
+
+         solution.addBlock(randomMatrixA, rowStart, colStart, 0, 0, rows, cols, scale);
+
+         assertTrue(expectedSolution.isApprox(solution, 1e-6));
+      }
+
+      { // Test exceptions
+         int rows = RandomNumbers.nextInt(random, 1, 100);
+         int cols = RandomNumbers.nextInt(random, 1, 100);
+         int fullRows = RandomNumbers.nextInt(random, rows, 500);
+         int fullCols = RandomNumbers.nextInt(random, cols, 500);
+
+         int destRowStart = RandomNumbers.nextInt(random, 0, fullRows - rows);
+         int destColStart = RandomNumbers.nextInt(random, 0, fullCols - cols);
+         int srcStartRow = 0;
+         int srcStartColumn = 0;
+
+         NativeMatrix expectedSolution = new NativeMatrix(fullRows, fullCols);
+         NativeMatrix block = new NativeMatrix(rows, cols);
+
+         assertDoesNotThrow(() -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, cols, Double.NaN));
+         assertTrue(expectedSolution.containsNaN());
+         assertDoesNotThrow(() -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, cols, 1.0));
+
+         Class<IllegalArgumentException> exceptionType = IllegalArgumentException.class;
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, -1, destColStart, srcStartRow, srcStartColumn, rows, cols, 1.0));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, -1, srcStartRow, srcStartColumn, rows, cols, 1.0));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, -1, srcStartColumn, rows, cols, 1.0));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, -1, rows, cols, 1.0));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, -1, cols, 1.0));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, -1, 1.0));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, fullRows - rows + 1, destColStart, srcStartRow, srcStartColumn, rows, cols, 1.0));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, fullCols - cols + 1, srcStartRow, srcStartColumn, rows, cols, 1.0));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow + 1, srcStartColumn, rows, cols, 1.0));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn + 1, rows, cols, 1.0));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows + 1, cols, 1.0));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, cols + 1, 1.0));
+      }
+   }
 
    @Test
    public void testAddBlockNoScale()
    {
       Random random = new Random(349754);
+      
+      for (int i = 0; i < iterations; i++)
+      {
+         int rows = RandomNumbers.nextInt(random, 1, 100);
+         int cols = RandomNumbers.nextInt(random, 1, 100);
+         int fullRows = RandomNumbers.nextInt(random, rows, 500);
+         int fullCols = RandomNumbers.nextInt(random, cols, 500);
+
+         int rowStart = RandomNumbers.nextInt(random, 0, fullRows - rows);
+         int colStart = RandomNumbers.nextInt(random, 0, fullCols - cols);
+
+         NativeMatrix randomMatrixA = new NativeMatrix(RandomMatrices_DDRM.rectangle(rows, cols, -50.0, 50.0, random));
+
+         NativeMatrix solution = new NativeMatrix(RandomMatrices_DDRM.rectangle(fullRows, fullCols, -50.0, 50.0, random));
+
+         NativeMatrix expectedSolution = new NativeMatrix(solution);
+
+
+         expectedSolution.addBlock(randomMatrixA, rowStart, colStart, 0, 0, rows, cols, 1.0);
+
+         solution.addBlock(randomMatrixA, rowStart, colStart, 0, 0, rows, cols);
+
+         assertTrue(expectedSolution.isApprox(solution, 1e-6));
+      }
 
       { // Test exceptions
          int rows = RandomNumbers.nextInt(random, 1, 100);
@@ -722,6 +810,67 @@ public class NativeMatrixTest
 
          assertDoesNotThrow(() -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, cols));
 
+         Class<IllegalArgumentException> exceptionType = IllegalArgumentException.class;
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, -1, destColStart, srcStartRow, srcStartColumn, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, -1, srcStartRow, srcStartColumn, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, -1, srcStartColumn, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, -1, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, -1, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, -1));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, fullRows - rows + 1, destColStart, srcStartRow, srcStartColumn, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, fullCols - cols + 1, srcStartRow, srcStartColumn, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow + 1, srcStartColumn, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn + 1, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows + 1, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, cols + 1));
+      }
+   }
+   
+   @Test
+   public void testSubtractBlock()
+   {
+      Random random = new Random(349754);
+      
+      for (int i = 0; i < iterations; i++)
+      {
+         int rows = RandomNumbers.nextInt(random, 1, 100);
+         int cols = RandomNumbers.nextInt(random, 1, 100);
+         int fullRows = RandomNumbers.nextInt(random, rows, 500);
+         int fullCols = RandomNumbers.nextInt(random, cols, 500);
+
+         int rowStart = RandomNumbers.nextInt(random, 0, fullRows - rows);
+         int colStart = RandomNumbers.nextInt(random, 0, fullCols - cols);
+
+         NativeMatrix randomMatrixA = new NativeMatrix(RandomMatrices_DDRM.rectangle(rows, cols, -50.0, 50.0, random));
+
+         NativeMatrix solution = new NativeMatrix(RandomMatrices_DDRM.rectangle(fullRows, fullCols, -50.0, 50.0, random));
+
+         NativeMatrix expectedSolution = new NativeMatrix(solution);
+
+
+         expectedSolution.addBlock(randomMatrixA, rowStart, colStart, 0, 0, rows, cols, -1.0);
+
+         solution.subtractBlock(randomMatrixA, rowStart, colStart, 0, 0, rows, cols);
+
+         assertTrue(expectedSolution.isApprox(solution, 1e-6));
+      }
+      
+      { // Test exceptions
+         int rows = RandomNumbers.nextInt(random, 1, 100);
+         int cols = RandomNumbers.nextInt(random, 1, 100);
+         int fullRows = RandomNumbers.nextInt(random, rows, 500);
+         int fullCols = RandomNumbers.nextInt(random, cols, 500);
+         
+         int destRowStart = RandomNumbers.nextInt(random, 0, fullRows - rows);
+         int destColStart = RandomNumbers.nextInt(random, 0, fullCols - cols);
+         int srcStartRow = 0;
+         int srcStartColumn = 0;
+         
+         NativeMatrix expectedSolution = new NativeMatrix(fullRows, fullCols);
+         NativeMatrix block = new NativeMatrix(rows, cols);
+         
+         assertDoesNotThrow(() -> expectedSolution.subtractBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, cols));
+         
          Class<IllegalArgumentException> exceptionType = IllegalArgumentException.class;
          assertThrows(exceptionType, () -> expectedSolution.addBlock(block, -1, destColStart, srcStartRow, srcStartColumn, rows, cols));
          assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, -1, srcStartRow, srcStartColumn, rows, cols));

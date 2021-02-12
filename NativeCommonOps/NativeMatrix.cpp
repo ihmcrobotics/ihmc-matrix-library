@@ -215,6 +215,37 @@ bool NativeMatrixImpl::addBlock(NativeMatrixImpl *a, int destStartRow, int destS
     return true;
 }
 
+bool NativeMatrixImpl::subtractBlock(NativeMatrixImpl *a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns)
+{
+    if(destStartRow < 0 || destStartColumn < 0 || srcStartRow < 0 || srcStartColumn < 0 || numberOfRows < 0 || numberOfColumns < 0)
+    {
+        return false;
+    }
+
+    if(rows() < destStartRow + numberOfRows)
+    {
+        return false;
+    }
+
+    if(cols() < destStartColumn + numberOfColumns)
+    {
+        return false;
+    }
+
+    if(a->rows() < srcStartRow + numberOfRows)
+    {
+        return false;
+    }
+
+    if(a->cols() < srcStartColumn + numberOfColumns)
+    {
+        return false;
+    }
+
+    matrix.block(destStartRow, destStartColumn, numberOfRows, numberOfColumns) -= a->matrix.block(srcStartRow, srcStartColumn, numberOfRows, numberOfColumns);
+    return true;
+}
+
 bool NativeMatrixImpl::multAddBlock(NativeMatrixImpl *a, NativeMatrixImpl *b, int rowStart, int colStart)
 {
     if(rowStart < 0 || colStart < 0)

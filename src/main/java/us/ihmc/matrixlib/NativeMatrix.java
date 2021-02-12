@@ -364,6 +364,27 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
    }
+   
+   /**
+    * Performs the following operation:<br>
+    * this -= a <br>
+    * where only a block of the matrix a is subtracted from a block of same size in this.
+    *
+    * @param a               The matrix to subtract from this. Not modified.
+    * @param destStartRow    The first row index of the block in this.
+    * @param destStartColumn The first column index of the block in this.
+    * @param srcStartRow     The first row index of the block in the matrix a.
+    * @param srcStartColumn  The first column index of the block in matrix a.
+    * @param numberOfRows    The number of rows of the block.
+    * @param numberOfColumns The number of columns of the block.
+    */
+   public void subtractBlock(NativeMatrix a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns)
+   {
+      if (!impl.subtractBlock(a.impl, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
 
    /**
     * Computes the matrix multiplication</br>

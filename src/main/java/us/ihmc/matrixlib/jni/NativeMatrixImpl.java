@@ -99,6 +99,10 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_addBlock__SWIG_1(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns);
   }
 
+  public boolean subtractBlock(NativeMatrixImpl a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_subtractBlock(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns);
+  }
+
   public boolean multAddBlock(NativeMatrixImpl a, NativeMatrixImpl b, int rowStart, int colStart) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_multAddBlock(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b, rowStart, colStart);
   }
