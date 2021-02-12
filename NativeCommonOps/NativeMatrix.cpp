@@ -184,6 +184,37 @@ bool NativeMatrixImpl::addBlock(NativeMatrixImpl *a, int destStartRow, int destS
     return true;
 }
 
+bool NativeMatrixImpl::addBlock(NativeMatrixImpl *a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns)
+{
+    if(destStartRow < 0 || destStartColumn < 0 || srcStartRow < 0 || srcStartColumn < 0 || numberOfRows < 0 || numberOfColumns < 0)
+    {
+        return false;
+    }
+
+    if(rows() < destStartRow + numberOfRows)
+    {
+        return false;
+    }
+
+    if(cols() < destStartColumn + numberOfColumns)
+    {
+        return false;
+    }
+
+    if(a->rows() < srcStartRow + numberOfRows)
+    {
+        return false;
+    }
+
+    if(a->cols() < srcStartColumn + numberOfColumns)
+    {
+        return false;
+    }
+
+    matrix.block(destStartRow, destStartColumn, numberOfRows, numberOfColumns) += a->matrix.block(srcStartRow, srcStartColumn, numberOfRows, numberOfColumns);
+    return true;
+}
+
 bool NativeMatrixImpl::multAddBlock(NativeMatrixImpl *a, NativeMatrixImpl *b, int rowStart, int colStart)
 {
     if(rowStart < 0 || colStart < 0)
@@ -350,6 +381,80 @@ bool NativeMatrixImpl::insert(double *src, int srcRows, int srcCols, int srcY0, 
 
     Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> eigenData(src, srcRows, srcCols);
     matrix.block(dstY0, dstX0, h, w) = eigenData.block(srcY0, srcX0, h, w);
+
+    return true;
+
+}
+bool NativeMatrixImpl::insertScaled(NativeMatrixImpl *src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale)
+{
+    if(srcY0 < 0 || srcY1 < 0 || srcX0 < 0 || srcX1 < 0 || dstY0 < 0 || dstX0 < 0)
+    {
+        return false;
+    }
+
+
+    if( srcY1 < srcY0 || srcY0 < 0 || srcY1 > src->rows() )
+    {
+        return false;
+    }
+    if( srcX1 < srcX0 || srcX0 < 0 || srcX1 > src->cols() )
+    {
+        return false;
+    }
+
+    int w = srcX1-srcX0;
+    int h = srcY1-srcY0;
+
+    if( dstY0+h > rows() )
+    {
+        return false;
+    }
+    if( dstX0+w > cols() )
+    {
+        return false;
+    }
+
+
+    matrix.block(dstY0, dstX0, h, w) = scale * src->matrix.block(srcY0, srcX0, h, w);
+
+    return true;
+}
+
+bool NativeMatrixImpl::insertScaled(double *src, int srcRows, int srcCols, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale)
+{
+    if(src == nullptr)
+    {
+        return false;
+    }
+
+    if(srcY0 < 0 || srcY1 < 0 || srcX0 < 0 || srcX1 < 0 || dstY0 < 0 || dstX0 < 0)
+    {
+        return false;
+    }
+
+    if( srcY1 < srcY0 || srcY0 < 0 || srcY1 > srcRows )
+    {
+        return false;
+    }
+    if( srcX1 < srcX0 || srcX0 < 0 || srcX1 > srcCols )
+    {
+        return false;
+    }
+
+    int w = srcX1-srcX0;
+    int h = srcY1-srcY0;
+
+    if( dstY0+h > rows() )
+    {
+        return false;
+    }
+    if( dstX0+w > cols() )
+    {
+        return false;
+    }
+
+    Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> eigenData(src, srcRows, srcCols);
+    matrix.block(dstY0, dstX0, h, w) = scale * eigenData.block(srcY0, srcX0, h, w);
 
     return true;
 

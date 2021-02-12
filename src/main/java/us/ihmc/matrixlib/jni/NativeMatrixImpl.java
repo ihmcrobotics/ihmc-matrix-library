@@ -92,7 +92,11 @@ public class NativeMatrixImpl {
   }
 
   public boolean addBlock(NativeMatrixImpl a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns, double scale) {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_addBlock(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns, scale);
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_addBlock__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns, scale);
+  }
+
+  public boolean addBlock(NativeMatrixImpl a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_addBlock__SWIG_1(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns);
   }
 
   public boolean multAddBlock(NativeMatrixImpl a, NativeMatrixImpl b, int rowStart, int colStart) {
@@ -121,6 +125,14 @@ public class NativeMatrixImpl {
 
   public boolean insert(double[] src, int rows, int cols, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_insert__SWIG_1(swigCPtr, this, src, rows, cols, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0);
+  }
+
+  public boolean insertScaled(NativeMatrixImpl src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_insertScaled__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(src), src, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0, scale);
+  }
+
+  public boolean insertScaled(double[] src, int srcRows, int srcCols, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_insertScaled__SWIG_1(swigCPtr, this, src, srcRows, srcCols, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0, scale);
   }
 
   public boolean extract(int srcY0, int srcY1, int srcX0, int srcX1, double[] dst, int dstRows, int dstCols, int dstY0, int dstX0) {

@@ -702,7 +702,7 @@ public class NativeMatrixTest
    }
 
    @Test
-   public void testAddBlock()
+   public void testAddBlockNoScale()
    {
       Random random = new Random(349754);
 
@@ -720,23 +720,21 @@ public class NativeMatrixTest
          NativeMatrix expectedSolution = new NativeMatrix(fullRows, fullCols);
          NativeMatrix block = new NativeMatrix(rows, cols);
 
-         assertDoesNotThrow(() -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, cols, Double.NaN));
-         assertTrue(expectedSolution.containsNaN());
-         assertDoesNotThrow(() -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, cols, 1.0));
+         assertDoesNotThrow(() -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, cols));
 
          Class<IllegalArgumentException> exceptionType = IllegalArgumentException.class;
-         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, -1, destColStart, srcStartRow, srcStartColumn, rows, cols, 1.0));
-         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, -1, srcStartRow, srcStartColumn, rows, cols, 1.0));
-         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, -1, srcStartColumn, rows, cols, 1.0));
-         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, -1, rows, cols, 1.0));
-         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, -1, cols, 1.0));
-         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, -1, 1.0));
-         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, fullRows - rows + 1, destColStart, srcStartRow, srcStartColumn, rows, cols, 1.0));
-         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, fullCols - cols + 1, srcStartRow, srcStartColumn, rows, cols, 1.0));
-         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow + 1, srcStartColumn, rows, cols, 1.0));
-         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn + 1, rows, cols, 1.0));
-         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows + 1, cols, 1.0));
-         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, cols + 1, 1.0));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, -1, destColStart, srcStartRow, srcStartColumn, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, -1, srcStartRow, srcStartColumn, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, -1, srcStartColumn, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, -1, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, -1, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, -1));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, fullRows - rows + 1, destColStart, srcStartRow, srcStartColumn, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, fullCols - cols + 1, srcStartRow, srcStartColumn, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow + 1, srcStartColumn, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn + 1, rows, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows + 1, cols));
+         assertThrows(exceptionType, () -> expectedSolution.addBlock(block, destRowStart, destColStart, srcStartRow, srcStartColumn, rows, cols + 1));
       }
    }
 
@@ -933,6 +931,86 @@ public class NativeMatrixTest
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, Acols - blockCols + 1));
       }
    }
+   
+   @Test
+   public void testInsertScaled()
+   {
+      Random random = new Random(124L);
+      
+      for (int i = 0; i < iterations; i++)
+      {
+         int Arows = RandomNumbers.nextInt(random, 1, 100);
+         int Acols = RandomNumbers.nextInt(random, 1, 100);
+         int Brows = RandomNumbers.nextInt(random, 1, Arows);
+         int Bcols = RandomNumbers.nextInt(random, 1, Acols);
+         
+         int BrowOffset = RandomNumbers.nextInt(random, 0, Brows);
+         int BcolOffset = RandomNumbers.nextInt(random, 0, Bcols);
+         
+         int ArowOffset = RandomNumbers.nextInt(random, 0, Arows - Brows);
+         int AcolOffset = RandomNumbers.nextInt(random, 0, Acols - Bcols);
+         
+         double scale = RandomNumbers.nextDouble(random, 10);
+         
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(Brows, Bcols, random);
+         
+         DMatrixRMaj BScaled = new DMatrixRMaj(B);
+         CommonOps_DDRM.scale(scale, BScaled);
+         
+         NativeMatrix nativeA = new NativeMatrix(A);
+         NativeMatrix nativeB = new NativeMatrix(B);
+         
+         CommonOps_DDRM.extract(BScaled, BrowOffset, Brows, BcolOffset, Bcols, A, ArowOffset, AcolOffset);
+         nativeA.insertScaled(nativeB, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset, scale);
+         
+         DMatrixRMaj nativeADMatrix = new DMatrixRMaj(A.getNumRows(), A.getNumCols());
+         nativeA.get(nativeADMatrix);
+
+         MatrixTestTools.assertMatrixEquals(A, nativeADMatrix, 1.0e-10);
+         
+         CommonOps_DDRM.insert(BScaled, A, ArowOffset, AcolOffset);
+         nativeA.insertScaled(nativeB, ArowOffset, AcolOffset, scale);
+         nativeA.get(nativeADMatrix);
+         
+         MatrixTestTools.assertMatrixEquals(A, nativeADMatrix, 1.0e-10);
+      }
+      
+      { // Test exceptions
+         int Arows = 10;
+         int Acols = 10;
+         int Brows = 5;
+         int Bcols = 5;
+         
+         int BrowOffset = RandomNumbers.nextInt(random, 0, Brows);
+         int BcolOffset = RandomNumbers.nextInt(random, 0, Bcols);
+         
+         int blockRows = Brows - BrowOffset;
+         int blockCols = Bcols - BcolOffset;
+         
+         int ArowOffset = RandomNumbers.nextInt(random, 0, Arows - Brows);
+         int AcolOffset = RandomNumbers.nextInt(random, 0, Acols - Bcols);
+         
+         NativeMatrix A = new NativeMatrix(RandomMatrices_DDRM.rectangle(Arows, Acols, random));
+         NativeMatrix B = new NativeMatrix(RandomMatrices_DDRM.rectangle(Brows, Bcols, random));
+
+         assertDoesNotThrow(() -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset, 1.0));
+         Class<IllegalArgumentException> expectedType = IllegalArgumentException.class;
+         assertThrows(expectedType, () -> A.insertScaled(B, -1, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, -1, BcolOffset, Bcols, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, -1, Bcols, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, -1, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols, -1, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, -1, 1.0));
+
+         assertThrows(expectedType, () -> A.insertScaled(B, Brows + 1, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows + 1, BcolOffset, Bcols, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, Bcols + 1, Bcols, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols + 1, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols, Arows - blockRows + 1, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, Acols - blockCols + 1, 1.0));
+      }
+   }
 
    @Test
    public void testEJMLInsert()
@@ -1005,6 +1083,85 @@ public class NativeMatrixTest
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols + 1, ArowOffset, AcolOffset));
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols, Arows - blockRows + 1, AcolOffset));
          assertThrows(expectedType, () -> A.insert(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, Acols - blockCols + 1));
+      }
+   }
+   
+   @Test
+   public void testEJMLInsertScaled()
+   {
+      Random random = new Random(124L);
+      
+      for (int i = 0; i < iterations; i++)
+      {
+         int Arows = RandomNumbers.nextInt(random, 1, 100);
+         int Acols = RandomNumbers.nextInt(random, 1, 100);
+         int Brows = RandomNumbers.nextInt(random, 1, Arows);
+         int Bcols = RandomNumbers.nextInt(random, 1, Acols);
+         
+         int BrowOffset = RandomNumbers.nextInt(random, 0, Brows);
+         int BcolOffset = RandomNumbers.nextInt(random, 0, Bcols);
+         
+         int ArowOffset = RandomNumbers.nextInt(random, 0, Arows - Brows);
+         int AcolOffset = RandomNumbers.nextInt(random, 0, Acols - Bcols);
+         
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(Brows, Bcols, random);
+         
+         
+         double scale = RandomNumbers.nextDouble(random, 10.0);
+         DMatrixRMaj BScaled = new DMatrixRMaj(B);
+         CommonOps_DDRM.scale(scale, BScaled);
+         
+         NativeMatrix nativeA = new NativeMatrix(A);
+         
+         CommonOps_DDRM.extract(BScaled, BrowOffset, Brows, BcolOffset, Bcols, A, ArowOffset, AcolOffset);
+         nativeA.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset, scale);
+         
+         DMatrixRMaj nativeADMatrix = new DMatrixRMaj(A.getNumRows(), A.getNumCols());
+         nativeA.get(nativeADMatrix);
+         
+         MatrixTestTools.assertMatrixEquals(A, nativeADMatrix, 1.0e-10);
+         
+         CommonOps_DDRM.insert(BScaled, A, ArowOffset, AcolOffset);
+         nativeA.insertScaled(B, ArowOffset, AcolOffset, scale);
+         nativeA.get(nativeADMatrix);
+         
+         MatrixTestTools.assertMatrixEquals(A, nativeADMatrix, 1.0e-10);
+      }
+      
+      { // Test exceptions
+         int Arows = 10;
+         int Acols = 10;
+         int Brows = 5;
+         int Bcols = 5;
+         
+         int BrowOffset = RandomNumbers.nextInt(random, 0, Brows);
+         int BcolOffset = RandomNumbers.nextInt(random, 0, Bcols);
+         
+         int blockRows = Brows - BrowOffset;
+         int blockCols = Bcols - BcolOffset;
+         
+         int ArowOffset = RandomNumbers.nextInt(random, 0, Arows - Brows);
+         int AcolOffset = RandomNumbers.nextInt(random, 0, Acols - Bcols);
+         
+         NativeMatrix A = new NativeMatrix(RandomMatrices_DDRM.rectangle(Arows, Acols, random));
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(Brows, Bcols, random);
+         
+         assertDoesNotThrow(() -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset, 1.0));
+         Class<IllegalArgumentException> expectedType = IllegalArgumentException.class;
+         assertThrows(expectedType, () -> A.insertScaled(B, -1, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, -1, BcolOffset, Bcols, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, -1, Bcols, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, -1, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols, -1, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, -1, 1.0));
+
+         assertThrows(expectedType, () -> A.insertScaled(B, Brows + 1, Brows, BcolOffset, Bcols, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows + 1, BcolOffset, Bcols, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, Bcols + 1, Bcols, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols + 1, ArowOffset, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols, Arows - blockRows + 1, AcolOffset, 1.0));
+         assertThrows(expectedType, () -> A.insertScaled(B, BrowOffset, Brows, BcolOffset, Bcols, ArowOffset, Acols - blockCols + 1, 1.0));
       }
    }
 
