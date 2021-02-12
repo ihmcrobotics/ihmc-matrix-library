@@ -1,4 +1,5 @@
 #include "NativeKalmanFilter.h"
+#include <iostream>
 using Eigen::MatrixXd;
 
 
@@ -27,7 +28,7 @@ bool NativeKalmanFilterImpl::predictErrorCovariance(NativeMatrixImpl *errorCovar
 bool NativeKalmanFilterImpl::computeKalmanGain(NativeMatrixImpl *gain, NativeMatrixImpl *P, NativeMatrixImpl *H, NativeMatrixImpl *R)
 {
 
-    if (H->cols() != P->rows() || P->rows() != P->cols() || H->rows() != R->rows() || R->rows() != R->rows() || gain->rows() != P->rows() || gain->cols() != R->rows())
+    if (H->cols() != P->rows() || P->rows() != P->cols() || H->rows() != R->rows() || R->rows() != R->cols() || gain->rows() != P->rows() || gain->cols() != R->rows())
     {
         return false;
     }
