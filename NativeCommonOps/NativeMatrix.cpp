@@ -443,6 +443,22 @@ bool NativeMatrixImpl::insert(int startRow, int startCol, double m00, double m01
 
 }
 
+bool NativeMatrixImpl::insertTupleRow(int startRow, int startCol, double x, double y, double z)
+{
+    if(startRow < 0 || this->rows() < startRow + 3 || this->cols() < startCol + 1 || startCol < 0)
+    {
+        return false;
+    }
+
+    matrix(startRow + 0, startCol) = x;
+    matrix(startRow + 1, startCol) = y;
+    matrix(startRow + 2, startCol) = z;
+
+
+    return true;
+
+}
+
 bool NativeMatrixImpl::insertScaled(NativeMatrixImpl *src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale)
 {
     if(srcY0 < 0 || srcY1 < 0 || srcX0 < 0 || srcX1 < 0 || dstY0 < 0 || dstX0 < 0)

@@ -11,6 +11,7 @@ import org.ejml.data.ReshapeMatrix;
 import org.ejml.ops.MatrixIO;
 
 import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.matrixlib.jni.NativeMatrixImpl;
 import us.ihmc.tools.nativelibraries.NativeLibraryLoader;
 
@@ -535,6 +536,51 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
+   }
+   
+   /**
+    * Insert a matrix 3D at (startRow, startcol) in this matrix, scaled by scale
+    * 
+    * @param src
+    * @param startRow
+    * @param startCol
+    * @param scale
+    */
+   public void insertScaled(Matrix3D src, int startRow, int startCol, double scale)
+   {
+      if(!impl.insert(startRow, startCol, scale * src.getM00(), scale * src.getM01(), scale * src.getM02(), scale * src.getM10(), scale * src.getM11(), scale * src.getM12(), scale * src.getM20(), scale * src.getM21(), scale * src.getM22()))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   /**
+    * Insert a tuple at (startRow, startcol) in this matrix as a row
+    * 
+    * @param startRow
+    * @param startCol
+    * @param x
+    * @param y
+    * @param z
+    */
+   public void insertTupleRow(int startRow, int startCol, double x, double y, double z)
+   {
+      if(!impl.insertTupleRow(startRow, startCol, x, y, z))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   /**
+    * Insert a tuple at (startRow, startcol) in this matrix as a row
+    * 
+    * @param startRow
+    * @param startCol
+    * @param tuple
+    */
+   public void insertTupleRow(Tuple3DReadOnly tuple, int startRow, int startCol)
+   {
+      insertTupleRow(startRow, startCol, tuple.getX(), tuple.getY(), tuple.getZ());
    }
    
    /**

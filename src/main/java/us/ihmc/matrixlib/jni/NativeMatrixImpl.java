@@ -135,6 +135,10 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_insert__SWIG_2(swigCPtr, this, startRow, startCol, m00, m01, m02, m10, m11, m12, m20, m21, m22);
   }
 
+  public boolean insertTupleRow(int startRow, int startCol, double x, double y, double z) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_insertTupleRow(swigCPtr, this, startRow, startCol, x, y, z);
+  }
+
   public boolean insertScaled(NativeMatrixImpl src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_insertScaled__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(src), src, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0, scale);
   }

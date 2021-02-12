@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import us.ihmc.commons.Conversions;
 import us.ihmc.commons.RandomNumbers;
 import us.ihmc.euclid.matrix.Matrix3D;
+import us.ihmc.euclid.tuple3D.Vector3D;
 
 public class NativeMatrixTest
 {
@@ -1404,6 +1405,65 @@ public class NativeMatrixTest
          matrix.get(Arows, Acols, expected);
          
          actual.insert(matrix, Arows, Acols);
+         
+         
+         MatrixTestTools.assertMatrixEquals(expected, actual, 1e-10);
+      }
+   }
+   @Test
+   public void testInsertTuple()
+   {
+      Random random = new Random(124L);
+      
+      for (int i = 0; i < iterations; i++)
+      {
+         
+         Vector3D tuple = new Vector3D();
+         tuple.set(RandomMatrices_DDRM.rectangle(3, 1, random));
+         
+         
+         DMatrixRMaj expected = new DMatrixRMaj(100, 100);
+         NativeMatrix actual = new NativeMatrix(100, 100);
+         NativeMatrix actual2 = new NativeMatrix(100, 100);
+         
+         int Arows = RandomNumbers.nextInt(random, 0, 90);
+         int Acols = RandomNumbers.nextInt(random, 0, 90);
+         
+         
+         tuple.get(Arows, Acols, expected);
+         
+         actual.insertTupleRow(tuple, Arows, Acols);
+         actual2.insertTupleRow(Arows, Acols, tuple.getX(), tuple.getY(), tuple.getZ());
+         
+         
+         MatrixTestTools.assertMatrixEquals(expected, actual, 1e-10);
+         MatrixTestTools.assertMatrixEquals(expected, actual2, 1e-10);
+      }
+   }
+   
+   @Test
+   public void testInsertScaledMatrix3D()
+   {
+      Random random = new Random(124L);
+      
+      for (int i = 0; i < iterations; i++)
+      {
+         Matrix3D matrix = new Matrix3D();
+         matrix.set(RandomMatrices_DDRM.rectangle(9, 9, random));
+         
+         double scale = RandomNumbers.nextDouble(random, 10.0);
+         
+         DMatrixRMaj expected = new DMatrixRMaj(100, 100);
+         NativeMatrix actual = new NativeMatrix(100, 100);
+         
+         int Arows = RandomNumbers.nextInt(random, 0, 90);
+         int Acols = RandomNumbers.nextInt(random, 0, 90);
+         
+         
+         matrix.get(Arows, Acols, expected);
+         CommonOps_DDRM.scale(scale, expected);
+         
+         actual.insertScaled(matrix, Arows, Acols, scale);
          
          
          MatrixTestTools.assertMatrixEquals(expected, actual, 1e-10);

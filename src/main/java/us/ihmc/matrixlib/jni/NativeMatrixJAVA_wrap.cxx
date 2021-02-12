@@ -810,6 +810,31 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
 }
 
 
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1insertTupleRow(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3, jdouble jarg4, jdouble jarg5, jdouble jarg6) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  double arg4 ;
+  double arg5 ;
+  double arg6 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  arg4 = (double)jarg4; 
+  arg5 = (double)jarg5; 
+  arg6 = (double)jarg6; 
+  result = (bool)(arg1)->insertTupleRow(arg2,arg3,arg4,arg5,arg6);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1insertScaled_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jint jarg3, jint jarg4, jint jarg5, jint jarg6, jint jarg7, jint jarg8, jdouble jarg9) {
   jboolean jresult = 0 ;
   NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;

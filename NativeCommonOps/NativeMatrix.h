@@ -59,6 +59,8 @@ public:
 
     bool insert(int startRow, int startCol, double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22);
 
+    bool insertTupleRow(int startRow, int startCol, double x, double y, double z);
+
     bool insertScaled(NativeMatrixImpl *src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale);
 
     bool insertScaled(double *src, int srcRows, int srcCols, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale);
