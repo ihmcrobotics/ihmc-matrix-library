@@ -56,4 +56,10 @@ public class NativeMatrixLibraryJNI {
   public final static native long new_NativeNullspaceProjectorImpl(int jarg1);
   public final static native boolean NativeNullspaceProjectorImpl_projectOnNullSpace(long jarg1, NativeNullspaceProjectorImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_, double jarg5);
   public final static native void delete_NativeNullspaceProjectorImpl(long jarg1);
+  public final static native long new_NativeKalmanFilterImpl();
+  public final static native boolean NativeKalmanFilterImpl_predictErrorCovariance(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_);
+  public final static native boolean NativeKalmanFilterImpl_computeKalmanGain(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_);
+  public final static native boolean NativeKalmanFilterImpl_updateState(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_);
+  public final static native boolean NativeKalmanFilterImpl_updateErrorCovariance(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_);
+  public final static native void delete_NativeKalmanFilterImpl(long jarg1);
 }

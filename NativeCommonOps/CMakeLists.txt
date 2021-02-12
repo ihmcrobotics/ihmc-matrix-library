@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-set(SOURCE_FILES NativeCommonOps.cpp NativeMatrix.cpp NativeNullspaceProjector.cpp)
+set(SOURCE_FILES NativeCommonOps.cpp NativeMatrix.cpp NativeNullspaceProjector.cpp NativeKalmanFilter.cpp)
 
 
 
@@ -25,6 +25,7 @@ set_source_files_properties(NativeMatrix.i PROPERTIES CPLUSPLUS ON)
 set_property(SOURCE NativeMatrix.i PROPERTY SWIG_FLAGS "-package" "us.ihmc.matrixlib.jni")
 set(SWIG_OPT_LINKER_FLAGS "")
 #swig_add_library(NativeCommonOps TYPE SHARED LANGUAGE java OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src/main/java/us/ihmc/matrixlib/jni" SOURCES NativeMatrix.i ${SOURCE_FILES})
+set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_SOURCE_DIR}/../src/main/java/us/ihmc/matrixlib/jni")
 swig_add_module(NativeCommonOps java NativeMatrix.i ${SOURCE_FILES})
 target_link_libraries(NativeCommonOps Eigen3::Eigen)
 
