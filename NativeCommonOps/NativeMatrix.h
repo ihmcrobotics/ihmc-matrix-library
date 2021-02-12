@@ -87,6 +87,8 @@ public:
 
     bool setDiagonal(int startRow, int startCol, int size, double value);
 
+    bool setRow(int startRow, int startCol, int numberOfRows, double value);
+
     inline double min()
     {
        return matrix.minCoeff();

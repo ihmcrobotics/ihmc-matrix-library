@@ -953,7 +953,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    }
    
    /**
-    * Set the diagonal of a block of the matrix
+    * Set the diagonal of a block of the matrix to a constant value
     * 
     * @param startRow Start row for block
     * @param startCol Start col for block
@@ -963,6 +963,23 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    public void setDiagonal(int startRow, int startCol, int size, double value)
    {
       if(!impl.setDiagonal(startRow, startCol, size, value))
+      {
+         throw new RuntimeException("Invalid matrix dimensions");
+      }
+   }
+   
+   
+   /**
+    * Set a (part of a) row of the matrix to a constant value
+    * 
+    * @param startRow Start row for block
+    * @param startCol Start col for block
+    * @param numberOfRows Number of rows to set
+    * @param value
+    */
+   public void setRow(int startRow, int startCol, int numberOfRows, double value)
+   {
+      if(!impl.setRow(startRow, startCol, numberOfRows, value))
       {
          throw new RuntimeException("Invalid matrix dimensions");
       }
