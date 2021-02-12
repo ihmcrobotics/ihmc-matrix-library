@@ -10,6 +10,7 @@ import org.ejml.data.MatrixType;
 import org.ejml.data.ReshapeMatrix;
 import org.ejml.ops.MatrixIO;
 
+import us.ihmc.euclid.matrix.Matrix3D;
 import us.ihmc.matrixlib.jni.NativeMatrixImpl;
 import us.ihmc.tools.nativelibraries.NativeLibraryLoader;
 
@@ -521,6 +522,21 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       return impl.solveCheck(a.impl, b.impl);
    }
 
+   /**
+    * Insert a matrix 3D at (startRow, startcol) in this matrix
+    * 
+    * @param src
+    * @param startRow
+    * @param startCol
+    */
+   public void insert(Matrix3D src, int startRow, int startCol)
+   {
+      if(!impl.insert(startRow, startCol, src.getM00(), src.getM01(), src.getM02(), src.getM10(), src.getM11(), src.getM12(), src.getM20(), src.getM21(), src.getM22()))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
    /**
     * Inserts a block from the given matrix into this.
     *

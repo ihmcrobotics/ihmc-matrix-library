@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import us.ihmc.commons.Conversions;
 import us.ihmc.commons.RandomNumbers;
+import us.ihmc.euclid.matrix.Matrix3D;
 
 public class NativeMatrixTest
 {
@@ -1379,6 +1380,33 @@ public class NativeMatrixTest
          assertThrows(expectedType, () -> B.extract(BrowOffset, Brows, BcolOffset, Bcols + 1, A, ArowOffset, AcolOffset));
          assertThrows(expectedType, () -> B.extract(BrowOffset, Brows, BcolOffset, Bcols, A, Arows - (Brows - BrowOffset) + 1, AcolOffset));
          assertThrows(expectedType, () -> B.extract(BrowOffset, Brows, BcolOffset, Bcols, A, ArowOffset, Acols - (Bcols - BcolOffset) + 1));
+      }
+   }
+   
+   @Test
+   public void testInsertMatrix3D()
+   {
+      Random random = new Random(124L);
+
+      for (int i = 0; i < iterations; i++)
+      {
+         Matrix3D matrix = new Matrix3D();
+         matrix.set(RandomMatrices_DDRM.rectangle(9, 9, random));
+         
+         
+         DMatrixRMaj expected = new DMatrixRMaj(100, 100);
+         NativeMatrix actual = new NativeMatrix(100, 100);
+         
+         int Arows = RandomNumbers.nextInt(random, 0, 90);
+         int Acols = RandomNumbers.nextInt(random, 0, 90);
+
+         
+         matrix.get(Arows, Acols, expected);
+         
+         actual.insert(matrix, Arows, Acols);
+         
+         
+         MatrixTestTools.assertMatrixEquals(expected, actual, 1e-10);
       }
    }
 

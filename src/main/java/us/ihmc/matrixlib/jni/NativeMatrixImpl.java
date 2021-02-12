@@ -131,6 +131,10 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_insert__SWIG_1(swigCPtr, this, src, rows, cols, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0);
   }
 
+  public boolean insert(int startRow, int startCol, double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_insert__SWIG_2(swigCPtr, this, startRow, startCol, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+  }
+
   public boolean insertScaled(NativeMatrixImpl src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_insertScaled__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(src), src, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0, scale);
   }

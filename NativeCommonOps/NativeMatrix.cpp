@@ -416,6 +416,33 @@ bool NativeMatrixImpl::insert(double *src, int srcRows, int srcCols, int srcY0, 
     return true;
 
 }
+
+bool NativeMatrixImpl::insert(int startRow, int startCol, double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+{
+    if(startRow < 0 || this->rows() < startRow + 3 || this->cols() < startCol + 3 || startCol < 0)
+    {
+        return false;
+    }
+
+    matrix(startRow + 0, startCol + 0) = m00;
+    matrix(startRow + 0, startCol + 1) = m01;
+    matrix(startRow + 0, startCol + 2) = m02;
+
+    matrix(startRow + 1, startCol + 0) = m10;
+    matrix(startRow + 1, startCol + 1) = m11;
+    matrix(startRow + 1, startCol + 2) = m12;
+
+    matrix(startRow + 2, startCol + 0) = m20;
+    matrix(startRow + 2, startCol + 1) = m21;
+    matrix(startRow + 2, startCol + 2) = m22;
+
+
+
+
+    return true;
+
+}
+
 bool NativeMatrixImpl::insertScaled(NativeMatrixImpl *src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale)
 {
     if(srcY0 < 0 || srcY1 < 0 || srcX0 < 0 || srcX1 < 0 || dstY0 < 0 || dstX0 < 0)
