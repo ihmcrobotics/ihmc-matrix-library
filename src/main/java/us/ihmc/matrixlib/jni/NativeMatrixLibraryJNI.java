@@ -41,6 +41,7 @@ public class NativeMatrixLibraryJNI {
   public final static native boolean NativeMatrixImpl_isAprrox(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, double jarg3);
   public final static native boolean NativeMatrixImpl_set__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4);
   public final static native boolean NativeMatrixImpl_get__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4);
+  public final static native boolean NativeMatrixImpl_setDiagonal(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, double jarg5);
   public final static native double NativeMatrixImpl_min(long jarg1, NativeMatrixImpl jarg1_);
   public final static native double NativeMatrixImpl_max(long jarg1, NativeMatrixImpl jarg1_);
   public final static native double NativeMatrixImpl_sum(long jarg1, NativeMatrixImpl jarg1_);

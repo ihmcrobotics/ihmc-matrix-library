@@ -73,6 +73,8 @@ public:
 
     bool get(double* data, int rows, int cols);
 
+    bool setDiagonal(int startRow, int startCol, int size, double value);
+
     inline double min()
     {
        return matrix.minCoeff();

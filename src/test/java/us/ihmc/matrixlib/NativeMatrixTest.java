@@ -33,6 +33,8 @@ public class NativeMatrixTest
    private volatile long nativeTime = 0;
    private volatile long ejmlTime = 0;
 
+   
+   
    @Test
    public void testZero()
    {
@@ -1453,4 +1455,34 @@ public class NativeMatrixTest
          }
       }
    }
+   
+   
+   @Test
+   public void testSetDiagonal()
+   {
+      Random random = new Random(124L);
+
+      for (int i = 0; i < iterations; i++)
+      {
+         int Arows = RandomNumbers.nextInt(random, 100, 200);
+         int Acols = RandomNumbers.nextInt(random, 100, 200);
+         
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(Arows, Acols, random);
+         NativeMatrix nativeA = new NativeMatrix(A);
+
+         
+         int size = RandomNumbers.nextInt(random, 1, 49);
+         int startRow = RandomNumbers.nextInt(random, 0, 49);
+         int startCol = RandomNumbers.nextInt(random, 0, 49);
+         
+         
+         double diagValue = RandomNumbers.nextDouble(random, 1000);
+         MatrixTestTools.setDiagonal(A, startRow, startCol, size, diagValue);
+         nativeA.setDiagonal(startRow, startCol, size, diagValue);
+         
+         MatrixTestTools.assertMatrixEquals(A, nativeA, 1e-10);
+
+      }
+   }
+   
 }

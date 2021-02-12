@@ -17,7 +17,8 @@ bool NativeKalmanFilterImpl::predictErrorCovariance(NativeMatrixImpl *errorCovar
             return false;
         }
 
-        errorCovariance->matrix = F->matrix * P->matrix.selfadjointView<Eigen::Upper>() * F->matrix.transpose() + Q->matrix;
+        MatrixXd Qdiag = Q->matrix.diagonal().asDiagonal();
+        errorCovariance->matrix = F->matrix * P->matrix.selfadjointView<Eigen::Upper>() * F->matrix.transpose() + Qdiag;
 
         return true;
 

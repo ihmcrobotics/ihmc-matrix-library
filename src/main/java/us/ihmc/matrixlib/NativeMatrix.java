@@ -777,6 +777,23 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    {
       impl.scale(scale);
    }
+   
+   /**
+    * Set the diagonal of a block of the matrix
+    * 
+    * @param startRow Start row for block
+    * @param startCol Start col for block
+    * @param size Number of elements on the diagonal to set
+    * @param value
+    */
+   public void setDiagonal(int startRow, int startCol, int size, double value)
+   {
+      if(!impl.setDiagonal(startRow, startCol, size, value))
+      {
+         throw new RuntimeException("Invalid matrix dimensions");
+      }
+   }
+   
 
    // TODO Add doc
    public boolean isApprox(NativeMatrix other, double precision)

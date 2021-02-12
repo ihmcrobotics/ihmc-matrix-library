@@ -550,6 +550,18 @@ bool NativeMatrixImpl::get(double *data, int rows, int cols)
     return true;
 }
 
+bool NativeMatrixImpl::setDiagonal(int startRow, int startCol, int size, double value)
+{
+    if(startRow < 0 || this->rows() < startRow + size || this->cols() < startCol + size || startCol < 0)
+    {
+        return false;
+    }
+
+    matrix.block(startRow, startCol, size, size).diagonal().fill(value);
+
+    return true;
+}
+
 void NativeMatrixImpl::print()
 {
     std::cout << matrix << std::endl;

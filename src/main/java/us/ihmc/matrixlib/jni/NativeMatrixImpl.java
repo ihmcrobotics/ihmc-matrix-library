@@ -163,6 +163,10 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_get__SWIG_0(swigCPtr, this, data, rows, cols);
   }
 
+  public boolean setDiagonal(int startRow, int startCol, int size, double value) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_setDiagonal(swigCPtr, this, startRow, startCol, size, value);
+  }
+
   public double min() {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_min(swigCPtr, this);
   }

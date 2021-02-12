@@ -44,5 +44,15 @@ public class MatrixTestTools
          }
       }
    }
+   
+   public static void setDiagonal(DMatrix matrix, int startRow, int startCol, int size, double value)
+   {
+     
+      for(int i = 0; i < size; i++)
+      {
+         matrix.set(startRow + i, startCol + i, value);
+      }
+   }
+   
 
 }
