@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.Random;
 
 import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.CommonOps_DDRM;
 import org.ejml.dense.row.RandomMatrices_DDRM;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.jupiter.api.Test;
@@ -88,6 +89,9 @@ public class NativeKalmanFilterTest
          DMatrixRMaj H = RandomMatrices_DDRM.rectangle(n, m, -1.0, 1.0, random);
          DMatrixRMaj R = RandomMatrices_DDRM.diagonal(n, 1.0, 100.0, random);
          
+         DMatrixRMaj Rdiag = new DMatrixRMaj(n, 1);
+         CommonOps_DDRM.extractDiag(R, Rdiag);
+         
          SimpleMatrix Psimple = new SimpleMatrix(P);
          SimpleMatrix Hsimple = new SimpleMatrix(H);
          SimpleMatrix Rsimple = new SimpleMatrix(R);
@@ -101,7 +105,7 @@ public class NativeKalmanFilterTest
          
          
          NativeMatrix actual = new NativeMatrix(m, n);         
-         NativeKalmanFilter.computeKalmanGain(actual, new NativeMatrix(P), new NativeMatrix(H), new NativeMatrix(R));
+         NativeKalmanFilter.computeKalmanGain(actual, new NativeMatrix(P), new NativeMatrix(H), new NativeMatrix(Rdiag));
 
 
 
