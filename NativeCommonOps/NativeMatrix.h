@@ -85,9 +85,9 @@ public:
 
     bool get(double* data, int rows, int cols);
 
-    bool setDiagonal(int startRow, int startCol, int size, double value);
+    bool fillDiagonal(int startRow, int startCol, int size, double value);
 
-    bool setRow(int startRow, int startCol, int numberOfRows, double value);
+    bool fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value);
 
     inline double min()
     {

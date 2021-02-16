@@ -1852,7 +1852,7 @@ public class NativeMatrixTest
    
    
    @Test
-   public void testSetDiagonal()
+   public void testFillDiagonal()
    {
       Random random = new Random(124L);
 
@@ -1872,7 +1872,7 @@ public class NativeMatrixTest
          
          double diagValue = RandomNumbers.nextDouble(random, 1000);
          MatrixTestTools.setDiagonal(A, startRow, startCol, size, diagValue);
-         nativeA.setDiagonal(startRow, startCol, size, diagValue);
+         nativeA.fillDiagonal(startRow, startCol, size, diagValue);
          
          MatrixTestTools.assertMatrixEquals(A, nativeA, 1e-10);
 
@@ -1880,7 +1880,7 @@ public class NativeMatrixTest
    }
    
    @Test
-   public void testSetRow()
+   public void testFillBlock()
    {
       Random random = new Random(124L);
       
@@ -1893,19 +1893,23 @@ public class NativeMatrixTest
          NativeMatrix nativeA = new NativeMatrix(A);
          
          
-         int size = RandomNumbers.nextInt(random, 1, 49);
+         int numRows = RandomNumbers.nextInt(random, 1, 49);
+         int numCols = RandomNumbers.nextInt(random, 1, 49);
          int startRow = RandomNumbers.nextInt(random, 0, 49);
          int startCol = RandomNumbers.nextInt(random, 0, 49);
          
          
          double diagValue = RandomNumbers.nextDouble(random, 1000);
          
-         for(int r = startRow; r < startRow + size; r++)
+         for(int r = startRow; r < startRow + numRows; r++)
          {            
-            A.set(r, startCol, diagValue);
+            for(int c = startCol; c < startCol + numCols; c++)
+            {
+               A.set(r, c, diagValue);
+            }
          }
          
-         nativeA.setRow(startRow, startCol, size, diagValue);
+         nativeA.fillBlock(startRow, startCol, numRows, numCols, diagValue);
          
          MatrixTestTools.assertMatrixEquals(A, nativeA, 1e-10);
          

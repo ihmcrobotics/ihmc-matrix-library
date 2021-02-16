@@ -729,7 +729,7 @@ bool NativeMatrixImpl::get(double *data, int rows, int cols)
     return true;
 }
 
-bool NativeMatrixImpl::setDiagonal(int startRow, int startCol, int size, double value)
+bool NativeMatrixImpl::fillDiagonal(int startRow, int startCol, int size, double value)
 {
     if(startRow < 0 || this->rows() < startRow + size || this->cols() < startCol + size || startCol < 0)
     {
@@ -741,14 +741,14 @@ bool NativeMatrixImpl::setDiagonal(int startRow, int startCol, int size, double 
     return true;
 }
 
-bool NativeMatrixImpl::setRow(int startRow, int startCol, int size, double value)
+bool NativeMatrixImpl::fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value)
 {
-    if(startRow < 0 || this->rows() < startRow + size || this->cols() < startCol + 1 || startCol < 0)
+    if(startRow < 0 || this->rows() < startRow + numberOfRows || this->cols() < startCol + numberOfCols || startCol < 0 || numberOfRows < 1 || numberOfCols < 1)
     {
         return false;
     }
 
-    matrix.block(startRow, startCol, size, 1).fill(value);
+    matrix.block(startRow, startCol, numberOfRows, numberOfCols).fill(value);
 
     return true;
 }

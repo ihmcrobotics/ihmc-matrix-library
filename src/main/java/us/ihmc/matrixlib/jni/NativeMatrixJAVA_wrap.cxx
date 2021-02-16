@@ -1115,7 +1115,7 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1setDiagonal(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3, jint jarg4, jdouble jarg5) {
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1fillDiagonal(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3, jint jarg4, jdouble jarg5) {
   jboolean jresult = 0 ;
   NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
   int arg2 ;
@@ -1132,19 +1132,20 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
   arg3 = (int)jarg3; 
   arg4 = (int)jarg4; 
   arg5 = (double)jarg5; 
-  result = (bool)(arg1)->setDiagonal(arg2,arg3,arg4,arg5);
+  result = (bool)(arg1)->fillDiagonal(arg2,arg3,arg4,arg5);
   jresult = (jboolean)result; 
   return jresult;
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1setRow(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3, jint jarg4, jdouble jarg5) {
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1fillBlock(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3, jint jarg4, jint jarg5, jdouble jarg6) {
   jboolean jresult = 0 ;
   NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
   int arg2 ;
   int arg3 ;
   int arg4 ;
-  double arg5 ;
+  int arg5 ;
+  double arg6 ;
   bool result;
   
   (void)jenv;
@@ -1154,8 +1155,9 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
   arg2 = (int)jarg2; 
   arg3 = (int)jarg3; 
   arg4 = (int)jarg4; 
-  arg5 = (double)jarg5; 
-  result = (bool)(arg1)->setRow(arg2,arg3,arg4,arg5);
+  arg5 = (int)jarg5; 
+  arg6 = (double)jarg6; 
+  result = (bool)(arg1)->fillBlock(arg2,arg3,arg4,arg5,arg6);
   jresult = (jboolean)result; 
   return jresult;
 }

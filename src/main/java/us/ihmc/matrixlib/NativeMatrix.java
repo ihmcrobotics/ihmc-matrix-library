@@ -953,16 +953,16 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    }
    
    /**
-    * Set the diagonal of a block of the matrix to a constant value
+    * Fill the diagonal of a block of the matrix with a constant value
     * 
     * @param startRow Start row for block
     * @param startCol Start col for block
     * @param size Number of elements on the diagonal to set
-    * @param value
+    * @param value Value to fill the diagonal with
     */
-   public void setDiagonal(int startRow, int startCol, int size, double value)
+   public void fillDiagonal(int startRow, int startCol, int size, double value)
    {
-      if(!impl.setDiagonal(startRow, startCol, size, value))
+      if(!impl.fillDiagonal(startRow, startCol, size, value))
       {
          throw new RuntimeException("Invalid matrix dimensions");
       }
@@ -970,23 +970,30 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    
    
    /**
-    * Set a (part of a) row of the matrix to a constant value
+    * Fill a block of the matrix to a constant value
     * 
     * @param startRow Start row for block
     * @param startCol Start col for block
-    * @param numberOfRows Number of rows to set
-    * @param value
+    * @param numberOfRows Number of rows to fill
+    * @param numberOfCols Numbers of columns to fill
+    * @param value Value to fill the block with
     */
-   public void setRow(int startRow, int startCol, int numberOfRows, double value)
+   public void fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value)
    {
-      if(!impl.setRow(startRow, startCol, numberOfRows, value))
+      if(!impl.fillBlock(startRow, startCol, numberOfRows, numberOfCols, value))
       {
          throw new RuntimeException("Invalid matrix dimensions");
       }
    }
    
 
-   // TODO Add doc
+   /**
+    * Check if the elements of this matrix are within +- "precision" to the corresponding elements in the other matrix and numRows and numCols are equal
+    * 
+    * @param other Matrix to check against
+    * @param precision Maximum difference 
+    * @return True if all elements in other are within +- "precision" to the corresponding current matrix
+    */
    public boolean isApprox(NativeMatrix other, double precision)
    {
       return impl.isAprrox(other.impl, precision);

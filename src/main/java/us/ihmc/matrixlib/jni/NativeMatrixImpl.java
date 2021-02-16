@@ -187,12 +187,12 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_get__SWIG_0(swigCPtr, this, data, rows, cols);
   }
 
-  public boolean setDiagonal(int startRow, int startCol, int size, double value) {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_setDiagonal(swigCPtr, this, startRow, startCol, size, value);
+  public boolean fillDiagonal(int startRow, int startCol, int size, double value) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_fillDiagonal(swigCPtr, this, startRow, startCol, size, value);
   }
 
-  public boolean setRow(int startRow, int startCol, int numberOfRows, double value) {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_setRow(swigCPtr, this, startRow, startCol, numberOfRows, value);
+  public boolean fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_fillBlock(swigCPtr, this, startRow, startCol, numberOfRows, numberOfCols, value);
   }
 
   public double min() {
