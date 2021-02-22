@@ -758,6 +758,11 @@ void NativeMatrixImpl::print()
     std::cout << matrix << std::endl;
 }
 
+NativeMatrixImpl::~NativeMatrixImpl()
+{
+    deallocate();
+}
+
 
 
 

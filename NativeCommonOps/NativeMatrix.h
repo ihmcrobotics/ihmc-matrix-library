@@ -167,6 +167,8 @@ public:
 
     void print();
 
+    ~NativeMatrixImpl();
+
     NativeMatrixView matrix;
 
 private:
@@ -175,12 +177,17 @@ private:
     uint64_t storageSize = 0;
     double* storage = nullptr;
 
-    inline void allocate(int numRows, int numCols)
+    inline void deallocate()
     {
         if(storage != nullptr)
         {
             allocator.deallocate(storage, storageSize);
         }
+    }
+
+    inline void allocate(int numRows, int numCols)
+    {
+        deallocate();
 
         storageSize = numRows * numCols;
         storage = allocator.allocate(storageSize);
