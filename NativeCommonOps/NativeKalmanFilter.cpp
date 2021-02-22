@@ -1,6 +1,5 @@
 #include "NativeKalmanFilter.h"
 #include <iostream>
-using Eigen::MatrixXd;
 
 
 NativeKalmanFilterImpl::NativeKalmanFilterImpl()
@@ -32,9 +31,9 @@ bool NativeKalmanFilterImpl::computeKalmanGain(NativeMatrixImpl *gain, NativeMat
         return false;
     }
 
-    MatrixXd PHt = P->matrix.selfadjointView<Eigen::Upper>() * H->matrix.transpose();
-    MatrixXd Rdiag = R->matrix.asDiagonal();
-    MatrixXd toInvert = H->matrix * PHt + Rdiag;
+    Eigen::MatrixXd PHt = P->matrix.selfadjointView<Eigen::Upper>() * H->matrix.transpose();
+    Eigen::MatrixXd Rdiag = R->matrix.asDiagonal();
+    Eigen::MatrixXd toInvert = H->matrix * PHt + Rdiag;
 
 
     gain->matrix = PHt * toInvert.inverse();
@@ -62,7 +61,7 @@ bool NativeKalmanFilterImpl::updateErrorCovariance(NativeMatrixImpl *nextError, 
        return false;
     }
 
-    nextError->matrix = (MatrixXd::Identity(P->rows(), P->rows()) - K->matrix * H->matrix) * P->matrix.selfadjointView<Eigen::Upper>();
+    nextError->matrix = (Eigen::MatrixXd::Identity(P->rows(), P->rows()) - K->matrix * H->matrix) * P->matrix.selfadjointView<Eigen::Upper>();
 
 
     return true;

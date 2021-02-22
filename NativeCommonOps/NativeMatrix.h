@@ -1,8 +1,19 @@
 #ifndef NATIVEMATRIX_H
 #define NATIVEMATRIX_H
 
-#include <Eigen/Dense>
 
+/*
+ * Rename the Eigen namespace to Eigen_NativeMatrix. This avoids conflicts with other libraries and when loading the controller in other processes.
+ */
+#define Eigen us_ihmc_matrix_library_vendor_matrix
+#include <Eigen/Dense>
+#undef Eigen
+
+
+namespace Eigen = us_ihmc_matrix_library_vendor_matrix;
+/*
+ *  End of rename
+ */
 
 typedef Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>, Eigen::AlignedMax> NativeMatrixView;
 

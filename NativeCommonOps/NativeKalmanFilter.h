@@ -2,8 +2,8 @@
 #define NATIVEKALMANFILTER_H
 
 
-#include <Eigen/Dense>
 #include "NativeMatrix.h"
+
 
 class NativeKalmanFilterImpl
 {

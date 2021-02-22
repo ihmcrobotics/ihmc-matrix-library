@@ -1,5 +1,4 @@
 #include "NativeMatrix.h"
-#include <Eigen/Dense>
 #include <iostream>
 #include <cmath>
 #include <cstring>

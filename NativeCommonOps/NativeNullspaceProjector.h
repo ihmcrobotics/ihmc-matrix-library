@@ -1,7 +1,6 @@
 #ifndef NULLSPACEPROJECTOR_H
 #define NULLSPACEPROJECTOR_H
 
-#include <Eigen/Dense>
 #include "NativeMatrix.h"
 
 class NativeNullspaceProjectorImpl
