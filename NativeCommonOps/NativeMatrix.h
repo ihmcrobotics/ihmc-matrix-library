@@ -159,12 +159,27 @@ public:
     NativeMatrixView matrix;
 
 private:
-    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>  storage;
+    Eigen::aligned_allocator<double> allocator;
 
+    uint64_t storageSize = 0;
+    double* storage = nullptr;
+
+    inline void allocate(int numRows, int numCols)
+    {
+        if(storage != nullptr)
+        {
+            allocator.deallocate(storage, storageSize);
+        }
+
+        storageSize = numRows * numCols;
+        storage = allocator.allocate(storageSize);
+    }
 
     inline void updateView(int numRows, int numCols)
     {
-        new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
+        eigen_assert((numRows * numCols) <= storageSize);
+
+        new (&matrix) NativeMatrixView(storage, numRows, numCols);
     }
 
 };

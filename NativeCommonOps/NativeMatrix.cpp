@@ -4,8 +4,9 @@
 #include <cmath>
 #include <cstring>
 
-NativeMatrixImpl::NativeMatrixImpl(int numRows, int numCols) : storage(numRows, numCols), matrix(NULL, numRows, numCols)
+NativeMatrixImpl::NativeMatrixImpl(int numRows, int numCols) : matrix(NULL, numRows, numCols)
 {
+    allocate(numRows, numCols);
     updateView(numRows, numCols);
 }
 
@@ -16,9 +17,9 @@ void NativeMatrixImpl::resize(int numRows, int numCols)
         return;
     }
 
-    if(numRows * numCols > storage.size())
+    if(numRows * numCols > storageSize)
     {
-        storage.resize(numRows, numCols);
+        allocate(numRows, numCols);
     }
 
     updateView(numRows, numCols);
@@ -608,7 +609,7 @@ bool NativeMatrixImpl::removeRow(int rowToRemove)
      * Very fast compared to eigen directly.
      */
 
-    double* data = storage.data();
+    double* data = storage;
 
     size_t newStride = (size_t)newRows * sizeof(double);
 
@@ -651,7 +652,7 @@ bool NativeMatrixImpl::removeColumn(int colToRemove)
     int oldCols = cols();
     int newCols = oldCols - 1;
 
-    double* data = storage.data();
+    double* data = storage;
     double* dst = data + (colToRemove * newRows);
     double* src = data + ( (colToRemove + 1) * newRows);
     size_t size = (newCols - colToRemove) * newRows * sizeof(double);
