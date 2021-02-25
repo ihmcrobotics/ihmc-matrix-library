@@ -10,6 +10,8 @@ import org.ejml.data.MatrixType;
 import org.ejml.data.ReshapeMatrix;
 import org.ejml.ops.MatrixIO;
 
+import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.matrixlib.jni.NativeMatrixImpl;
 import us.ihmc.tools.nativelibraries.NativeLibraryLoader;
 
@@ -334,13 +336,53 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     * @param srcStartColumn  The first column index of the block in matrix a.
     * @param numberOfRows    The number of rows of the block.
     * @param numberOfColumns The number of columns of the block.
-    * @param scale           The scale factor to apply to the block's elements before adding it to
-    *                        this.
     */
    public void addBlock(NativeMatrix a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns,
                         double scale)
    {
       if (!impl.addBlock(a.impl, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns, scale))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Performs the following operation:<br>
+    * this += a <br>
+    * where only a block of the matrix a is added to a block of same size in this.
+    *
+    * @param a               The matrix to add to this. Not modified.
+    * @param destStartRow    The first row index of the block in this.
+    * @param destStartColumn The first column index of the block in this.
+    * @param srcStartRow     The first row index of the block in the matrix a.
+    * @param srcStartColumn  The first column index of the block in matrix a.
+    * @param numberOfRows    The number of rows of the block.
+    * @param numberOfColumns The number of columns of the block.
+    */
+   public void addBlock(NativeMatrix a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns)
+   {
+      if (!impl.addBlock(a.impl, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   /**
+    * Performs the following operation:<br>
+    * this -= a <br>
+    * where only a block of the matrix a is subtracted from a block of same size in this.
+    *
+    * @param a               The matrix to subtract from this. Not modified.
+    * @param destStartRow    The first row index of the block in this.
+    * @param destStartColumn The first column index of the block in this.
+    * @param srcStartRow     The first row index of the block in the matrix a.
+    * @param srcStartColumn  The first column index of the block in matrix a.
+    * @param numberOfRows    The number of rows of the block.
+    * @param numberOfColumns The number of columns of the block.
+    */
+   public void subtractBlock(NativeMatrix a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns)
+   {
+      if (!impl.subtractBlock(a.impl, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
@@ -482,6 +524,66 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    }
 
    /**
+    * Insert a matrix 3D at (startRow, startcol) in this matrix
+    * 
+    * @param src
+    * @param startRow
+    * @param startCol
+    */
+   public void insert(Matrix3DReadOnly src, int startRow, int startCol)
+   {
+      if(!impl.insert(startRow, startCol, src.getM00(), src.getM01(), src.getM02(), src.getM10(), src.getM11(), src.getM12(), src.getM20(), src.getM21(), src.getM22()))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   /**
+    * Insert a matrix 3D at (startRow, startcol) in this matrix, scaled by scale
+    * 
+    * @param src
+    * @param startRow
+    * @param startCol
+    * @param scale
+    */
+   public void insertScaled(Matrix3DReadOnly src, int startRow, int startCol, double scale)
+   {
+      if(!impl.insert(startRow, startCol, scale * src.getM00(), scale * src.getM01(), scale * src.getM02(), scale * src.getM10(), scale * src.getM11(), scale * src.getM12(), scale * src.getM20(), scale * src.getM21(), scale * src.getM22()))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   /**
+    * Insert a tuple at (startRow, startcol) in this matrix as a row
+    * 
+    * @param startRow
+    * @param startCol
+    * @param x
+    * @param y
+    * @param z
+    */
+   public void insertTupleRow(int startRow, int startCol, double x, double y, double z)
+   {
+      if(!impl.insertTupleRow(startRow, startCol, x, y, z))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   /**
+    * Insert a tuple at (startRow, startcol) in this matrix as a row
+    * 
+    * @param startRow
+    * @param startCol
+    * @param tuple
+    */
+   public void insertTupleRow(Tuple3DReadOnly tuple, int startRow, int startCol)
+   {
+      insertTupleRow(startRow, startCol, tuple.getX(), tuple.getY(), tuple.getZ());
+   }
+   
+   /**
     * Inserts a block from the given matrix into this.
     *
     * @param src   The matrix to be copied in this. Not modified.
@@ -515,6 +617,42 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    public void insert(NativeMatrix src, int dstY0, int dstX0)
    {
       insert(src, 0, src.getNumRows(), 0, src.getNumCols(), dstY0, dstX0);
+   }
+   
+   /**
+    * Inserts a scaled block from the given matrix into this.
+    *
+    * @param src   The matrix to be copied in this. Not modified.
+    * @param srcY0 The first row index (inclusive) of the block in {@code src} to copy.
+    * @param srcY1 The last row index (exclusive) of the block in {@code src} to copy.
+    * @param srcX0 The first column index (inclusive) of the block in {@code src} to copy.
+    * @param srcX1 The last column index (exclusive) of the block in {@code src} to copy.
+    * @param dstY0 The first row index (inclusive) of the block in {@code this} to write in.
+    * @param dstX0 The first column index (inclusive) of the block in {@code this} to write in.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void insertScaled(NativeMatrix src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale)
+   {
+      if (!impl.insertScaled(src.impl, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0, scale))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   /**
+    * Inserts the given matrix scaled into this.
+    * <p>
+    * {@code src} has to be either same size or smaller than this.
+    * </p>
+    *
+    * @param src   The matrix to be copied in this. Not modified.
+    * @param dstY0 The first row index (inclusive) of the block in {@code this} to write in.
+    * @param dstX0 The first column index (inclusive) of the block in {@code this} to write in.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void insertScaled(NativeMatrix src, int dstY0, int dstX0, double scale)
+   {
+      insertScaled(src, 0, src.getNumRows(), 0, src.getNumCols(), dstY0, dstX0, scale);
    }
 
    /**
@@ -551,6 +689,42 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    public void insert(DMatrixRMaj src, int dstY0, int dstX0)
    {
       insert(src, 0, src.getNumRows(), 0, src.getNumCols(), dstY0, dstX0);
+   }
+
+   /**
+    * Inserts a scaled block from the given matrix into this.
+    *
+    * @param src   The matrix to be copied in this. Not modified.
+    * @param srcY0 The first row index (inclusive) of the block in {@code src} to copy.
+    * @param srcY1 The last row index (exclusive) of the block in {@code src} to copy.
+    * @param srcX0 The first column index (inclusive) of the block in {@code src} to copy.
+    * @param srcX1 The last column index (exclusive) of the block in {@code src} to copy.
+    * @param dstY0 The first row index (inclusive) of the block in {@code this} to write in.
+    * @param dstX0 The first column index (inclusive) of the block in {@code this} to write in.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void insertScaled(DMatrixRMaj src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale)
+   {
+      if (!impl.insertScaled(src.data, src.numRows, src.numCols, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0, scale))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+   
+   /**
+    * Inserts the given matrix into this.
+    * <p>
+    * {@code src} has to be either same size or smaller than this.
+    * </p>
+    *
+    * @param src   The matrix to be copied in this. Not modified.
+    * @param dstY0 The first row index (inclusive) of the block in {@code this} to write in.
+    * @param dstX0 The first column index (inclusive) of the block in {@code this} to write in.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void insertScaled(DMatrixRMaj src, int dstY0, int dstX0, double scale)
+   {
+      insertScaled(src, 0, src.getNumRows(), 0, src.getNumCols(), dstY0, dstX0, scale);
    }
 
    /**
@@ -777,8 +951,49 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    {
       impl.scale(scale);
    }
+   
+   /**
+    * Fill the diagonal of a block of the matrix with a constant value
+    * 
+    * @param startRow Start row for block
+    * @param startCol Start col for block
+    * @param size Number of elements on the diagonal to set
+    * @param value Value to fill the diagonal with
+    */
+   public void fillDiagonal(int startRow, int startCol, int size, double value)
+   {
+      if(!impl.fillDiagonal(startRow, startCol, size, value))
+      {
+         throw new RuntimeException("Invalid matrix dimensions");
+      }
+   }
+   
+   
+   /**
+    * Fill a block of the matrix to a constant value
+    * 
+    * @param startRow Start row for block
+    * @param startCol Start col for block
+    * @param numberOfRows Number of rows to fill
+    * @param numberOfCols Numbers of columns to fill
+    * @param value Value to fill the block with
+    */
+   public void fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value)
+   {
+      if(!impl.fillBlock(startRow, startCol, numberOfRows, numberOfCols, value))
+      {
+         throw new RuntimeException("Invalid matrix dimensions");
+      }
+   }
+   
 
-   // TODO Add doc
+   /**
+    * Check if the elements of this matrix are within +- "precision" to the corresponding elements in the other matrix and numRows and numCols are equal
+    * 
+    * @param other Matrix to check against
+    * @param precision Maximum difference 
+    * @return True if all elements in other are within +- "precision" to the corresponding current matrix
+    */
    public boolean isApprox(NativeMatrix other, double precision)
    {
       return impl.isAprrox(other.impl, precision);

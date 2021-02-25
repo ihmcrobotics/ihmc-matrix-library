@@ -23,7 +23,9 @@ public class NativeMatrixLibraryJNI {
   public final static native boolean NativeMatrixImpl_multAddTransA(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_multTransB(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_multAddTransB(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
-  public final static native boolean NativeMatrixImpl_addBlock(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8, double jarg9);
+  public final static native boolean NativeMatrixImpl_addBlock__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8, double jarg9);
+  public final static native boolean NativeMatrixImpl_addBlock__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8);
+  public final static native boolean NativeMatrixImpl_subtractBlock(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8);
   public final static native boolean NativeMatrixImpl_multAddBlock(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, int jarg4, int jarg5);
   public final static native boolean NativeMatrixImpl_multQuad(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_invert(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_);
@@ -31,6 +33,10 @@ public class NativeMatrixLibraryJNI {
   public final static native boolean NativeMatrixImpl_solveCheck(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_insert__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8);
   public final static native boolean NativeMatrixImpl_insert__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8, int jarg9, int jarg10);
+  public final static native boolean NativeMatrixImpl_insert__SWIG_2(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, double jarg4, double jarg5, double jarg6, double jarg7, double jarg8, double jarg9, double jarg10, double jarg11, double jarg12);
+  public final static native boolean NativeMatrixImpl_insertTupleRow(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, double jarg4, double jarg5, double jarg6);
+  public final static native boolean NativeMatrixImpl_insertScaled__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8, double jarg9);
+  public final static native boolean NativeMatrixImpl_insertScaled__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, int jarg8, int jarg9, int jarg10, double jarg11);
   public final static native boolean NativeMatrixImpl_extract(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, double[] jarg6, int jarg7, int jarg8, int jarg9, int jarg10);
   public final static native boolean NativeMatrixImpl_transpose(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_);
   public final static native boolean NativeMatrixImpl_removeRow(long jarg1, NativeMatrixImpl jarg1_, int jarg2);
@@ -41,6 +47,8 @@ public class NativeMatrixLibraryJNI {
   public final static native boolean NativeMatrixImpl_isAprrox(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, double jarg3);
   public final static native boolean NativeMatrixImpl_set__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4);
   public final static native boolean NativeMatrixImpl_get__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4);
+  public final static native boolean NativeMatrixImpl_fillDiagonal(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, double jarg5);
+  public final static native boolean NativeMatrixImpl_fillBlock(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, double jarg6);
   public final static native double NativeMatrixImpl_min(long jarg1, NativeMatrixImpl jarg1_);
   public final static native double NativeMatrixImpl_max(long jarg1, NativeMatrixImpl jarg1_);
   public final static native double NativeMatrixImpl_sum(long jarg1, NativeMatrixImpl jarg1_);
@@ -56,4 +64,10 @@ public class NativeMatrixLibraryJNI {
   public final static native long new_NativeNullspaceProjectorImpl(int jarg1);
   public final static native boolean NativeNullspaceProjectorImpl_projectOnNullSpace(long jarg1, NativeNullspaceProjectorImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_, double jarg5);
   public final static native void delete_NativeNullspaceProjectorImpl(long jarg1);
+  public final static native long new_NativeKalmanFilterImpl();
+  public final static native boolean NativeKalmanFilterImpl_predictErrorCovariance(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_);
+  public final static native boolean NativeKalmanFilterImpl_computeKalmanGain(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_);
+  public final static native boolean NativeKalmanFilterImpl_updateState(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_);
+  public final static native boolean NativeKalmanFilterImpl_updateErrorCovariance(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_, long jarg4, NativeMatrixImpl jarg4_);
+  public final static native void delete_NativeKalmanFilterImpl(long jarg1);
 }

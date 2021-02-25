@@ -92,7 +92,15 @@ public class NativeMatrixImpl {
   }
 
   public boolean addBlock(NativeMatrixImpl a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns, double scale) {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_addBlock(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns, scale);
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_addBlock__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns, scale);
+  }
+
+  public boolean addBlock(NativeMatrixImpl a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_addBlock__SWIG_1(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns);
+  }
+
+  public boolean subtractBlock(NativeMatrixImpl a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_subtractBlock(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, destStartRow, destStartColumn, srcStartRow, srcStartColumn, numberOfRows, numberOfColumns);
   }
 
   public boolean multAddBlock(NativeMatrixImpl a, NativeMatrixImpl b, int rowStart, int colStart) {
@@ -121,6 +129,22 @@ public class NativeMatrixImpl {
 
   public boolean insert(double[] src, int rows, int cols, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_insert__SWIG_1(swigCPtr, this, src, rows, cols, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0);
+  }
+
+  public boolean insert(int startRow, int startCol, double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_insert__SWIG_2(swigCPtr, this, startRow, startCol, m00, m01, m02, m10, m11, m12, m20, m21, m22);
+  }
+
+  public boolean insertTupleRow(int startRow, int startCol, double x, double y, double z) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_insertTupleRow(swigCPtr, this, startRow, startCol, x, y, z);
+  }
+
+  public boolean insertScaled(NativeMatrixImpl src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_insertScaled__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(src), src, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0, scale);
+  }
+
+  public boolean insertScaled(double[] src, int srcRows, int srcCols, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_insertScaled__SWIG_1(swigCPtr, this, src, srcRows, srcCols, srcY0, srcY1, srcX0, srcX1, dstY0, dstX0, scale);
   }
 
   public boolean extract(int srcY0, int srcY1, int srcX0, int srcX1, double[] dst, int dstRows, int dstCols, int dstY0, int dstX0) {
@@ -161,6 +185,14 @@ public class NativeMatrixImpl {
 
   public boolean get(double[] data, int rows, int cols) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_get__SWIG_0(swigCPtr, this, data, rows, cols);
+  }
+
+  public boolean fillDiagonal(int startRow, int startCol, int size, double value) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_fillDiagonal(swigCPtr, this, startRow, startCol, size, value);
+  }
+
+  public boolean fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_fillBlock(swigCPtr, this, startRow, startCol, numberOfRows, numberOfCols, value);
   }
 
   public double min() {
