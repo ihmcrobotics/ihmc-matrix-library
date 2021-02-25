@@ -9,6 +9,12 @@ IHMC Matrix Library gathers utilities to improve experience the matrix library E
 
 Requires the installation of Visual C++ 2019 Redistributable (https://aka.ms/vs/16/release/VC_redist.x64.exe).
 
+
+# Development
+
+To avoid conflicts, we rename the Eigen namespace to us_ihmc_matrix_library_vendor_matrix in "NativeMatrix.h". We then alias Eigen to us_ihmc_matrix_library_vendor_matrix (!). Do not include <Eigen/Dense> or any other Eigen libraries in any files other than the #define Eigen us_ihmc_matrix_library_vendor_matrix block in NativeMatrix.h.
+
+
 # Compilation
 
 ## Linux

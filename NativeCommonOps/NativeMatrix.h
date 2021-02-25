@@ -38,6 +38,10 @@ public:
     bool addBlock(NativeMatrixImpl* a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn,
                   int numberOfRows, int numberOfColumns, double scale);
 
+    bool addBlock(NativeMatrixImpl *a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns);
+
+    bool subtractBlock(NativeMatrixImpl *a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns);
+
 
     bool multAddBlock(NativeMatrixImpl* a, NativeMatrixImpl* b, int rowStart, int colStart);
 
@@ -52,6 +56,14 @@ public:
     bool insert(NativeMatrixImpl* src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0);
 
     bool insert(double* src, int rows, int cols, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0);
+
+    bool insert(int startRow, int startCol, double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22);
+
+    bool insertTupleRow(int startRow, int startCol, double x, double y, double z);
+
+    bool insertScaled(NativeMatrixImpl *src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale);
+
+    bool insertScaled(double *src, int srcRows, int srcCols, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale);
 
     bool extract(int srcY0, int srcY1, int srcX0, int srcX1, double *dst, int dstRows, int dstCols, int dstY0, int dstX0);
 
@@ -72,6 +84,10 @@ public:
     bool set(double* data, int rows, int cols);
 
     bool get(double* data, int rows, int cols);
+
+    bool fillDiagonal(int startRow, int startCol, int size, double value);
+
+    bool fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value);
 
     inline double min()
     {
@@ -145,9 +161,10 @@ public:
 private:
     Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>  storage;
 
-
     inline void updateView(int numRows, int numCols)
     {
+        eigen_assert((numRows * numCols) <= storage.size());
+
         new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
     }
 

@@ -1,5 +1,4 @@
 #include "NativeMatrix.h"
-#include <Eigen/Dense>
 #include <iostream>
 #include <cmath>
 #include <cstring>
@@ -23,6 +22,7 @@ void NativeMatrixImpl::resize(int numRows, int numCols)
 
     updateView(numRows, numCols);
 }
+
 
 bool NativeMatrixImpl::set(NativeMatrixImpl *a)
 {
@@ -181,6 +181,68 @@ bool NativeMatrixImpl::addBlock(NativeMatrixImpl *a, int destStartRow, int destS
     }
 
     matrix.block(destStartRow, destStartColumn, numberOfRows, numberOfColumns) += scale * a->matrix.block(srcStartRow, srcStartColumn, numberOfRows, numberOfColumns);
+    return true;
+}
+
+bool NativeMatrixImpl::addBlock(NativeMatrixImpl *a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns)
+{
+    if(destStartRow < 0 || destStartColumn < 0 || srcStartRow < 0 || srcStartColumn < 0 || numberOfRows < 0 || numberOfColumns < 0)
+    {
+        return false;
+    }
+
+    if(rows() < destStartRow + numberOfRows)
+    {
+        return false;
+    }
+
+    if(cols() < destStartColumn + numberOfColumns)
+    {
+        return false;
+    }
+
+    if(a->rows() < srcStartRow + numberOfRows)
+    {
+        return false;
+    }
+
+    if(a->cols() < srcStartColumn + numberOfColumns)
+    {
+        return false;
+    }
+
+    matrix.block(destStartRow, destStartColumn, numberOfRows, numberOfColumns) += a->matrix.block(srcStartRow, srcStartColumn, numberOfRows, numberOfColumns);
+    return true;
+}
+
+bool NativeMatrixImpl::subtractBlock(NativeMatrixImpl *a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns)
+{
+    if(destStartRow < 0 || destStartColumn < 0 || srcStartRow < 0 || srcStartColumn < 0 || numberOfRows < 0 || numberOfColumns < 0)
+    {
+        return false;
+    }
+
+    if(rows() < destStartRow + numberOfRows)
+    {
+        return false;
+    }
+
+    if(cols() < destStartColumn + numberOfColumns)
+    {
+        return false;
+    }
+
+    if(a->rows() < srcStartRow + numberOfRows)
+    {
+        return false;
+    }
+
+    if(a->cols() < srcStartColumn + numberOfColumns)
+    {
+        return false;
+    }
+
+    matrix.block(destStartRow, destStartColumn, numberOfRows, numberOfColumns) -= a->matrix.block(srcStartRow, srcStartColumn, numberOfRows, numberOfColumns);
     return true;
 }
 
@@ -350,6 +412,123 @@ bool NativeMatrixImpl::insert(double *src, int srcRows, int srcCols, int srcY0, 
 
     Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> eigenData(src, srcRows, srcCols);
     matrix.block(dstY0, dstX0, h, w) = eigenData.block(srcY0, srcX0, h, w);
+
+    return true;
+
+}
+
+bool NativeMatrixImpl::insert(int startRow, int startCol, double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+{
+    if(startRow < 0 || this->rows() < startRow + 3 || this->cols() < startCol + 3 || startCol < 0)
+    {
+        return false;
+    }
+
+    matrix(startRow + 0, startCol + 0) = m00;
+    matrix(startRow + 0, startCol + 1) = m01;
+    matrix(startRow + 0, startCol + 2) = m02;
+
+    matrix(startRow + 1, startCol + 0) = m10;
+    matrix(startRow + 1, startCol + 1) = m11;
+    matrix(startRow + 1, startCol + 2) = m12;
+
+    matrix(startRow + 2, startCol + 0) = m20;
+    matrix(startRow + 2, startCol + 1) = m21;
+    matrix(startRow + 2, startCol + 2) = m22;
+
+
+
+
+    return true;
+
+}
+
+bool NativeMatrixImpl::insertTupleRow(int startRow, int startCol, double x, double y, double z)
+{
+    if(startRow < 0 || this->rows() < startRow + 3 || this->cols() < startCol + 1 || startCol < 0)
+    {
+        return false;
+    }
+
+    matrix(startRow + 0, startCol) = x;
+    matrix(startRow + 1, startCol) = y;
+    matrix(startRow + 2, startCol) = z;
+
+
+    return true;
+
+}
+
+bool NativeMatrixImpl::insertScaled(NativeMatrixImpl *src, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale)
+{
+    if(srcY0 < 0 || srcY1 < 0 || srcX0 < 0 || srcX1 < 0 || dstY0 < 0 || dstX0 < 0)
+    {
+        return false;
+    }
+
+
+    if( srcY1 < srcY0 || srcY0 < 0 || srcY1 > src->rows() )
+    {
+        return false;
+    }
+    if( srcX1 < srcX0 || srcX0 < 0 || srcX1 > src->cols() )
+    {
+        return false;
+    }
+
+    int w = srcX1-srcX0;
+    int h = srcY1-srcY0;
+
+    if( dstY0+h > rows() )
+    {
+        return false;
+    }
+    if( dstX0+w > cols() )
+    {
+        return false;
+    }
+
+
+    matrix.block(dstY0, dstX0, h, w) = scale * src->matrix.block(srcY0, srcX0, h, w);
+
+    return true;
+}
+
+bool NativeMatrixImpl::insertScaled(double *src, int srcRows, int srcCols, int srcY0, int srcY1, int srcX0, int srcX1, int dstY0, int dstX0, double scale)
+{
+    if(src == nullptr)
+    {
+        return false;
+    }
+
+    if(srcY0 < 0 || srcY1 < 0 || srcX0 < 0 || srcX1 < 0 || dstY0 < 0 || dstX0 < 0)
+    {
+        return false;
+    }
+
+    if( srcY1 < srcY0 || srcY0 < 0 || srcY1 > srcRows )
+    {
+        return false;
+    }
+    if( srcX1 < srcX0 || srcX0 < 0 || srcX1 > srcCols )
+    {
+        return false;
+    }
+
+    int w = srcX1-srcX0;
+    int h = srcY1-srcY0;
+
+    if( dstY0+h > rows() )
+    {
+        return false;
+    }
+    if( dstX0+w > cols() )
+    {
+        return false;
+    }
+
+    Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> eigenData(src, srcRows, srcCols);
+    matrix.block(dstY0, dstX0, h, w) = scale * eigenData.block(srcY0, srcX0, h, w);
 
     return true;
 
@@ -550,13 +729,31 @@ bool NativeMatrixImpl::get(double *data, int rows, int cols)
     return true;
 }
 
+bool NativeMatrixImpl::fillDiagonal(int startRow, int startCol, int size, double value)
+{
+    if(startRow < 0 || this->rows() < startRow + size || this->cols() < startCol + size || startCol < 0)
+    {
+        return false;
+    }
+
+    matrix.block(startRow, startCol, size, size).diagonal().fill(value);
+
+    return true;
+}
+
+bool NativeMatrixImpl::fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value)
+{
+    if(startRow < 0 || this->rows() < startRow + numberOfRows || this->cols() < startCol + numberOfCols || startCol < 0 || numberOfRows < 1 || numberOfCols < 1)
+    {
+        return false;
+    }
+
+    matrix.block(startRow, startCol, numberOfRows, numberOfCols).fill(value);
+
+    return true;
+}
+
 void NativeMatrixImpl::print()
 {
     std::cout << matrix << std::endl;
 }
-
-
-
-
-
-

@@ -31,9 +31,11 @@
 
 %include "NativeMatrix.h"
 %include "NativeNullspaceProjector.h"
+%include "NativeKalmanFilter.h"
 
 %{
 #include "NativeMatrix.h"
 #include "NativeNullspaceProjector.h"
+#include "NativeKalmanFilter.h"
 %}
 

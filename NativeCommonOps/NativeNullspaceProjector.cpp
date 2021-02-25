@@ -1,5 +1,4 @@
 #include "NativeNullspaceProjector.h"
-#include <iostream>
 
 NativeNullspaceProjectorImpl::NativeNullspaceProjectorImpl(int degreesOfFreedom) :
     degreesOfFreedom_(degreesOfFreedom),
@@ -31,8 +30,6 @@ bool NativeNullspaceProjectorImpl::projectOnNullSpace(NativeMatrixImpl* A, Nativ
     BtB = B->matrix.transpose() * B->matrix;
     outer = BtB + identity * alpha * alpha;
 
-//    std::cout << BtB << std::endl;
-//    std::cout << outer << std::endl;
     x->resize(A->rows(), aCols);
 
     x->matrix = A->matrix * (identity - outer.llt().solve(BtB));

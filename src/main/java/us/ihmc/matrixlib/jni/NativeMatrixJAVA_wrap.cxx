@@ -232,6 +232,7 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 
 #include "NativeMatrix.h"
 #include "NativeNullspaceProjector.h"
+#include "NativeKalmanFilter.h"
 
 
 #ifdef __cplusplus
@@ -506,7 +507,7 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1addBlock(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jint jarg3, jint jarg4, jint jarg5, jint jarg6, jint jarg7, jint jarg8, jdouble jarg9) {
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1addBlock_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jint jarg3, jint jarg4, jint jarg5, jint jarg6, jint jarg7, jint jarg8, jdouble jarg9) {
   jboolean jresult = 0 ;
   NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
   NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
@@ -533,6 +534,66 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
   arg8 = (int)jarg8; 
   arg9 = (double)jarg9; 
   result = (bool)(arg1)->addBlock(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1addBlock_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jint jarg3, jint jarg4, jint jarg5, jint jarg6, jint jarg7, jint jarg8) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int arg6 ;
+  int arg7 ;
+  int arg8 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  arg3 = (int)jarg3; 
+  arg4 = (int)jarg4; 
+  arg5 = (int)jarg5; 
+  arg6 = (int)jarg6; 
+  arg7 = (int)jarg7; 
+  arg8 = (int)jarg8; 
+  result = (bool)(arg1)->addBlock(arg2,arg3,arg4,arg5,arg6,arg7,arg8);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1subtractBlock(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jint jarg3, jint jarg4, jint jarg5, jint jarg6, jint jarg7, jint jarg8) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int arg6 ;
+  int arg7 ;
+  int arg8 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  arg3 = (int)jarg3; 
+  arg4 = (int)jarg4; 
+  arg5 = (int)jarg5; 
+  arg6 = (int)jarg6; 
+  arg7 = (int)jarg7; 
+  arg8 = (int)jarg8; 
+  result = (bool)(arg1)->subtractBlock(arg2,arg3,arg4,arg5,arg6,arg7,arg8);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -704,6 +765,140 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
   arg9 = (int)jarg9; 
   arg10 = (int)jarg10; 
   result = (bool)(arg1)->insert(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10);
+  jresult = (jboolean)result; 
+  {
+    jenv->ReleasePrimitiveArrayCritical(jarg2, arg2, 0);
+  }
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1insert_1_1SWIG_12(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3, jdouble jarg4, jdouble jarg5, jdouble jarg6, jdouble jarg7, jdouble jarg8, jdouble jarg9, jdouble jarg10, jdouble jarg11, jdouble jarg12) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  double arg4 ;
+  double arg5 ;
+  double arg6 ;
+  double arg7 ;
+  double arg8 ;
+  double arg9 ;
+  double arg10 ;
+  double arg11 ;
+  double arg12 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  arg4 = (double)jarg4; 
+  arg5 = (double)jarg5; 
+  arg6 = (double)jarg6; 
+  arg7 = (double)jarg7; 
+  arg8 = (double)jarg8; 
+  arg9 = (double)jarg9; 
+  arg10 = (double)jarg10; 
+  arg11 = (double)jarg11; 
+  arg12 = (double)jarg12; 
+  result = (bool)(arg1)->insert(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1insertTupleRow(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3, jdouble jarg4, jdouble jarg5, jdouble jarg6) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  double arg4 ;
+  double arg5 ;
+  double arg6 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  arg4 = (double)jarg4; 
+  arg5 = (double)jarg5; 
+  arg6 = (double)jarg6; 
+  result = (bool)(arg1)->insertTupleRow(arg2,arg3,arg4,arg5,arg6);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1insertScaled_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jint jarg3, jint jarg4, jint jarg5, jint jarg6, jint jarg7, jint jarg8, jdouble jarg9) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int arg6 ;
+  int arg7 ;
+  int arg8 ;
+  double arg9 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  arg3 = (int)jarg3; 
+  arg4 = (int)jarg4; 
+  arg5 = (int)jarg5; 
+  arg6 = (int)jarg6; 
+  arg7 = (int)jarg7; 
+  arg8 = (int)jarg8; 
+  arg9 = (double)jarg9; 
+  result = (bool)(arg1)->insertScaled(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1insertScaled_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdoubleArray jarg2, jint jarg3, jint jarg4, jint jarg5, jint jarg6, jint jarg7, jint jarg8, jint jarg9, jint jarg10, jdouble jarg11) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  double *arg2 = (double *) 0 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int arg6 ;
+  int arg7 ;
+  int arg8 ;
+  int arg9 ;
+  int arg10 ;
+  double arg11 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  {
+    arg2 = (double*) jenv->GetPrimitiveArrayCritical(jarg2, NULL);
+  }
+  arg3 = (int)jarg3; 
+  arg4 = (int)jarg4; 
+  arg5 = (int)jarg5; 
+  arg6 = (int)jarg6; 
+  arg7 = (int)jarg7; 
+  arg8 = (int)jarg8; 
+  arg9 = (int)jarg9; 
+  arg10 = (int)jarg10; 
+  arg11 = (double)jarg11; 
+  result = (bool)(arg1)->insertScaled(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
   jresult = (jboolean)result; 
   {
     jenv->ReleasePrimitiveArrayCritical(jarg2, arg2, 0);
@@ -916,6 +1111,54 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
   {
     jenv->ReleasePrimitiveArrayCritical(jarg2, arg2, 0);
   }
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1fillDiagonal(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3, jint jarg4, jdouble jarg5) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  double arg5 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  arg4 = (int)jarg4; 
+  arg5 = (double)jarg5; 
+  result = (bool)(arg1)->fillDiagonal(arg2,arg3,arg4,arg5);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1fillBlock(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3, jint jarg4, jint jarg5, jdouble jarg6) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  double arg6 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  arg4 = (int)jarg4; 
+  arg5 = (int)jarg5; 
+  arg6 = (double)jarg6; 
+  result = (bool)(arg1)->fillBlock(arg2,arg3,arg4,arg5,arg6);
+  jresult = (jboolean)result; 
   return jresult;
 }
 
@@ -1145,6 +1388,124 @@ SWIGEXPORT void JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_delete
   (void)jenv;
   (void)jcls;
   arg1 = *(NativeNullspaceProjectorImpl **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_new_1NativeKalmanFilterImpl(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  NativeKalmanFilterImpl *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (NativeKalmanFilterImpl *)new NativeKalmanFilterImpl();
+  *(NativeKalmanFilterImpl **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeKalmanFilterImpl_1predictErrorCovariance(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg3 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg4 = (NativeMatrixImpl *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  (void)jarg4_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  arg3 = *(NativeMatrixImpl **)&jarg3; 
+  arg4 = *(NativeMatrixImpl **)&jarg4; 
+  result = (bool)NativeKalmanFilterImpl::predictErrorCovariance(arg1,arg2,arg3,arg4);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeKalmanFilterImpl_1computeKalmanGain(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg3 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg4 = (NativeMatrixImpl *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  (void)jarg4_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  arg3 = *(NativeMatrixImpl **)&jarg3; 
+  arg4 = *(NativeMatrixImpl **)&jarg4; 
+  result = (bool)NativeKalmanFilterImpl::computeKalmanGain(arg1,arg2,arg3,arg4);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeKalmanFilterImpl_1updateState(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg3 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg4 = (NativeMatrixImpl *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  (void)jarg4_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  arg3 = *(NativeMatrixImpl **)&jarg3; 
+  arg4 = *(NativeMatrixImpl **)&jarg4; 
+  result = (bool)NativeKalmanFilterImpl::updateState(arg1,arg2,arg3,arg4);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeKalmanFilterImpl_1updateErrorCovariance(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg2 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg3 = (NativeMatrixImpl *) 0 ;
+  NativeMatrixImpl *arg4 = (NativeMatrixImpl *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  (void)jarg4_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = *(NativeMatrixImpl **)&jarg2; 
+  arg3 = *(NativeMatrixImpl **)&jarg3; 
+  arg4 = *(NativeMatrixImpl **)&jarg4; 
+  result = (bool)NativeKalmanFilterImpl::updateErrorCovariance(arg1,arg2,arg3,arg4);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_delete_1NativeKalmanFilterImpl(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  NativeKalmanFilterImpl *arg1 = (NativeKalmanFilterImpl *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(NativeKalmanFilterImpl **)&jarg1; 
   delete arg1;
 }
 
