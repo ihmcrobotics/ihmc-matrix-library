@@ -16,6 +16,10 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -s -mavx")
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Set default visibility to hidden. This avoids conflicts when combining with libraries linked to other versions of Eigen.
+# Instead of using a global symbol, the Eigen functions are internal to this library
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_C_VISIBILITY_PRESET hidden)
 
 set(SOURCE_FILES NativeCommonOps.cpp NativeMatrix.cpp NativeNullspaceProjector.cpp NativeKalmanFilter.cpp)
 

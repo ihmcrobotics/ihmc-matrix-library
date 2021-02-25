@@ -1,19 +1,8 @@
 #ifndef NATIVEMATRIX_H
 #define NATIVEMATRIX_H
 
-
-/*
- * Rename the Eigen namespace to Eigen_NativeMatrix. This avoids conflicts with other libraries and when loading the controller in other processes.
- */
-#define Eigen us_ihmc_matrix_library_vendor_matrix
 #include <Eigen/Dense>
-#undef Eigen
 
-
-namespace Eigen = us_ihmc_matrix_library_vendor_matrix;
-/*
- *  End of rename
- */
 
 typedef Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>, Eigen::AlignedMax> NativeMatrixView;
 
@@ -167,37 +156,16 @@ public:
 
     void print();
 
-    ~NativeMatrixImpl();
-
     NativeMatrixView matrix;
 
 private:
-    Eigen::aligned_allocator<double> allocator;
-
-    uint64_t storageSize = 0;
-    double* storage = nullptr;
-
-    inline void deallocate()
-    {
-        if(storage != nullptr)
-        {
-            allocator.deallocate(storage, storageSize);
-        }
-    }
-
-    inline void allocate(int numRows, int numCols)
-    {
-        deallocate();
-
-        storageSize = numRows * numCols;
-        storage = allocator.allocate(storageSize);
-    }
+    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>  storage;
 
     inline void updateView(int numRows, int numCols)
     {
-        eigen_assert((numRows * numCols) <= storageSize);
+        eigen_assert((numRows * numCols) <= storage.size());
 
-        new (&matrix) NativeMatrixView(storage, numRows, numCols);
+        new (&matrix) NativeMatrixView(storage.data(), numRows, numCols);
     }
 
 };
