@@ -29,11 +29,6 @@
 
 %ignore matrix;
 
-
-namespace us_ihmc_matrix_library_vendor_matrix {
-}
-
-
 %include "NativeMatrix.h"
 %include "NativeNullspaceProjector.h"
 %include "NativeKalmanFilter.h"
