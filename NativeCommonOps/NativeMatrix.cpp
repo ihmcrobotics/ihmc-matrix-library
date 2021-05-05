@@ -30,9 +30,14 @@ void NativeMatrixImpl::conservativeResize(int numRows, int numCols)
         return;
     }
 
-    storage.conservativeResize(numRows, numCols);
+    int minRow = std::min(numRows, rows());
+    int minCol = std::min(numCols, cols());
 
-    updateView(numRows, numCols);
+    Eigen::Block<Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>, Eigen::AlignedMax>> currentMatrix = matrix.block(0, 0, minRow, minCol);
+
+    resize(numRows, numCols);
+
+    matrix.block(0, 0, minRow, minCol) = currentMatrix;
 }
 
 

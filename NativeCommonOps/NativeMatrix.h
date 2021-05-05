@@ -192,8 +192,6 @@ public:
 private:
     Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>  storage;
 
-    Eigen::NoChange_t noChange;
-
     inline void updateView(int numRows, int numCols)
     {
         eigen_assert((numRows * numCols) <= storage.size());
