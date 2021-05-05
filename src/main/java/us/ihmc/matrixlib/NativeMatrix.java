@@ -88,8 +88,8 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     * </p>
     * <p>
     * Examples:<br>
-    * [ 1 2 ; 3 4 ] &rarr; reshape( 1 , 2 ) = [ 1 3 ]<br>
-    * [ 1 2 ; 3 4 ] &rarr; reshape( 2 , 1 ) = [ 1 ; 3 ]<br>
+    * [ 1 2 ; 3 4 ] &rarr; reshape( 1 , 2 ) = [ 1 2 ]<br>
+    * [ 1 2 ; 3 4 ] &rarr; reshape( 2 , 1 ) = [ 1 ; 2 ]<br>
     * [ 1 2 ; 3 4 ] &rarr; reshape( 2 , 3 ) = [ 0 0 0 ; 0 0 0 ]
     * </p>
     *
@@ -99,7 +99,15 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    @Override
    public void reshape(int rows, int cols)
    {
+      reshape(rows, cols, true);
+   }
+
+   public void reshape(int rows, int cols, boolean keepValues)
+   {
       impl.resize(rows, cols);
+
+      if (!keepValues)
+         impl.zero();
    }
 
    /**

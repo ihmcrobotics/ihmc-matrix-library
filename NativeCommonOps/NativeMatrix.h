@@ -4,7 +4,7 @@
 #include <Eigen/Dense>
 
 
-typedef Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>, Eigen::AlignedMax> NativeMatrixView;
+typedef Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>, Eigen::AlignedMax> NativeMatrixView;
 
 class NativeMatrixImpl
 {
@@ -27,13 +27,23 @@ public:
 
     bool multAdd(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
+    bool multAdd(double scale, NativeMatrixImpl* a, NativeMatrixImpl* b);
+
     bool multTransA(NativeMatrixImpl* a, NativeMatrixImpl* b);
+
+    bool multTransA(double scale, NativeMatrixImpl* a, NativeMatrixImpl* b);
 
     bool multAddTransA(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
+    bool multAddTransA(double scale, NativeMatrixImpl* a, NativeMatrixImpl* b);
+
     bool multTransB(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
+    bool multTransB(double scale, NativeMatrixImpl* a, NativeMatrixImpl* b);
+
     bool multAddTransB(NativeMatrixImpl* a, NativeMatrixImpl* b);
+
+    bool multAddTransB(double scale, NativeMatrixImpl* a, NativeMatrixImpl* b);
 
     bool addBlock(NativeMatrixImpl* a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn,
                   int numberOfRows, int numberOfColumns, double scale);
@@ -46,6 +56,12 @@ public:
     bool multAddBlock(NativeMatrixImpl* a, NativeMatrixImpl* b, int rowStart, int colStart);
 
     bool multQuad(NativeMatrixImpl* a, NativeMatrixImpl* b);
+
+    bool multAddQuad(NativeMatrixImpl* a, NativeMatrixImpl* b);
+
+    bool multQuadBlock(NativeMatrixImpl* a, NativeMatrixImpl* b, int rowStart, int colStart);
+
+    bool multAddQuadBlock(NativeMatrixImpl* a, NativeMatrixImpl* b, int rowStart, int colStart);
 
     bool invert(NativeMatrixImpl* a);
 
