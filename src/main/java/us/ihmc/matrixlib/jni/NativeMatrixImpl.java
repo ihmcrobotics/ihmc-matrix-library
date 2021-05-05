@@ -51,10 +51,6 @@ public class NativeMatrixImpl {
     NativeMatrixLibraryJNI.NativeMatrixImpl_resize(swigCPtr, this, numRows, numCols);
   }
 
-  public void conservativeResize(int numRows, int numCols) {
-    NativeMatrixLibraryJNI.NativeMatrixImpl_conservativeResize(swigCPtr, this, numRows, numCols);
-  }
-
   public boolean set(NativeMatrixImpl a) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_set__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a);
   }

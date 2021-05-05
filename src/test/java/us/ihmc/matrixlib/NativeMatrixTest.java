@@ -60,41 +60,6 @@ public class NativeMatrixTest
    }
 
    @Test
-   public void testConservativeReshapeJustRows()
-   {
-      Random random = new Random(98264L);
-
-      int initialRows = RandomNumbers.nextInt(random, 1, 100);
-      int cols = 157;
-
-      DMatrixRMaj expected = RandomMatrices_DDRM.rectangle(initialRows, cols, random);
-      NativeMatrix nativeMatrix = new NativeMatrix(expected);
-
-      for (int i = 0; i < iterations; i++)
-      {
-         int newRows = RandomNumbers.nextInt(random, 1, 100);
-         int curRows = expected.getNumRows();
-
-         expected.reshape(newRows, cols, true);
-         nativeMatrix.conservativeReshape(newRows, cols);
-
-         DMatrixRMaj actual = new DMatrixRMaj(expected);
-
-         // if we're increasing the size, put in new data
-         if (newRows > curRows)
-         {
-            DMatrixRMaj newData = RandomMatrices_DDRM.rectangle(newRows - curRows, cols, random);
-
-            CommonOps_DDRM.insert(newData, expected, curRows, 0);
-            nativeMatrix.insert(newData, curRows, 0);
-         }
-
-         nativeMatrix.get(actual);
-         MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
-      }
-   }
-
-   @Test
    public void testContainsNaN()
    {
       Random random = new Random(789896);

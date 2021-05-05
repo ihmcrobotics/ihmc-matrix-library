@@ -23,26 +23,6 @@ void NativeMatrixImpl::resize(int numRows, int numCols)
     updateView(numRows, numCols);
 }
 
-void NativeMatrixImpl::conservativeResize(int numRows, int numCols)
-{
-    if(numRows == rows() && numCols == cols())
-    {
-        return;
-    }
-
-    int minRow = std::min(numRows, rows());
-    int minCol = std::min(numCols, cols());
-
-    Eigen::Block<Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>, Eigen::AlignedMax>> currentMatrix = matrix.block(0, 0, minRow, minCol);
-
-    resize(numRows, numCols);
-
-    matrix.block(0, 0, minRow, minCol) = currentMatrix;
-}
-
-
-
-
 bool NativeMatrixImpl::set(NativeMatrixImpl *a)
 {
     resize(a->rows(), a->cols());

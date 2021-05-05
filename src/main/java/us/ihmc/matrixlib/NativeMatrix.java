@@ -98,11 +98,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       impl.resize(rows, cols);
    }
 
-   public void conservativeReshape(int rows, int cols)
-   {
-      impl.conservativeResize(rows, cols);
-   }
-
    /**
     * Copies the given matrix and scales every single element by the given factor.
     * <p>
