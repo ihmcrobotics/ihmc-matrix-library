@@ -17,10 +17,6 @@ public:
 
     void conservativeResize(int numRows, int numCols);
 
-    void conservativeResizeRows(int numRows);
-
-    void conservativeResizeCols(int numCols);
-
     bool set(NativeMatrixImpl* a);
 
     bool add(NativeMatrixImpl* a, NativeMatrixImpl* b);

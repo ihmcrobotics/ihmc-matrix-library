@@ -103,16 +103,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       impl.conservativeResize(rows, cols);
    }
 
-   public void conservativeReshapeRows(int rows)
-   {
-      impl.conservativeResizeRows(rows);
-   }
-
-   public void conservativeReshapeCols(int cols)
-   {
-      impl.conservativeResizeCols(cols);
-   }
-
    /**
     * Copies the given matrix and scales every single element by the given factor.
     * <p>
@@ -237,7 +227,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     */
    public void add(int row, int col, double value)
    {
-      if (impl.add(row, col, value))
+      if (!impl.add(row, col, value))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
@@ -251,7 +241,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     */
    public void addEquals(NativeMatrix b)
    {
-      if (impl.addEquals(b.impl))
+      if (!impl.addEquals(b.impl))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
@@ -265,7 +255,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     */
    public void addEquals(double scale, NativeMatrix b)
    {
-      if (impl.addEquals(scale, b.impl))
+      if (!impl.addEquals(scale, b.impl))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }

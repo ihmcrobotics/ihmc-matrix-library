@@ -35,30 +35,6 @@ void NativeMatrixImpl::conservativeResize(int numRows, int numCols)
     updateView(numRows, numCols);
 }
 
-void NativeMatrixImpl::conservativeResizeRows(int numRows)
-{
-    if(numRows == rows())
-    {
-        return;
-    }
-
-    storage.conservativeResize(numRows, noChange);
-
-    updateView(numRows, cols());
-}
-
-
-void NativeMatrixImpl::conservativeResizeCols(int numCols)
-{
-    if(numCols == cols())
-    {
-        return;
-    }
-
-    storage.conservativeResize(noChange, numCols);
-
-    updateView(rows(), numCols);
-}
 
 
 
@@ -112,7 +88,7 @@ bool NativeMatrixImpl::addEquals(double scale, NativeMatrixImpl *b)
 
 bool NativeMatrixImpl::add(int row, int col, double value)
 {
-    if (row > rows() - 1 || col > cols() - 1)
+    if (row >= rows() || col >= cols())
     {
         return false;
     }
