@@ -47,6 +47,17 @@ bool NativeMatrixImpl::add(NativeMatrixImpl *a, NativeMatrixImpl *b)
     return true;
 }
 
+bool NativeMatrixImpl::add(int row, int col, double value)
+{
+    if (row > rows() - 1 || col > cols() - 1)
+    {
+        return false;
+    }
+    matrix(row, col) += value;
+
+    return true;
+}
+
 bool NativeMatrixImpl::subtract(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
     if(a->rows() != b->rows() || a->cols() != b->cols())

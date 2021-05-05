@@ -19,6 +19,8 @@ public:
 
     bool add(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
+    bool add(int row, int col, double value);
+
     bool subtract(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
     bool mult(NativeMatrixImpl* a, NativeMatrixImpl* b);
@@ -52,8 +54,9 @@ public:
 
     bool subtractBlock(NativeMatrixImpl *a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns);
 
-
     bool multAddBlock(NativeMatrixImpl* a, NativeMatrixImpl* b, int rowStart, int colStart);
+
+    bool multAddBlock(double scale, NativeMatrixImpl* a, NativeMatrixImpl* b, int rowStart, int colStart);
 
     bool multQuad(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
