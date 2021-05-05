@@ -4,7 +4,7 @@
 #include <Eigen/Dense>
 
 
-typedef Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>, Eigen::AlignedMax> NativeMatrixView;
+typedef Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>, Eigen::AlignedMax> NativeMatrixView;
 
 class NativeMatrixImpl
 {
@@ -14,6 +14,12 @@ public:
     NativeMatrixImpl(int numRows, int numCols);
 
     void resize(int numRows, int numCols);
+
+    void conservativeResize(int numRows, int numCols);
+
+    void conservativeResizeRows(int numRows);
+
+    void conservativeResizeCols(int numCols);
 
     bool set(NativeMatrixImpl* a);
 
@@ -179,6 +185,8 @@ public:
 
 private:
     Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>  storage;
+
+    Eigen::NoChange_t noChange;
 
     inline void updateView(int numRows, int numCols)
     {

@@ -23,6 +23,44 @@ void NativeMatrixImpl::resize(int numRows, int numCols)
     updateView(numRows, numCols);
 }
 
+void NativeMatrixImpl::conservativeResize(int numRows, int numCols)
+{
+    if(numRows == rows() && numCols == cols())
+    {
+        return;
+    }
+
+    storage.conservativeResize(numRows, numCols);
+
+    updateView(numRows, numCols);
+}
+
+void NativeMatrixImpl::conservativeResizeRows(int numRows)
+{
+    if(numRows == rows())
+    {
+        return;
+    }
+
+    storage.conservativeResize(numRows, noChange);
+
+    updateView(numRows, cols());
+}
+
+
+void NativeMatrixImpl::conservativeResizeCols(int numCols)
+{
+    if(numCols == cols())
+    {
+        return;
+    }
+
+    storage.conservativeResize(noChange, numCols);
+
+    updateView(rows(), numCols);
+}
+
+
 
 bool NativeMatrixImpl::set(NativeMatrixImpl *a)
 {
@@ -164,7 +202,7 @@ bool NativeMatrixImpl::multAddTransA(NativeMatrixImpl *a, NativeMatrixImpl *b)
     return true;
 }
 
-bool NativeMatrixImpl::multAddTransA(NativeMatrixImpl *a, NativeMatrixImpl *b)
+bool NativeMatrixImpl::multAddTransA(double scale, NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
     if(a->cols() != rows() || b->cols() != cols() || a->rows() != b->rows())
     {

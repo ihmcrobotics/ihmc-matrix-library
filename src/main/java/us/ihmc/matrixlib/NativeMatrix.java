@@ -99,15 +99,22 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    @Override
    public void reshape(int rows, int cols)
    {
-      reshape(rows, cols, true);
+      impl.resize(rows, cols);
    }
 
-   public void reshape(int rows, int cols, boolean keepValues)
+   public void conservativeReshape(int rows, int cols)
    {
-      impl.resize(rows, cols);
+      impl.conservativeResize(rows, cols);
+   }
 
-      if (!keepValues)
-         impl.zero();
+   public void conservativeReshapeRows(int rows)
+   {
+      impl.conservativeResizeRows(rows);
+   }
+
+   public void conservativeReshapeCols(int cols)
+   {
+      impl.conservativeResizeCols(cols);
    }
 
    /**
