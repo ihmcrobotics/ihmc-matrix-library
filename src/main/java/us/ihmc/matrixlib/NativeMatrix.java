@@ -3,11 +3,7 @@ package us.ihmc.matrixlib;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.ejml.data.DMatrix;
-import org.ejml.data.DMatrixRMaj;
-import org.ejml.data.Matrix;
-import org.ejml.data.MatrixType;
-import org.ejml.data.ReshapeMatrix;
+import org.ejml.data.*;
 import org.ejml.ops.MatrixIO;
 
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -178,6 +174,22 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       if (!impl.set(matrix.impl))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Copies the given matrix into this.
+    * <p>
+    * This operation reshapes this to match the given matrix.
+    * </p>
+    *
+    * @param matrix The matrix which is to be copied. This is not modified or saved.
+    */
+   public void set(DMatrixSparseCSC matrix)
+   {
+      if (!impl.setSparse(matrix.nz_values, matrix.nz_rows, matrix.col_idx, matrix.numRows, matrix.numCols, matrix.nz_length))
+      {
+         throw new IllegalArgumentException("Cannot set matrix.");
       }
    }
 
@@ -1266,7 +1278,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    /**
     * {@inheritDoc}
     * <p>
-    * This implementation only supports {@link NativeMatrix} and {@link DMatrixRMaj}.
+    * This implementation only supports {@link NativeMatrix}, {@link DMatrixRMaj}, and {@link DMatrixSparseCSC}.
     * </p>
     * 
     * @param original The matrix which is to be copied. This is not modified or saved.
@@ -1280,6 +1292,8 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
          set((NativeMatrix) original);
       else if (original instanceof DMatrixRMaj)
          set((DMatrixRMaj) original);
+      else if (original instanceof DMatrixSparseCSC)
+         set((DMatrixSparseCSC) original);
       else if (original == null)
          throw new NullPointerException();
       else

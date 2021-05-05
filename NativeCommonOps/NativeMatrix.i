@@ -27,6 +27,17 @@
     jenv->ReleasePrimitiveArrayCritical($input, $1, 0);
 }
 
+%typemap(jtype) int* "int[]"
+%typemap(jstype) int* "int[]"
+%typemap(javain) int* "$javainput"
+%typemap(jni) int* "jintArray"
+%typemap(in) int* {
+    $1 = (int*) jenv->GetPrimitiveArrayCritical($input, NULL);
+}
+%typemap(freearg) int* {
+    jenv->ReleasePrimitiveArrayCritical($input, $1, 0);
+}
+
 %ignore matrix;
 
 %include "NativeMatrix.h"

@@ -1416,6 +1416,48 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
 }
 
 
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1setSparse(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdoubleArray jarg2, jintArray jarg3, jintArray jarg4, jint jarg5, jint jarg6, jint jarg7) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  double *arg2 = (double *) 0 ;
+  int *arg3 = (int *) 0 ;
+  int *arg4 = (int *) 0 ;
+  int arg5 ;
+  int arg6 ;
+  int arg7 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  {
+    arg2 = (double*) jenv->GetPrimitiveArrayCritical(jarg2, NULL);
+  }
+  {
+    arg3 = (int*) jenv->GetPrimitiveArrayCritical(jarg3, NULL);
+  }
+  {
+    arg4 = (int*) jenv->GetPrimitiveArrayCritical(jarg4, NULL);
+  }
+  arg5 = (int)jarg5; 
+  arg6 = (int)jarg6; 
+  arg7 = (int)jarg7; 
+  result = (bool)(arg1)->setSparse(arg2,arg3,arg4,arg5,arg6,arg7);
+  jresult = (jboolean)result; 
+  {
+    jenv->ReleasePrimitiveArrayCritical(jarg2, arg2, 0);
+  }
+  {
+    jenv->ReleasePrimitiveArrayCritical(jarg3, arg3, 0);
+  }
+  {
+    jenv->ReleasePrimitiveArrayCritical(jarg4, arg4, 0);
+  }
+  return jresult;
+}
+
+
 SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1get_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdoubleArray jarg2, jint jarg3, jint jarg4) {
   jboolean jresult = 0 ;
   NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;

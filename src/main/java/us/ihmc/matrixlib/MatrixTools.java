@@ -419,7 +419,7 @@ public class MatrixTools
     * @param numberOfColumns Column size of the block
     * @param scale           Scale the block from otherMatrix by this value
     */
-   public static void addMatrixBlock(DMatrix1Row dest, int destStartRow, int destStartColumn, DMatrix1Row src, int srcStartRow, int srcStartColumn,
+   public static void addMatrixBlock(DMatrix dest, int destStartRow, int destStartColumn, DMatrix1Row src, int srcStartRow, int srcStartColumn,
                                      int numberOfRows, int numberOfColumns, double scale)
    {
       if (numberOfRows == 0 || numberOfColumns == 0)
