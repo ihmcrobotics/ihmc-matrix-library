@@ -18,6 +18,8 @@ public class NativeMatrixLibraryJNI {
   public final static native void NativeMatrixImpl_conservativeResizeCols(long jarg1, NativeMatrixImpl jarg1_, int jarg2);
   public final static native boolean NativeMatrixImpl_set__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_);
   public final static native boolean NativeMatrixImpl_add__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
+  public final static native boolean NativeMatrixImpl_addEquals__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_);
+  public final static native boolean NativeMatrixImpl_addEquals__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, double jarg2, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_add__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, double jarg4);
   public final static native boolean NativeMatrixImpl_subtract(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_mult__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);

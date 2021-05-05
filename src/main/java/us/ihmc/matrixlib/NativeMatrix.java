@@ -244,6 +244,34 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    }
 
    /**
+    Computes the matrix addition</br>
+    * this += b
+    *
+    * @throws IllegalArgumentException if the accessors are out of bounds.
+    */
+   public void addEquals(NativeMatrix b)
+   {
+      if (impl.addEquals(b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    Computes the matrix addition</br>
+    * this += scale * b
+    *
+    * @throws IllegalArgumentException if the accessors are out of bounds.
+    */
+   public void addEquals(double scale, NativeMatrix b)
+   {
+      if (impl.addEquals(scale, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
     * Computes the matrix subtraction</br>
     * this = a - b
     * <p>

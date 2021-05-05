@@ -25,6 +25,10 @@ public:
 
     bool add(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
+    bool addEquals(NativeMatrixImpl* b);
+
+    bool addEquals(double scale, NativeMatrixImpl* b);
+
     bool add(int row, int col, double value);
 
     bool subtract(NativeMatrixImpl* a, NativeMatrixImpl* b);

@@ -71,6 +71,14 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_add__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
   }
 
+  public boolean addEquals(NativeMatrixImpl b) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_addEquals__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(b), b);
+  }
+
+  public boolean addEquals(double scale, NativeMatrixImpl b) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_addEquals__SWIG_1(swigCPtr, this, scale, NativeMatrixImpl.getCPtr(b), b);
+  }
+
   public boolean add(int row, int col, double value) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_add__SWIG_1(swigCPtr, this, row, col, value);
   }

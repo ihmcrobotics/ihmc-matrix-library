@@ -85,6 +85,31 @@ bool NativeMatrixImpl::add(NativeMatrixImpl *a, NativeMatrixImpl *b)
     return true;
 }
 
+
+bool NativeMatrixImpl::addEquals(NativeMatrixImpl *b)
+{
+    if(rows() != b->rows() || cols() != b->cols())
+    {
+        return false;
+    }
+
+    matrix += (b->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::addEquals(double scale, NativeMatrixImpl *b)
+{
+    if(rows() != b->rows() || cols() != b->cols())
+    {
+        return false;
+    }
+
+    matrix += scale * (b->matrix);
+
+    return true;
+}
+
 bool NativeMatrixImpl::add(int row, int col, double value)
 {
     if (row > rows() - 1 || col > cols() - 1)

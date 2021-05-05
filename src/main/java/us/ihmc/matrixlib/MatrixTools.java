@@ -497,7 +497,7 @@ public class MatrixTools
       return C;
    }
 
-   public static void addDiagonal(DMatrix1Row matrix, double scalar)
+   public static void addDiagonal(DMatrix matrix, double scalar)
    {
       int n = Math.max(matrix.getNumRows(), matrix.getNumCols());
       for (int i = 0; i < n; i++)
