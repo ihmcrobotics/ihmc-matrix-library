@@ -64,6 +64,10 @@ public:
 
     bool multAddBlock(double scale, NativeMatrixImpl* a, NativeMatrixImpl* b, int rowStart, int colStart);
 
+    bool multAddBlockTransA(NativeMatrixImpl* a, NativeMatrixImpl* b, int rowStart, int colStart);
+
+    bool multAddBlockTransA(double scale, NativeMatrixImpl* a, NativeMatrixImpl* b, int rowStart, int colStart);
+
     bool multQuad(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
     bool multAddQuad(NativeMatrixImpl* a, NativeMatrixImpl* b);

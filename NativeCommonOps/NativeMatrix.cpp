@@ -416,6 +416,62 @@ bool NativeMatrixImpl::multAddBlock(double scale, NativeMatrixImpl *a, NativeMat
 
 }
 
+bool NativeMatrixImpl::multAddBlockTransA(NativeMatrixImpl *a, NativeMatrixImpl *b, int rowStart, int colStart)
+{
+    if(rowStart < 0 || colStart < 0)
+    {
+        return false;
+    }
+
+    if(a->rows() != b->rows())
+    {
+        return false;
+    }
+
+    if( (rows() - rowStart) < a->cols())
+    {
+        return false;
+    }
+
+    if((cols() - colStart) < b->cols())
+    {
+        return false;
+    }
+
+    matrix.block(rowStart, colStart, a->cols(), b->cols()) += a->matrix.transpose() * b->matrix;
+
+    return true;
+
+}
+
+bool NativeMatrixImpl::multAddBlockTransA(double scale, NativeMatrixImpl *a, NativeMatrixImpl *b, int rowStart, int colStart)
+{
+    if(rowStart < 0 || colStart < 0)
+        {
+            return false;
+        }
+
+        if(a->rows() != b->rows())
+        {
+            return false;
+        }
+
+        if( (rows() - rowStart) < a->cols())
+        {
+            return false;
+        }
+
+        if((cols() - colStart) < b->cols())
+        {
+            return false;
+        }
+
+        matrix.block(rowStart, colStart, a->cols(), b->cols()) += scale * a->matrix.transpose() * b->matrix;
+
+        return true;
+
+}
+
 bool NativeMatrixImpl::multQuad(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
     if(a->rows() != b->cols() || b->cols() != b->rows())

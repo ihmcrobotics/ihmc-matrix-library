@@ -147,6 +147,14 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_multAddBlock__SWIG_1(swigCPtr, this, scale, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b, rowStart, colStart);
   }
 
+  public boolean multAddBlockTransA(NativeMatrixImpl a, NativeMatrixImpl b, int rowStart, int colStart) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_multAddBlockTransA__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b, rowStart, colStart);
+  }
+
+  public boolean multAddBlockTransA(double scale, NativeMatrixImpl a, NativeMatrixImpl b, int rowStart, int colStart) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_multAddBlockTransA__SWIG_1(swigCPtr, this, scale, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b, rowStart, colStart);
+  }
+
   public boolean multQuad(NativeMatrixImpl a, NativeMatrixImpl b) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_multQuad(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
   }

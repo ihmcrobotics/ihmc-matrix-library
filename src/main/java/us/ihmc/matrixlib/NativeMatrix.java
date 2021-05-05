@@ -425,6 +425,22 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       }
    }
 
+   public void multAddBlockTransA(NativeMatrix a, NativeMatrix b, int rowStart, int colStart)
+   {
+      if (!impl.multAddBlockTransA(a.impl, b.impl, rowStart, colStart))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   public void multAddBlockTransA(double scale, NativeMatrix a, NativeMatrix b, int rowStart, int colStart)
+   {
+      if (!impl.multAddBlockTransA(scale, a.impl, b.impl, rowStart, colStart))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
    /**
     * Performs the following operation:<br>
     * this += scale * a <br>
