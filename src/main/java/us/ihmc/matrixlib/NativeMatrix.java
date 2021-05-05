@@ -200,6 +200,14 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       }
    }
 
+   public void add(int row, int col, double value)
+   {
+      if (impl.set(row, col, unsafe_get(row, col) + value))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
    /**
     * Computes the matrix subtraction</br>
     * this = a - b
