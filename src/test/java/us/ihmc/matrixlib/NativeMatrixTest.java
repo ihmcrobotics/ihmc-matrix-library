@@ -60,6 +60,65 @@ public class NativeMatrixTest
    }
 
    @Test
+   public void testAddElement()
+   {
+      Random random = new Random(98264L);
+
+      for (int iter = 0; iter < iterations; iter++)
+      {
+         int rows = RandomNumbers.nextInt(random, 1, maxSize);
+         int cols = RandomNumbers.nextInt(random, 1, maxSize);
+         DMatrixRMaj expected = RandomMatrices_DDRM.rectangle(rows, cols, random);
+         DMatrixRMaj actual = RandomMatrices_DDRM.rectangle(rows, cols, random);
+         NativeMatrix nativeMatrix = new NativeMatrix(expected);
+
+         nativeMatrix.get(actual);
+         MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
+
+         for (int i = 0; i < 10; i++)
+         {
+            int row = RandomNumbers.nextInt(random, 0, rows - 1);
+            int col = RandomNumbers.nextInt(random, 0, cols - 1);
+            double value = RandomNumbers.nextDouble(random, 10.0);
+            expected.add(row, col, value);
+
+            nativeMatrix.add(row, col, value);
+            nativeMatrix.get(actual);
+            MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
+         }
+      }
+   }
+
+   @Test
+   public void testAddEquals()
+   {
+      Random random = new Random(98264L);
+
+      DMatrixRMaj expected = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+      DMatrixRMaj actual = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+      NativeMatrix nativeMatrix = new NativeMatrix(expected);
+
+      for (int iter = 0; iter < iterations; iter++)
+      {
+         DMatrixRMaj b = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+
+         CommonOps_DDRM.addEquals(expected, b);
+         nativeMatrix.addEquals(new NativeMatrix(expected));
+
+         nativeMatrix.get(actual);
+         MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
+
+         double scale = RandomNumbers.nextDouble(random, 10.0);
+
+         CommonOps_DDRM.addEquals(expected, scale, b);
+         nativeMatrix.addEquals(scale, new NativeMatrix(expected));
+
+         nativeMatrix.get(actual);
+         MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
+      }
+   }
+
+   @Test
    public void testContainsNaN()
    {
       Random random = new Random(789896);
@@ -282,6 +341,10 @@ public class NativeMatrixTest
          nativeB.set(B);
          nativeAB.multAdd(nativeA, nativeB);
          nativeAB.get(AB);
+
+         double scale = RandomNumbers.nextDouble(random, 10.0);
+         CommonOps_DDRM.multAdd(scale, A, B, AB);
+         nativeAB.multAdd(scale, nativeA, nativeB);
       }
 
       for (int i = 0; i < iterations; i++)
@@ -311,6 +374,18 @@ public class NativeMatrixTest
          ejmlTime -= System.nanoTime();
          CommonOps_DDRM.multAdd(A, B, expected);
          ejmlTime += System.nanoTime();
+
+         MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
+
+         double scale = RandomNumbers.nextDouble(random, 10.0);
+
+         nativeA.set(A);
+         nativeB.set(B);
+         nativeAB.set(expected);
+         nativeAB.multAdd(scale, nativeA, nativeB);
+         nativeAB.get(actual);
+
+         CommonOps_DDRM.multAdd(scale, A, B, expected);
 
          MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
       }
@@ -385,6 +460,84 @@ public class NativeMatrixTest
          nativeA.set(A);
          nativeB.set(B);
          nativeAtBA.multQuad(nativeA, nativeB);
+         nativeAtBA.get(actual);
+         nativeTime += System.nanoTime();
+
+         MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
+      }
+
+      printTimings(nativeTime, ejmlTime, matrixSizes, iterations);
+      System.out.println("--------------------------------------------------------------");
+
+      { // Test exceptions
+         assertDoesNotThrow(() -> new NativeMatrix(3, 3).multQuad(new NativeMatrix(5, 3), new NativeMatrix(5, 5)));
+         assertDoesNotThrow(() -> new NativeMatrix(8, 8).multQuad(new NativeMatrix(5, 3), new NativeMatrix(5, 5)));
+         assertDoesNotThrow(() -> new NativeMatrix(3, 3).multQuad(new NativeMatrix(0, 3), new NativeMatrix(0, 0)));
+         assertDoesNotThrow(() -> new NativeMatrix(0, 0).multQuad(new NativeMatrix(5, 0), new NativeMatrix(5, 5)));
+         Class<IllegalArgumentException> expectedType = IllegalArgumentException.class;
+         assertThrows(expectedType, () -> new NativeMatrix(3, 3).multQuad(new NativeMatrix(5, 3), new NativeMatrix(6, 5)));
+         assertThrows(expectedType, () -> new NativeMatrix(3, 3).multQuad(new NativeMatrix(5, 3), new NativeMatrix(5, 6)));
+      }
+   }
+
+   @Test
+   public void testMultAddQuad()
+   {
+      Random random = new Random(40L);
+
+      System.out.println("Testing computing quadratic form with random matrices...");
+
+      nativeTime = 0;
+      ejmlTime = 0;
+      double matrixSizes = 0.0;
+
+      for (int i = 0; i < warmumIterations; i++)
+      {
+         DMatrixRMaj base = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
+         DMatrixRMaj tempBA = new DMatrixRMaj(maxSize, maxSize);
+         DMatrixRMaj AtBA = new DMatrixRMaj(maxSize, maxSize);
+         CommonOps_DDRM.mult(B, A, tempBA);
+         CommonOps_DDRM.multTransA(A, tempBA, AtBA);
+         CommonOps_DDRM.addEquals(base, AtBA);
+
+         NativeMatrix nativeA = new NativeMatrix(maxSize, maxSize);
+         NativeMatrix nativeB = new NativeMatrix(maxSize, maxSize);
+         NativeMatrix nativeAtBA = new NativeMatrix(base);
+         nativeA.set(A);
+         nativeB.set(B);
+         nativeAtBA.multAddQuad(nativeA, nativeB);
+         nativeAtBA.get(AtBA);
+      }
+
+      for (int i = 0; i < iterations; i++)
+      {
+         int aRows = random.nextInt(maxSize) + 1;
+         int aCols = random.nextInt(maxSize) + 1;
+         matrixSizes += (aRows + aCols) / 2.0;
+
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(aRows, aCols, random);
+         DMatrixRMaj B = RandomMatrices_DDRM.rectangle(aRows, aRows, random);
+         DMatrixRMaj base = RandomMatrices_DDRM.rectangle(aCols, aCols, random);
+         DMatrixRMaj actual = new DMatrixRMaj(aCols, aCols);
+         DMatrixRMaj expected = new DMatrixRMaj(aCols, aCols);
+         DMatrixRMaj tempBA = new DMatrixRMaj(aRows, aCols);
+
+         NativeMatrix nativeA = new NativeMatrix(aRows, aCols);
+         NativeMatrix nativeB = new NativeMatrix(aRows, aRows);
+         NativeMatrix nativeAtBA = new NativeMatrix(base);
+
+         ejmlTime -= System.nanoTime();
+         expected.set(base);
+         CommonOps_DDRM.mult(B, A, tempBA);
+         CommonOps_DDRM.multAddTransA(A, tempBA, expected);
+         ejmlTime += System.nanoTime();
+
+         nativeTime -= System.nanoTime();
+         nativeA.set(A);
+         nativeB.set(B);
+         nativeAtBA.multAddQuad(nativeA, nativeB);
          nativeAtBA.get(actual);
          nativeTime += System.nanoTime();
 
@@ -701,6 +854,56 @@ public class NativeMatrixTest
          solution.multAddBlock(randomMatrixA, randomMatrixB, rowStart, colStart);
 
          assertTrue(expectedSolution.isApprox(solution, 1e-6));
+
+         double scale = RandomNumbers.nextDouble(random, 10.0);
+
+         expectedSolution.addBlock(temp, rowStart, colStart, 0, 0, rows, cols, scale);
+
+         solution.multAddBlock(scale, randomMatrixA, randomMatrixB, rowStart, colStart);
+
+         assertTrue(expectedSolution.isApprox(solution, 1e-6));
+      }
+   }
+
+   @Test
+   public void testMultAddBlockTransA()
+   {
+      Random random = new Random(124L);
+
+      for (int i = 0; i < iterations; i++)
+      {
+         int rows = RandomNumbers.nextInt(random, 1, 100);
+         int cols = RandomNumbers.nextInt(random, 1, 100);
+         int fullRows = RandomNumbers.nextInt(random, rows, 500);
+         int fullCols = RandomNumbers.nextInt(random, cols, 500);
+         int taskSize = RandomNumbers.nextInt(random, 1, 100);
+
+         int rowStart = RandomNumbers.nextInt(random, 0, fullRows - rows);
+         int colStart = RandomNumbers.nextInt(random, 0, fullCols - cols);
+
+         NativeMatrix randomMatrixA = new NativeMatrix(RandomMatrices_DDRM.rectangle(rows, taskSize, -50.0, 50.0, random));
+         NativeMatrix randomMatrixB = new NativeMatrix(RandomMatrices_DDRM.rectangle(taskSize, cols, -50.0, 50.0, random));
+
+         NativeMatrix solution = new NativeMatrix(RandomMatrices_DDRM.rectangle(fullRows, fullCols, -50.0, 50.0, random));
+
+         NativeMatrix expectedSolution = new NativeMatrix(solution);
+
+         NativeMatrix temp = new NativeMatrix(rows, cols);
+         temp.multTransA(randomMatrixA, randomMatrixB);
+
+         expectedSolution.addBlock(temp, rowStart, colStart, 0, 0, rows, cols, 1.0);
+
+         solution.multAddBlockTransA(randomMatrixA, randomMatrixB, rowStart, colStart);
+
+         assertTrue(expectedSolution.isApprox(solution, 1e-6));
+
+         double scale = RandomNumbers.nextDouble(random, 10.0);
+
+         expectedSolution.addBlock(temp, rowStart, colStart, 0, 0, rows, cols, scale);
+
+         solution.multAddBlockTransA(scale, randomMatrixA, randomMatrixB, rowStart, colStart);
+
+         assertTrue(expectedSolution.isApprox(solution, 1e-6));
       }
    }
    
@@ -917,6 +1120,13 @@ public class NativeMatrixTest
 
          MatrixTestTools.assertMatrixEquals(solution, nativeSolutionDMatrix, 1.0e-10);
 
+         double scale = RandomNumbers.nextDouble(random, 10.0);
+
+         CommonOps_DDRM.multTransA(scale, A, B, solution);
+         nativeSolution.multTransA(scale, nativeA, nativeB);
+         nativeSolution.get(nativeSolutionDMatrix);
+
+         MatrixTestTools.assertMatrixEquals(solution, nativeSolutionDMatrix, 1.0e-10);
       }
    }
 
@@ -943,6 +1153,14 @@ public class NativeMatrixTest
          nativeSolution.multAddTransA(nativeA, nativeB);
 
          DMatrixRMaj nativeSolutionDMatrix = new DMatrixRMaj(Acols, Bcols);
+         nativeSolution.get(nativeSolutionDMatrix);
+
+         MatrixTestTools.assertMatrixEquals(solution, nativeSolutionDMatrix, 1.0e-10);
+
+         double scale = RandomNumbers.nextDouble(random, 10.0);
+
+         CommonOps_DDRM.multAddTransA(scale, A, B, solution);
+         nativeSolution.multAddTransA(scale, nativeA, nativeB);
          nativeSolution.get(nativeSolutionDMatrix);
 
          MatrixTestTools.assertMatrixEquals(solution, nativeSolutionDMatrix, 1.0e-10);
@@ -976,6 +1194,13 @@ public class NativeMatrixTest
 
          MatrixTestTools.assertMatrixEquals(solution, nativeSolutionDMatrix, 1.0e-10);
 
+         double scale = RandomNumbers.nextDouble(random, 10.0);
+
+         CommonOps_DDRM.multTransB(scale, A, B, solution);
+         nativeSolution.multTransB(scale, nativeA, nativeB);
+         nativeSolution.get(nativeSolutionDMatrix);
+
+         MatrixTestTools.assertMatrixEquals(solution, nativeSolutionDMatrix, 1.0e-10);
       }
    }
 
@@ -1006,6 +1231,13 @@ public class NativeMatrixTest
 
          MatrixTestTools.assertMatrixEquals(solution, nativeSolutionDMatrix, 1.0e-10);
 
+         double scale = RandomNumbers.nextDouble(random, 10.0);
+
+         CommonOps_DDRM.multAddTransB(scale, A, B, solution);
+         nativeSolution.multAddTransB(scale, nativeA, nativeB);
+         nativeSolution.get(nativeSolutionDMatrix);
+
+         MatrixTestTools.assertMatrixEquals(solution, nativeSolutionDMatrix, 1.0e-10);
       }
    }
 
