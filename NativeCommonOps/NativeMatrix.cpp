@@ -46,6 +46,34 @@ bool NativeMatrixImpl::add(NativeMatrixImpl *a, NativeMatrixImpl *b)
     return true;
 }
 
+bool NativeMatrixImpl::add(NativeMatrixImpl *a, double scale, NativeMatrixImpl *b)
+{
+    if(a->rows() != b->rows() || a->cols() != b->cols())
+    {
+        return false;
+    }
+
+    resize(a->rows(), a->cols());
+
+    matrix = (a->matrix) + scale * (b->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::add(double scale1, NativeMatrixImpl *a, double scale2, NativeMatrixImpl *b)
+{
+    if(a->rows() != b->rows() || a->cols() != b->cols())
+    {
+        return false;
+    }
+
+    resize(a->rows(), a->cols());
+
+    matrix = scale1 * (a->matrix) + scale2 * (b->matrix);
+
+    return true;
+}
+
 
 bool NativeMatrixImpl::addEquals(NativeMatrixImpl *b)
 {
@@ -955,14 +983,31 @@ bool NativeMatrixImpl::get(double *data, int rows, int cols)
     return true;
 }
 
-bool NativeMatrixImpl::fillDiagonal(int startRow, int startCol, int size, double value)
+
+bool NativeMatrixImpl::addDiagonal(int startRow, int startCol, int rows, int cols, double value)
 {
-    if(startRow < 0 || this->rows() < startRow + size || this->cols() < startCol + size || startCol < 0)
+    if(startRow < 0 || this->rows() < startRow + rows || this->cols() < startCol + cols || startCol < 0)
     {
         return false;
     }
 
-    matrix.block(startRow, startCol, size, size).diagonal().fill(value);
+    for (int i = 0; i < std::min(rows, cols); i++)
+    {
+        matrix(startRow + i, startCol + i) += value;
+    }
+
+    return true;
+}
+
+
+bool NativeMatrixImpl::fillDiagonal(int startRow, int startCol, int rows, int cols, double value)
+{
+    if(startRow < 0 || this->rows() < startRow + rows || this->cols() < startCol + cols || startCol < 0)
+    {
+        return false;
+    }
+
+    matrix.block(startRow, startCol, rows, cols).diagonal().fill(value);
 
     return true;
 }

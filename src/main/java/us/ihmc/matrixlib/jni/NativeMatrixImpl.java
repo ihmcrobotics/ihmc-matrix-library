@@ -59,6 +59,14 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_add__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, NativeMatrixImpl.getCPtr(b), b);
   }
 
+  public boolean add(NativeMatrixImpl a, double scale, NativeMatrixImpl b) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_add__SWIG_1(swigCPtr, this, NativeMatrixImpl.getCPtr(a), a, scale, NativeMatrixImpl.getCPtr(b), b);
+  }
+
+  public boolean add(double scale1, NativeMatrixImpl a, double scale2, NativeMatrixImpl b) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_add__SWIG_2(swigCPtr, this, scale1, NativeMatrixImpl.getCPtr(a), a, scale2, NativeMatrixImpl.getCPtr(b), b);
+  }
+
   public boolean addEquals(NativeMatrixImpl b) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_addEquals__SWIG_0(swigCPtr, this, NativeMatrixImpl.getCPtr(b), b);
   }
@@ -68,7 +76,7 @@ public class NativeMatrixImpl {
   }
 
   public boolean add(int row, int col, double value) {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_add__SWIG_1(swigCPtr, this, row, col, value);
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_add__SWIG_3(swigCPtr, this, row, col, value);
   }
 
   public boolean subtract(NativeMatrixImpl a, NativeMatrixImpl b) {
@@ -243,12 +251,32 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_get__SWIG_0(swigCPtr, this, data, rows, cols);
   }
 
-  public boolean fillDiagonal(int startRow, int startCol, int size, double value) {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_fillDiagonal(swigCPtr, this, startRow, startCol, size, value);
+  public boolean addDiagonal(int startRow, int startCol, int rows, int cols, double value) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_addDiagonal__SWIG_0(swigCPtr, this, startRow, startCol, rows, cols, value);
+  }
+
+  public boolean fillDiagonal(int startRow, int startCol, int rows, int cols, double value) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_fillDiagonal__SWIG_0(swigCPtr, this, startRow, startCol, rows, cols, value);
   }
 
   public boolean fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_fillBlock(swigCPtr, this, startRow, startCol, numberOfRows, numberOfCols, value);
+  }
+
+  public boolean addDiagonal(int startRow, int startCol, int size, double value) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_addDiagonal__SWIG_1(swigCPtr, this, startRow, startCol, size, value);
+  }
+
+  public boolean addDiagonal(double value) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_addDiagonal__SWIG_2(swigCPtr, this, value);
+  }
+
+  public boolean fillDiagonal(int startRow, int startCol, int size, double value) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_fillDiagonal__SWIG_1(swigCPtr, this, startRow, startCol, size, value);
+  }
+
+  public boolean fillDiagonal(double value) {
+    return NativeMatrixLibraryJNI.NativeMatrixImpl_fillDiagonal__SWIG_2(swigCPtr, this, value);
   }
 
   public double min() {

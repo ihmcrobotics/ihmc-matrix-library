@@ -19,6 +19,10 @@ public:
 
     bool add(NativeMatrixImpl* a, NativeMatrixImpl* b);
 
+    bool add(NativeMatrixImpl* a, double scale, NativeMatrixImpl* b);
+
+    bool add(double scale1, NativeMatrixImpl* a, double scale2, NativeMatrixImpl* b);
+
     bool addEquals(NativeMatrixImpl* b);
 
     bool addEquals(double scale, NativeMatrixImpl* b);
@@ -112,9 +116,31 @@ public:
 
     bool get(double* data, int rows, int cols);
 
-    bool fillDiagonal(int startRow, int startCol, int size, double value);
+    bool addDiagonal(int startRow, int startCol, int rows, int cols, double value);
+
+    bool fillDiagonal(int startRow, int startCol, int rows, int cols, double value);
 
     bool fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value);
+
+    inline bool addDiagonal(int startRow, int startCol, int size, double value)
+    {
+        return addDiagonal(startRow, startCol, size, size, value);
+    }
+
+    inline bool addDiagonal(double value)
+    {
+        return addDiagonal(0, 0, rows(), cols(), value);
+    }
+
+    inline bool fillDiagonal(int startRow, int startCol, int size, double value)
+    {
+        return fillDiagonal(startRow, startCol, size, size, value);
+    }
+
+    inline bool fillDiagonal(double value)
+    {
+        return fillDiagonal(0, 0, rows(), cols(), value);
+    }
 
     inline double min()
     {
