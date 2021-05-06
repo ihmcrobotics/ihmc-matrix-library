@@ -163,22 +163,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    }
 
    /**
-    * Copies the given matrix into this.
-    * <p>
-    * This operation reshapes this to match the given matrix.
-    * </p>
-    *
-    * @param matrix The matrix which is to be copied. This is not modified or saved.
-    */
-   public void set(DMatrixSparseCSC matrix)
-   {
-      if (!impl.setSparse(matrix.nz_values, matrix.nz_rows, matrix.col_idx, matrix.numRows, matrix.numCols, matrix.nz_length))
-      {
-         throw new IllegalArgumentException("Cannot set matrix.");
-      }
-   }
-
-   /**
     * Packs this matrix into a {@code DMatrixRMaj}.
     *
     * @param matrixToPack the matrix used to store this. Modified.
@@ -1305,8 +1289,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
          set((NativeMatrix) original);
       else if (original instanceof DMatrixRMaj)
          set((DMatrixRMaj) original);
-      else if (original instanceof DMatrixSparseCSC)
-         set((DMatrixSparseCSC) original);
       else if (original == null)
          throw new NullPointerException();
       else

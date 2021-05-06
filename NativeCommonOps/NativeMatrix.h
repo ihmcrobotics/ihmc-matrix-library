@@ -110,8 +110,6 @@ public:
 
     bool set(double* data, int rows, int cols);
 
-    bool setSparse(double* data, int* nz_rows, int* col_idx, int rows, int cols, int nnz);
-
     bool get(double* data, int rows, int cols);
 
     bool fillDiagonal(int startRow, int startCol, int size, double value);

@@ -937,29 +937,6 @@ bool NativeMatrixImpl::set(double *data, int rows, int cols)
 
 }
 
-bool NativeMatrixImpl::setSparse(double *data, int *nz_rows, int *col_idx, int rows, int cols, int nnz)
-{
-    if(data == nullptr || nz_rows == nullptr || col_idx == nullptr)
-    {
-        return false;
-    }
-
-    resize(rows, cols);
-
-    matrix.setZero();
-
-    for (int col = 0; col < cols; col++)
-    {
-        for (int idx = col_idx[col]; idx < col_idx[col + 1]; idx++)
-        {
-            matrix(nz_rows[idx], col) = data[idx];
-        }
-    }
-
-    return true;
-
-}
-
 bool NativeMatrixImpl::get(double *data, int rows, int cols)
 {
     if(rows != this->rows() || cols != this->cols())

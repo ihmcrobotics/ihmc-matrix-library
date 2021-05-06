@@ -239,10 +239,6 @@ public class NativeMatrixImpl {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_set__SWIG_1(swigCPtr, this, data, rows, cols);
   }
 
-  public boolean setSparse(double[] data, int[] nz_rows, int[] col_idx, int rows, int cols, int nnz) {
-    return NativeMatrixLibraryJNI.NativeMatrixImpl_setSparse(swigCPtr, this, data, nz_rows, col_idx, rows, cols, nnz);
-  }
-
   public boolean get(double[] data, int rows, int cols) {
     return NativeMatrixLibraryJNI.NativeMatrixImpl_get__SWIG_0(swigCPtr, this, data, rows, cols);
   }

@@ -29,7 +29,7 @@ public class NativeMatrixTest
 {
    private static final int maxSize = 80;
    private static final int warmumIterations = 2000;
-   private static final int iterations = 2000;
+   private static final int iterations = 100;
    private static final double epsilon = 1.0e-8;
 
    // Make volatile to force operation order
@@ -103,7 +103,7 @@ public class NativeMatrixTest
          DMatrixRMaj b = RandomMatrices_DDRM.rectangle(maxSize, maxSize, random);
 
          CommonOps_DDRM.addEquals(expected, b);
-         nativeMatrix.addEquals(new NativeMatrix(expected));
+         nativeMatrix.addEquals(new NativeMatrix(b));
 
          nativeMatrix.get(actual);
          MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
@@ -111,7 +111,7 @@ public class NativeMatrixTest
          double scale = RandomNumbers.nextDouble(random, 10.0);
 
          CommonOps_DDRM.addEquals(expected, scale, b);
-         nativeMatrix.addEquals(scale, new NativeMatrix(expected));
+         nativeMatrix.addEquals(scale, new NativeMatrix(b));
 
          nativeMatrix.get(actual);
          MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
@@ -881,7 +881,7 @@ public class NativeMatrixTest
          int rowStart = RandomNumbers.nextInt(random, 0, fullRows - rows);
          int colStart = RandomNumbers.nextInt(random, 0, fullCols - cols);
 
-         NativeMatrix randomMatrixA = new NativeMatrix(RandomMatrices_DDRM.rectangle(rows, taskSize, -50.0, 50.0, random));
+         NativeMatrix randomMatrixA = new NativeMatrix(RandomMatrices_DDRM.rectangle(taskSize, rows, -50.0, 50.0, random));
          NativeMatrix randomMatrixB = new NativeMatrix(RandomMatrices_DDRM.rectangle(taskSize, cols, -50.0, 50.0, random));
 
          NativeMatrix solution = new NativeMatrix(RandomMatrices_DDRM.rectangle(fullRows, fullCols, -50.0, 50.0, random));
