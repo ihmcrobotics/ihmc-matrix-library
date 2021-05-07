@@ -84,8 +84,8 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     * </p>
     * <p>
     * Examples:<br>
-    * [ 1 2 ; 3 4 ] &rarr; reshape( 1 , 2 ) = [ 1 2 ]<br>
-    * [ 1 2 ; 3 4 ] &rarr; reshape( 2 , 1 ) = [ 1 ; 2 ]<br>
+    * [ 1 2 ; 3 4 ] &rarr; reshape( 1 , 2 ) = [ 1 3 ]<br>
+    * [ 1 2 ; 3 4 ] &rarr; reshape( 2 , 1 ) = [ 1 ; 3 ]<br>
     * [ 1 2 ; 3 4 ] &rarr; reshape( 2 , 3 ) = [ 0 0 0 ; 0 0 0 ]
     * </p>
     *
@@ -1387,7 +1387,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    /**
     * {@inheritDoc}
     * <p>
-    * This implementation only supports {@link NativeMatrix}, {@link DMatrixRMaj}, and {@link DMatrixSparseCSC}.
+    * This implementation only supports {@link NativeMatrix} and {@link DMatrixRMaj}.
     * </p>
     * 
     * @param original The matrix which is to be copied. This is not modified or saved.
