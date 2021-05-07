@@ -29,7 +29,7 @@ public class NativeMatrixTest
 {
    private static final int maxSize = 80;
    private static final int warmumIterations = 2000;
-   private static final int iterations = 100;
+   private static final int iterations = 2000;
    private static final double epsilon = 1.0e-8;
 
    // Make volatile to force operation order
