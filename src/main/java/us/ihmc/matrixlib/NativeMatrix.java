@@ -473,6 +473,16 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       }
    }
 
+   /**
+    * Performs the following operation:<br>
+    * this += a<sup>T</sup> * b <br>
+    * where we are only modifying a block of this matrix, starting a rowStart, colStart
+    *
+    * @param a        The left matrix in the multiplication operation. Not modified.
+    * @param b        The right matrix in the multiplication operation. Not modified.
+    * @param rowStart first row index of the block to process.
+    * @param colStart first column index of the block to process.
+    */
    public void multAddBlockTransA(NativeMatrix a, NativeMatrix b, int rowStart, int colStart)
    {
       if (!impl.multAddBlockTransA(a.impl, b.impl, rowStart, colStart))
@@ -481,6 +491,17 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       }
    }
 
+   /**
+    * Performs the following operation:<br>
+    * this += scale * a<sup>T</sup> * b <br>
+    * where we are only modifying a block of this matrix, starting a rowStart, colStart
+    *
+    * @param scale the scaling factor to apply to every element of the multiplication result.
+    * @param a        The left matrix in the multiplication operation. Not modified.
+    * @param b        The right matrix in the multiplication operation. Not modified.
+    * @param rowStart first row index of the block to process.
+    * @param colStart first column index of the block to process.
+    */
    public void multAddBlockTransA(double scale, NativeMatrix a, NativeMatrix b, int rowStart, int colStart)
    {
       if (!impl.multAddBlockTransA(scale, a.impl, b.impl, rowStart, colStart))
