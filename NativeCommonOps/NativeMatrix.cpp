@@ -23,7 +23,6 @@ void NativeMatrixImpl::resize(int numRows, int numCols)
     updateView(numRows, numCols);
 }
 
-
 bool NativeMatrixImpl::set(NativeMatrixImpl *a)
 {
     resize(a->rows(), a->cols());
@@ -43,6 +42,70 @@ bool NativeMatrixImpl::add(NativeMatrixImpl *a, NativeMatrixImpl *b)
     resize(a->rows(), a->cols());
 
     matrix = (a->matrix) + (b->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::add(NativeMatrixImpl *a, double scale, NativeMatrixImpl *b)
+{
+    if(a->rows() != b->rows() || a->cols() != b->cols())
+    {
+        return false;
+    }
+
+    resize(a->rows(), a->cols());
+
+    matrix = (a->matrix) + scale * (b->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::add(double scale1, NativeMatrixImpl *a, double scale2, NativeMatrixImpl *b)
+{
+    if(a->rows() != b->rows() || a->cols() != b->cols())
+    {
+        return false;
+    }
+
+    resize(a->rows(), a->cols());
+
+    matrix = scale1 * (a->matrix) + scale2 * (b->matrix);
+
+    return true;
+}
+
+
+bool NativeMatrixImpl::addEquals(NativeMatrixImpl *b)
+{
+    if(rows() != b->rows() || cols() != b->cols())
+    {
+        return false;
+    }
+
+    matrix += (b->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::addEquals(double scale, NativeMatrixImpl *b)
+{
+    if(rows() != b->rows() || cols() != b->cols())
+    {
+        return false;
+    }
+
+    matrix += scale * (b->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::add(int row, int col, double value)
+{
+    if (row >= rows() || col >= cols())
+    {
+        return false;
+    }
+    matrix(row, col) += value;
 
     return true;
 }
@@ -101,6 +164,18 @@ bool NativeMatrixImpl::multAdd(NativeMatrixImpl *a, NativeMatrixImpl *b)
     return true;
 }
 
+bool NativeMatrixImpl::multAdd(double scale, NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->rows() != rows() || b->cols() != cols() || a->cols() != b->rows())
+    {
+        return false;
+    }
+
+    matrix += scale * (a->matrix) * (b->matrix);
+
+    return true;
+}
+
 bool NativeMatrixImpl::multTransA(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
     if( a->rows() != b->rows())
@@ -115,6 +190,20 @@ bool NativeMatrixImpl::multTransA(NativeMatrixImpl *a, NativeMatrixImpl *b)
     return true;
 }
 
+bool NativeMatrixImpl::multTransA(double scale, NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if( a->rows() != b->rows())
+    {
+        return false;
+    }
+
+    resize(a->cols(), b->cols());
+
+    matrix = scale * (a->matrix.transpose()) * (b->matrix);
+
+    return true;
+}
+
 bool NativeMatrixImpl::multAddTransA(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
     if(a->cols() != rows() || b->cols() != cols() || a->rows() != b->rows())
@@ -123,6 +212,18 @@ bool NativeMatrixImpl::multAddTransA(NativeMatrixImpl *a, NativeMatrixImpl *b)
     }
 
     matrix += (a->matrix.transpose()) * (b->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::multAddTransA(double scale, NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->cols() != rows() || b->cols() != cols() || a->rows() != b->rows())
+    {
+        return false;
+    }
+
+    matrix += scale * (a->matrix.transpose()) * (b->matrix);
 
     return true;
 }
@@ -141,6 +242,20 @@ bool NativeMatrixImpl::multTransB(NativeMatrixImpl *a, NativeMatrixImpl *b)
     return true;
 }
 
+bool NativeMatrixImpl::multTransB(double scale, NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->cols() != b->cols())
+    {
+        return false;
+    }
+
+    resize(a->rows(), b->rows());
+
+    matrix = scale * (a->matrix) * (b->matrix.transpose());
+
+    return true;
+}
+
 bool NativeMatrixImpl::multAddTransB(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
     if(a->rows() != rows() || b->rows() != cols() || a->cols() != b->cols())
@@ -152,6 +267,19 @@ bool NativeMatrixImpl::multAddTransB(NativeMatrixImpl *a, NativeMatrixImpl *b)
 
     return true;
 }
+
+bool NativeMatrixImpl::multAddTransB(double scale, NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->rows() != rows() || b->rows() != cols() || a->cols() != b->cols())
+    {
+        return false;
+    }
+
+    matrix += scale * (a->matrix) * (b->matrix.transpose());
+
+    return true;
+}
+
 
 bool NativeMatrixImpl::addBlock(NativeMatrixImpl *a, int destStartRow, int destStartColumn, int srcStartRow, int srcStartColumn, int numberOfRows, int numberOfColumns, double scale)
 {
@@ -274,6 +402,90 @@ bool NativeMatrixImpl::multAddBlock(NativeMatrixImpl *a, NativeMatrixImpl *b, in
 
 }
 
+bool NativeMatrixImpl::multAddBlock(double scale, NativeMatrixImpl *a, NativeMatrixImpl *b, int rowStart, int colStart)
+{
+    if(rowStart < 0 || colStart < 0)
+    {
+        return false;
+    }
+
+    if(a->cols() != b->rows())
+    {
+        return false;
+    }
+
+    if( (rows() - rowStart) < a->rows())
+    {
+        return false;
+    }
+
+    if((cols() - colStart) < b->cols())
+    {
+        return false;
+    }
+
+    matrix.block(rowStart, colStart, a->rows(), b->cols()) += scale * a->matrix * b->matrix;
+
+    return true;
+
+}
+
+bool NativeMatrixImpl::multAddBlockTransA(NativeMatrixImpl *a, NativeMatrixImpl *b, int rowStart, int colStart)
+{
+    if(rowStart < 0 || colStart < 0)
+    {
+        return false;
+    }
+
+    if(a->rows() != b->rows())
+    {
+        return false;
+    }
+
+    if( (rows() - rowStart) < a->cols())
+    {
+        return false;
+    }
+
+    if((cols() - colStart) < b->cols())
+    {
+        return false;
+    }
+
+    matrix.block(rowStart, colStart, a->cols(), b->cols()) += a->matrix.transpose() * b->matrix;
+
+    return true;
+
+}
+
+bool NativeMatrixImpl::multAddBlockTransA(double scale, NativeMatrixImpl *a, NativeMatrixImpl *b, int rowStart, int colStart)
+{
+    if(rowStart < 0 || colStart < 0)
+        {
+            return false;
+        }
+
+        if(a->rows() != b->rows())
+        {
+            return false;
+        }
+
+        if( (rows() - rowStart) < a->cols())
+        {
+            return false;
+        }
+
+        if((cols() - colStart) < b->cols())
+        {
+            return false;
+        }
+
+        matrix.block(rowStart, colStart, a->cols(), b->cols()) += scale * a->matrix.transpose() * b->matrix;
+
+        return true;
+
+}
+
 bool NativeMatrixImpl::multQuad(NativeMatrixImpl *a, NativeMatrixImpl *b)
 {
     if(a->rows() != b->cols() || b->cols() != b->rows())
@@ -284,6 +496,48 @@ bool NativeMatrixImpl::multQuad(NativeMatrixImpl *a, NativeMatrixImpl *b)
     resize(a->cols(), a->cols());
 
     matrix = (a->matrix).transpose() * (b->matrix) * (a->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::multAddQuad(NativeMatrixImpl *a, NativeMatrixImpl *b)
+{
+    if(a->rows() != b->cols() || b->cols() != b->rows())
+    {
+        return false;
+    }
+
+    resize(a->cols(), a->cols());
+
+    matrix += (a->matrix).transpose() * (b->matrix) * (a->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::multQuadBlock(NativeMatrixImpl *a, NativeMatrixImpl *b, int rowStart, int colStart)
+{
+    if(a->rows() != b->cols() || b->cols() != b->rows())
+    {
+        return false;
+    }
+
+    resize(a->cols(), a->cols());
+
+    matrix.block(rowStart, colStart, a->cols(), a->cols()) = (a->matrix).transpose() * (b->matrix) * (a->matrix);
+
+    return true;
+}
+
+bool NativeMatrixImpl::multAddQuadBlock(NativeMatrixImpl *a, NativeMatrixImpl *b, int rowStart, int colStart)
+{
+    if(a->rows() != b->cols() || b->cols() != b->rows())
+    {
+        return false;
+    }
+
+    resize(a->cols(), a->cols());
+
+    matrix.block(rowStart, colStart, a->cols(), a->cols()) += (a->matrix).transpose() * (b->matrix) * (a->matrix);
 
     return true;
 }
@@ -729,14 +983,31 @@ bool NativeMatrixImpl::get(double *data, int rows, int cols)
     return true;
 }
 
-bool NativeMatrixImpl::fillDiagonal(int startRow, int startCol, int size, double value)
+
+bool NativeMatrixImpl::addDiagonal(int startRow, int startCol, int rows, int cols, double value)
 {
-    if(startRow < 0 || this->rows() < startRow + size || this->cols() < startCol + size || startCol < 0)
+    if(startRow < 0 || this->rows() < startRow + rows || this->cols() < startCol + cols || startCol < 0)
     {
         return false;
     }
 
-    matrix.block(startRow, startCol, size, size).diagonal().fill(value);
+    for (int i = 0; i < std::min(rows, cols); i++)
+    {
+        matrix(startRow + i, startCol + i) += value;
+    }
+
+    return true;
+}
+
+
+bool NativeMatrixImpl::fillDiagonal(int startRow, int startCol, int rows, int cols, double value)
+{
+    if(startRow < 0 || this->rows() < startRow + rows || this->cols() < startCol + cols || startCol < 0)
+    {
+        return false;
+    }
+
+    matrix.block(startRow, startCol, rows, cols).diagonal().fill(value);
 
     return true;
 }
