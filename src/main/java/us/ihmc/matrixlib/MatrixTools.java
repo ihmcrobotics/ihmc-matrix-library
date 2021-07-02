@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.ejml.MatrixDimensionException;
+import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrix1Row;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
@@ -354,7 +355,7 @@ public class MatrixTools
     * @param numberOfColumns Column size of the block
     * @param scale           Scale the block from otherMatrix by this value
     */
-   public static void setMatrixBlock(DMatrix1Row dest, int destStartRow, int destStartColumn, DMatrix1Row src, int srcStartRow, int srcStartColumn,
+   public static void setMatrixBlock(DMatrix dest, int destStartRow, int destStartColumn, DMatrix src, int srcStartRow, int srcStartColumn,
                                      int numberOfRows, int numberOfColumns, double scale)
    {
       if (numberOfRows == 0 || numberOfColumns == 0)
@@ -384,7 +385,7 @@ public class MatrixTools
     * @param rows         rows of input matrix to use in setting matrix to pack
     * @param columns      columns of input matrix to use in setting matrix to pack
     */
-   public static void getMatrixBlock(DMatrix1Row matrixToPack, DMatrix1Row input, int[] rows, int[] columns)
+   public static void getMatrixBlock(DMatrix matrixToPack, DMatrix input, int[] rows, int[] columns)
    {
       if (rows.length != matrixToPack.getNumRows() || columns.length != matrixToPack.getNumCols())
       {
@@ -418,7 +419,7 @@ public class MatrixTools
     * @param numberOfColumns Column size of the block
     * @param scale           Scale the block from otherMatrix by this value
     */
-   public static void addMatrixBlock(DMatrix1Row dest, int destStartRow, int destStartColumn, DMatrix1Row src, int srcStartRow, int srcStartColumn,
+   public static void addMatrixBlock(DMatrix dest, int destStartRow, int destStartColumn, DMatrix1Row src, int srcStartRow, int srcStartColumn,
                                      int numberOfRows, int numberOfColumns, double scale)
    {
       if (numberOfRows == 0 || numberOfColumns == 0)
@@ -496,7 +497,7 @@ public class MatrixTools
       return C;
    }
 
-   public static void addDiagonal(DMatrix1Row matrix, double scalar)
+   public static void addDiagonal(DMatrix matrix, double scalar)
    {
       int n = Math.max(matrix.getNumRows(), matrix.getNumCols());
       for (int i = 0; i < n; i++)

@@ -3,11 +3,7 @@ package us.ihmc.matrixlib;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.ejml.data.DMatrix;
-import org.ejml.data.DMatrixRMaj;
-import org.ejml.data.Matrix;
-import org.ejml.data.MatrixType;
-import org.ejml.data.ReshapeMatrix;
+import org.ejml.data.*;
 import org.ejml.ops.MatrixIO;
 
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
@@ -200,6 +196,89 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       }
    }
 
+
+   /**
+    * Computes the matrix addition</br>
+    * this = a + scale * b
+    * <p>
+    * This operation reshapes this to match the result of the operation.
+    * </p>
+    *
+    * @param a left matrix in addition. Not modified.
+    * @param b right matrix in addition. Not modified.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void add(NativeMatrix a, double scale, NativeMatrix b)
+   {
+      if (!impl.add(a.impl, scale, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Computes the matrix addition</br>
+    * this = scale1 * a + scale2 * b
+    * <p>
+    * This operation reshapes this to match the result of the operation.
+    * </p>
+    *
+    * @param a left matrix in addition. Not modified.
+    * @param b right matrix in addition. Not modified.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void add(double scale1, NativeMatrix a, double scale2, NativeMatrix b)
+   {
+      if (!impl.add(scale1, a.impl, scale2, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Adds value to an element in the matrix
+    *
+    * @param row row access to data
+    * @param col col access to data
+    * @param value value to add
+    * @throws IllegalArgumentException if the accessors are out of bounds.
+    */
+   public void add(int row, int col, double value)
+   {
+      if (!impl.add(row, col, value))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    Computes the matrix addition</br>
+    * this += b
+    *
+    * @throws IllegalArgumentException if the accessors are out of bounds.
+    */
+   public void addEquals(NativeMatrix b)
+   {
+      if (!impl.addEquals(b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    Computes the matrix addition</br>
+    * this += scale * b
+    *
+    * @throws IllegalArgumentException if the accessors are out of bounds.
+    */
+   public void addEquals(double scale, NativeMatrix b)
+   {
+      if (!impl.addEquals(scale, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
    /**
     * Computes the matrix subtraction</br>
     * this = a - b
@@ -276,6 +355,23 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
 
    /**
     * Add the result of the matrix multiplication to this<br>
+    * this += scale * a * b
+    *
+    * @param scale the scaling factor to apply to every element of the multiplication result.
+    * @param a     matrix in multiplication. Not modified.
+    * @param b     matrix in multiplication. Not modified.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void multAdd(double scale, NativeMatrix a, NativeMatrix b)
+   {
+      if (!impl.multAdd(scale, a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Add the result of the matrix multiplication to this<br>
     * this += a<sup>T</sup> * b
     *
     * @param a left matrix in multiplication. Not modified.
@@ -285,6 +381,23 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    public void multAddTransA(NativeMatrix a, NativeMatrix b)
    {
       if (!impl.multAddTransA(a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Add the result of the matrix multiplication to this<br>
+    * this += scale * a<sup>T</sup> * b
+    *
+    * @param scale the scaling factor to apply to every element of the multiplication result.
+    * @param a left matrix in multiplication. Not modified.
+    * @param b right matrix in multiplication. Not modified.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void multAddTransA(double scale, NativeMatrix a, NativeMatrix b)
+   {
+      if (!impl.multAddTransA(scale, a.impl, b.impl))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
@@ -307,6 +420,23 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    }
 
    /**
+    * Add the result of the matrix multiplication to this<br>
+    * this += scale * a * b<sup>T</sup>
+    *
+    * @param scale the scaling factor to apply to every element of the multiplication result.
+    * @param a left matrix in multiplication. Not modified.
+    * @param b right matrix in multiplication. Not modified.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void multAddTransB(double scale, NativeMatrix a, NativeMatrix b)
+   {
+      if (!impl.multAddTransB(scale, a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
     * Performs the following operation:<br>
     * this += a * b <br>
     * where we are only modifying a block of this matrix, starting a rowStart, colStart
@@ -319,6 +449,62 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    public void multAddBlock(NativeMatrix a, NativeMatrix b, int rowStart, int colStart)
    {
       if (!impl.multAddBlock(a.impl, b.impl, rowStart, colStart))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Performs the following operation:<br>
+    * this += scale * a * b <br>
+    * where we are only modifying a block of this matrix, starting a rowStart, colStart
+    *
+    * @param scale the scaling factor to apply to every element of the multiplication result.
+    * @param a        The left matrix in the multiplication operation. Not modified.
+    * @param b        The right matrix in the multiplication operation. Not modified.
+    * @param rowStart first row index of the block to process.
+    * @param colStart first column index of the block to process.
+    */
+   public void multAddBlock(double scale, NativeMatrix a, NativeMatrix b, int rowStart, int colStart)
+   {
+      if (!impl.multAddBlock(scale, a.impl, b.impl, rowStart, colStart))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Performs the following operation:<br>
+    * this += a<sup>T</sup> * b <br>
+    * where we are only modifying a block of this matrix, starting a rowStart, colStart
+    *
+    * @param a        The left matrix in the multiplication operation. Not modified.
+    * @param b        The right matrix in the multiplication operation. Not modified.
+    * @param rowStart first row index of the block to process.
+    * @param colStart first column index of the block to process.
+    */
+   public void multAddBlockTransA(NativeMatrix a, NativeMatrix b, int rowStart, int colStart)
+   {
+      if (!impl.multAddBlockTransA(a.impl, b.impl, rowStart, colStart))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Performs the following operation:<br>
+    * this += scale * a<sup>T</sup> * b <br>
+    * where we are only modifying a block of this matrix, starting a rowStart, colStart
+    *
+    * @param scale the scaling factor to apply to every element of the multiplication result.
+    * @param a        The left matrix in the multiplication operation. Not modified.
+    * @param b        The right matrix in the multiplication operation. Not modified.
+    * @param rowStart first row index of the block to process.
+    * @param colStart first column index of the block to process.
+    */
+   public void multAddBlockTransA(double scale, NativeMatrix a, NativeMatrix b, int rowStart, int colStart)
+   {
+      if (!impl.multAddBlockTransA(scale, a.impl, b.impl, rowStart, colStart))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
@@ -409,6 +595,26 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
 
    /**
     * Computes the matrix multiplication</br>
+    * this = scale * a * b<sup>T</sup>
+    * <p>
+    * This operation reshapes this to match the result of the operation.
+    * </p>
+    *
+    * @param scale the scaling factor to apply to every element of the multiplication result.
+    * @param a The left matrix in the multiplication operation. Not modified.
+    * @param b The right matrix in the multiplication operation. Not modified.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void multTransB(double scale, NativeMatrix a, NativeMatrix b)
+   {
+      if (!impl.multTransB(scale, a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Computes the matrix multiplication</br>
     * this = a<sup>T</sup> * b
     * <p>
     * This operation reshapes this to match the result of the operation.
@@ -421,6 +627,26 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    public void multTransA(NativeMatrix a, NativeMatrix b)
    {
       if (!impl.multTransA(a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Computes the matrix multiplication</br>
+    * this = scale * a<sup>T</sup> * b
+    * <p>
+    * This operation reshapes this to match the result of the operation.
+    * </p>
+    *
+    * @param scale the scaling factor to apply to every element of the multiplication result.
+    * @param a The left matrix in the multiplication operation. Not modified.
+    * @param b The right matrix in the multiplication operation. Not modified.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void multTransA(double scale, NativeMatrix a, NativeMatrix b)
+   {
+      if (!impl.multTransA(scale, a.impl, b.impl))
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
@@ -444,6 +670,64 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
    }
+
+   /**
+    * Computes the quadratic form</br>
+    * this += a<sup>T</sup> * b * a
+    * <p>
+    * This operation reshapes this to match the result of the operation.
+    * </p>
+    *
+    * @param a matrix in multiplication. Not modified.
+    * @param b matrix in multiplication. Not modified.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void multAddQuad(NativeMatrix a, NativeMatrix b)
+   {
+      if (!impl.multAddQuad(a.impl, b.impl))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Computes the quadratic form</br>
+    * this = a<sup>T</sup> * b * a
+    * where only the square block product is added to a block of same size in this.
+    *
+    * @param a matrix in multiplication. Not modified.
+    * @param b matrix in multiplication. Not modified.
+    * @param rowStart first row index of the block to process.
+    * @param colStart first column index of the block to process.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void multQuadBlock(NativeMatrix a, NativeMatrix b, int rowStart, int colStart)
+   {
+      if (!impl.multQuadBlock(a.impl, b.impl, rowStart, colStart))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
+   /**
+    * Computes the quadratic form</br>
+    * this += a<sup>T</sup> * b * a
+    * where only the square block product is added to a block of same size in this.
+    *
+    * @param a matrix in multiplication. Not modified.
+    * @param b matrix in multiplication. Not modified.
+    * @param rowStart first row index of the block to process.
+    * @param colStart first column index of the block to process.
+    * @throws IllegalArgumentException if the matrix dimensions are incompatible.
+    */
+   public void multAddQuadBlock(NativeMatrix a, NativeMatrix b, int rowStart, int colStart)
+   {
+      if (!impl.multAddQuadBlock(a.impl, b.impl, rowStart, colStart))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
 
    /**
     * Inverts a matrix and stores the result in this.</br>
@@ -951,10 +1235,83 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    {
       impl.scale(scale);
    }
-   
+
+   /**
+    * Add the diagonal elements of a matrix with a constant value
+    * @param value Value to add to the diagonal with
+    */
+   public void addDiagonal(double value)
+   {
+      if(!impl.addDiagonal(value))
+      {
+         throw new RuntimeException("Invalid matrix dimensions");
+      }
+   }
+
+   /**
+    * Add the diagonal elements of a matrix with a constant value
+    *
+    * @param startRow Start row for block
+    * @param startCol Start col for block
+    * @param size Number of elements on the diagonal to set
+    * @param value Value to add to the diagonal with
+    */
+   public void addDiagonal(int startRow, int startCol, int rows, int cols, double value)
+   {
+      if(!impl.addDiagonal(startRow, startCol, rows, cols, value))
+      {
+         throw new RuntimeException("Invalid matrix dimensions");
+      }
+   }
+
+   /**
+    * Add the diagonal elements of a matrix with a constant value
+    *
+    * @param startRow Start row for block
+    * @param startCol Start col for block
+    * @param size Number of elements on the diagonal to set
+    * @param value Value to add to the diagonal with
+    */
+   public void addDiagonal(int startRow, int startCol, int size, double value)
+   {
+      if(!impl.addDiagonal(startRow, startCol, size, value))
+      {
+         throw new RuntimeException("Invalid matrix dimensions");
+      }
+   }
+
+
+   /**
+    * Fill a matrix with a constant value
+    * @param value Value to fill the diagonal with
+    */
+   public void fillDiagonal(double value)
+   {
+      if(!impl.fillDiagonal(value))
+      {
+         throw new RuntimeException("Invalid matrix dimensions");
+      }
+   }
+
    /**
     * Fill the diagonal of a block of the matrix with a constant value
-    * 
+    *
+    * @param startRow Start row for block
+    * @param startCol Start col for block
+    * @param size Number of elements on the diagonal to set
+    * @param value Value to fill the diagonal with
+    */
+   public void fillDiagonal(int startRow, int startCol, int rows, int cols, double value)
+   {
+      if(!impl.fillDiagonal(startRow, startCol, rows, cols, value))
+      {
+         throw new RuntimeException("Invalid matrix dimensions");
+      }
+   }
+
+   /**
+    * Fill the diagonal of a block of the matrix with a constant value
+    *
     * @param startRow Start row for block
     * @param startCol Start col for block
     * @param size Number of elements on the diagonal to set
@@ -967,7 +1324,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
          throw new RuntimeException("Invalid matrix dimensions");
       }
    }
-   
+
    
    /**
     * Fill a block of the matrix to a constant value
