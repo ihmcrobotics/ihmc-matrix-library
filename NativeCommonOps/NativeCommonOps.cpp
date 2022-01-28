@@ -6,6 +6,7 @@
  */
 
 #include <jni.h>
+#define EIGEN_DONT_VECTORIZE
 #include <Eigen/Dense>
 #include <iostream>
 #include "us_ihmc_matrixlib_NativeCommonOpsWrapper.h"
