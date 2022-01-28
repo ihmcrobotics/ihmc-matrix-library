@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/NativeKalmanFilter.h
+NativeMatrix.h
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/NativeMatrix.h
+
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/NativeMatrix.h
+Eigen/Dense
+-
+
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/NativeMatrix.i
+typemaps.i
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/typemaps.i
+various.i
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/various.i
+NativeMatrix.h
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/NativeMatrix.h
+NativeNullspaceProjector.h
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/NativeNullspaceProjector.h
+NativeKalmanFilter.h
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/NativeKalmanFilter.h
+NativeMatrix.h
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/NativeMatrix.h
+NativeNullspaceProjector.h
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/NativeNullspaceProjector.h
+NativeKalmanFilter.h
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/NativeKalmanFilter.h
+
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/NativeNullspaceProjector.h
+NativeMatrix.h
+/home/owinship/repository-group/ihmc-matrix-library/NativeCommonOps/NativeMatrix.h
+
