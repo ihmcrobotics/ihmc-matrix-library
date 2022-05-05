@@ -18,7 +18,7 @@ mainDependencies {
    api("org.ejml:ejml-core:0.39")
    api("org.ejml:ejml-ddense:0.39")
 
-   api("us.ihmc:ihmc-commons:0.30.5")
+   api("us.ihmc:ihmc-commons:0.30.6")
    api("us.ihmc:euclid:0.17.2")
    api("us.ihmc:ihmc-native-library-loader:1.3.1")
 }
