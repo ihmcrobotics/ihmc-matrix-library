@@ -6,7 +6,7 @@ plugins {
 
 ihmc {
    group = "us.ihmc"
-   version = "0.18.7"
+   version = "0.18.8"
    vcsUrl = "https://github.com/ihmcrobotics/ihmc-matrix-library"
    openSource = true
 
