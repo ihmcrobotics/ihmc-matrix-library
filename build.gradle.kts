@@ -6,7 +6,7 @@ plugins {
 
 ihmc {
    group = "us.ihmc"
-   version = "0.18.7"
+   version = "0.18.8"
    vcsUrl = "https://github.com/ihmcrobotics/ihmc-matrix-library"
    openSource = true
 
@@ -19,11 +19,11 @@ mainDependencies {
    api("org.ejml:ejml-ddense:0.39")
 
    api("us.ihmc:ihmc-commons:0.31.0")
-   api("us.ihmc:euclid:0.18.1")
+   api("us.ihmc:euclid:0.19.0")
    api("us.ihmc:ihmc-native-library-loader:1.3.1")
 }
 
 testDependencies {
-   api("us.ihmc:euclid-frame:0.18.1")
+   api("us.ihmc:euclid-frame:0.19.0")
    api("org.ejml:ejml-simple:0.39")
 }
