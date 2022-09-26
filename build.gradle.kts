@@ -20,7 +20,7 @@ mainDependencies {
 
    api("us.ihmc:ihmc-commons:0.31.0")
    api("us.ihmc:euclid:0.19.0")
-   api("us.ihmc:ihmc-native-library-loader:1.3.1")
+   api("us.ihmc:ihmc-native-library-loader:2.0.1")
 }
 
 testDependencies {
