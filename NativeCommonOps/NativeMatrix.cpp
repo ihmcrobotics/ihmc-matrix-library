@@ -1024,6 +1024,47 @@ bool NativeMatrixImpl::fillBlock(int startRow, int startCol, int numberOfRows, i
     return true;
 }
 
+bool NativeMatrixImpl::zeroRow(int rowToZero)
+{
+    if (rowToZero < 0 || this->rows() < rowToZero)
+    {
+        return false;
+    }
+
+    matrix.row(rowToZero).setZero();
+
+    return true;
+}
+
+bool NativeMatrixImpl::zeroCol(int colToZero)
+{
+    if (colToZero < 0 || this->cols() < colToZero)
+    {
+        return false;
+    }
+
+    matrix.col(colToZero).setZero();
+
+    return true;
+}
+
+bool NativeMatrixImpl::setElement(int dstRow, int dstCol, NativeMatrixImpl* src, int srcRow, int srcCol)
+{
+    if(dstRow >= this->rows() || dstCol >= this->cols() || dstRow < 0 || dstCol < 0)
+    {
+        return false;
+    }
+
+    if(srcRow >= src->rows() || srcCol >= src->cols() || srcRow < 0 || srcCol < 0)
+    {
+        return false;
+    }
+
+    matrix(dstRow, dstCol) = src->matrix(srcRow, srcCol);
+
+    return true;
+}
+
 void NativeMatrixImpl::print()
 {
     std::cout << matrix << std::endl;

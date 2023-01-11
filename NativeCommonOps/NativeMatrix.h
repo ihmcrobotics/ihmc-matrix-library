@@ -122,6 +122,8 @@ public:
 
     bool fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value);
 
+    bool setElement(int dstRow, int dstCol, NativeMatrixImpl* src, int srcRow, int srcCol);
+
     inline bool addDiagonal(int startRow, int startCol, int size, double value)
     {
         return addDiagonal(startRow, startCol, size, size, value);
@@ -206,6 +208,9 @@ public:
         return matrix.size();
     }
 
+    bool zeroRow(int rowToZero);
+
+    bool zeroCol(int colToZero);
 
     void print();
 
