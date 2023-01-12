@@ -118,11 +118,15 @@ public:
 
     bool addDiagonal(int startRow, int startCol, int rows, int cols, double value);
 
+    bool fill(double value);
+
     bool fillDiagonal(int startRow, int startCol, int rows, int cols, double value);
 
     bool fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value);
 
     bool setElement(int dstRow, int dstCol, NativeMatrixImpl* src, int srcRow, int srcCol);
+
+    bool zeroBlock(int srcY0, int srcY1, int srcX0, int srcX1);
 
     inline bool addDiagonal(int startRow, int startCol, int size, double value)
     {

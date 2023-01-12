@@ -985,7 +985,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    {
       insert(src, 0, src.getNumRows(), 0, src.getNumCols(), dstY0, dstX0);
    }
-   
+
    /**
     * Inserts a scaled block from the given matrix into this.
     *
@@ -1408,6 +1408,13 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       }
    }
 
+   public void fill(double value)
+   {
+      if (!impl.fill(value))
+      {
+         throw new RuntimeException("Invalid matrix dimensions.");
+      }
+   }
    
    /**
     * Fill a block of the matrix to a constant value
@@ -1468,6 +1475,14 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    public void setElement(int dstRow, int dstCol, NativeMatrix src, int srcRow, int srcCol)
    {
       if (!impl.setElement(dstRow, dstCol, src.impl, srcRow, srcCol))
+      {
+         throw new RuntimeException("Invalid matrix dimensions.");
+      }
+   }
+
+   public void zeroBlock(int srcY0, int srcY1, int srcX0, int srcX1)
+   {
+      if (!impl.zeroBlock(srcY0, srcY1, srcX0, srcX1))
       {
          throw new RuntimeException("Invalid matrix dimensions.");
       }

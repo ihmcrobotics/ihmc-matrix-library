@@ -64,9 +64,11 @@ public class NativeMatrixLibraryJNI {
   public final static native boolean NativeMatrixImpl_set__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4);
   public final static native boolean NativeMatrixImpl_get__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4);
   public final static native boolean NativeMatrixImpl_addDiagonal__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, double jarg6);
+  public final static native boolean NativeMatrixImpl_fill(long jarg1, NativeMatrixImpl jarg1_, double jarg2);
   public final static native boolean NativeMatrixImpl_fillDiagonal__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, double jarg6);
   public final static native boolean NativeMatrixImpl_fillBlock(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, double jarg6);
   public final static native boolean NativeMatrixImpl_setElement(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, long jarg4, NativeMatrixImpl jarg4_, int jarg5, int jarg6);
+  public final static native boolean NativeMatrixImpl_zeroBlock(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, int jarg5);
   public final static native boolean NativeMatrixImpl_addDiagonal__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, double jarg5);
   public final static native boolean NativeMatrixImpl_addDiagonal__SWIG_2(long jarg1, NativeMatrixImpl jarg1_, double jarg2);
   public final static native boolean NativeMatrixImpl_fillDiagonal__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, double jarg5);

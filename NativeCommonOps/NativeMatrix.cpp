@@ -999,6 +999,12 @@ bool NativeMatrixImpl::addDiagonal(int startRow, int startCol, int rows, int col
     return true;
 }
 
+bool NativeMatrixImpl::fill(double value)
+{
+    matrix.fill(value);
+
+    return true;
+}
 
 bool NativeMatrixImpl::fillDiagonal(int startRow, int startCol, int rows, int cols, double value)
 {
@@ -1061,6 +1067,30 @@ bool NativeMatrixImpl::setElement(int dstRow, int dstCol, NativeMatrixImpl* src,
     }
 
     matrix(dstRow, dstCol) = src->matrix(srcRow, srcCol);
+
+    return true;
+}
+
+bool NativeMatrixImpl::zeroBlock(int srcY0, int srcY1, int srcX0, int srcX1)
+{
+    if(srcY0 < 0 || srcY1 < 0 || srcX0 < 0 || srcX1 < 0)
+    {
+        return false;
+    }
+
+    if( srcY1 < srcY0 || srcY0 < 0 || srcY1 > rows() )
+    {
+        return false;
+    }
+    if( srcX1 < srcX0 || srcX0 < 0 || srcX1 > cols() )
+    {
+        return false;
+    }
+
+    int w = srcX1-srcX0;
+    int h = srcY1-srcY0;
+
+    matrix.block(srcY0, srcX0, h, w).setZero();
 
     return true;
 }
