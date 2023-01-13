@@ -90,6 +90,35 @@ public class NativeMatrixTest
    }
 
    @Test
+   public void testAddDiagonal()
+   {
+      Random random = new Random(98264L);
+
+      for (int iter = 0; iter < iterations; iter++)
+      {
+         int rows = RandomNumbers.nextInt(random, 1, maxSize);
+         int cols = RandomNumbers.nextInt(random, 1, maxSize);
+         DMatrixRMaj expected = RandomMatrices_DDRM.rectangle(rows, cols, random);
+         DMatrixRMaj actual = RandomMatrices_DDRM.rectangle(rows, cols, random);
+         NativeMatrix nativeMatrix = new NativeMatrix(expected);
+
+         nativeMatrix.get(actual);
+         MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
+
+         for (int i = 0; i < 10; i++)
+         {
+            double diagonal = RandomNumbers.nextDouble(random, 1000.0);
+            for (int idx = 0; idx < Math.min(rows, cols); idx++)
+               expected.add(idx, idx, diagonal);
+
+            nativeMatrix.addDiagonal(0, 0, Math.min(rows, cols), diagonal);
+            nativeMatrix.get(actual);
+            MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
+         }
+      }
+   }
+
+   @Test
    public void testAddEquals()
    {
       Random random = new Random(98264L);

@@ -41,8 +41,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    }
 
    final NativeMatrixImpl impl;
-   private int rows = -1;
-   private int cols = -1;
 
    /**
     * Creates a new matrix with the specified shape whose elements initially have the value of zero.
@@ -52,8 +50,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     */
    public NativeMatrix(int rows, int cols)
    {
-      this.rows = rows;
-      this.cols = cols;
       impl = new NativeMatrixImpl(rows, cols);
       zero();
    }
@@ -99,8 +95,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    @Override
    public void reshape(int rows, int cols)
    {
-      this.rows = rows;
-      this.cols = cols;
       impl.resize(rows, cols);
    }
 
@@ -115,8 +109,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     */
    public void scale(double alpha, DMatrixRMaj matrix)
    {
-      this.rows = matrix.getNumRows();
-      this.cols = matrix.getNumCols();
       set(matrix);
       scale(alpha);
    }
@@ -136,9 +128,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = matrix.rows;
-      this.cols = matrix.cols;
    }
 
    /**
@@ -155,9 +144,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Cannot set matrix.");
       }
-
-      this.rows = matrix.getNumRows();
-      this.cols = matrix.getNumCols();
    }
 
    /**
@@ -174,9 +160,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = matrix.rows;
-      this.cols = matrix.cols;
    }
 
    /**
@@ -211,9 +194,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = a.cols;
    }
 
 
@@ -234,9 +214,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = a.cols;
    }
 
    /**
@@ -256,9 +233,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = a.cols;
    }
 
    /**
@@ -322,9 +296,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = a.cols;
    }
 
    /**
@@ -344,9 +315,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = b.cols;
    }
 
    /**
@@ -367,9 +335,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = b.cols;
    }
 
    /**
@@ -386,9 +351,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = b.cols;
    }
 
    /**
@@ -406,9 +368,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = b.cols;
    }
 
    /**
@@ -425,9 +384,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.cols;
-      this.cols = b.cols;
    }
 
    /**
@@ -445,9 +401,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.cols;
-      this.cols = b.cols;
    }
 
    /**
@@ -464,9 +417,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = b.rows;
    }
 
    /**
@@ -484,9 +434,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = b.rows;
    }
 
    /**
@@ -644,9 +591,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = b.rows;
    }
 
    /**
@@ -667,9 +611,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = b.rows;
    }
 
    /**
@@ -689,9 +630,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.cols;
-      this.cols = b.cols;
    }
 
    /**
@@ -712,9 +650,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.cols;
-      this.cols = b.cols;
    }
 
    /**
@@ -734,9 +669,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.cols;
-      this.cols = a.cols;
    }
 
    /**
@@ -756,9 +688,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.cols;
-      this.cols = a.cols;
    }
 
    /**
@@ -821,9 +750,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.rows;
-      this.cols = a.cols;
    }
 
    /**
@@ -846,9 +772,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.cols;
-      this.cols = a.rows;
    }
 
    /**
@@ -866,9 +789,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       {
          throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
       }
-
-      this.rows = a.cols;
-      this.cols = b.cols;
    }
 
    /**
@@ -884,9 +804,6 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
     */
    public boolean solveCheck(NativeMatrix a, NativeMatrix b)
    {
-      this.rows = a.cols;
-      this.cols = b.cols;
-
       return impl.solveCheck(a.impl, b.impl);
    }
 
@@ -1243,7 +1160,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    @Override
    public int getNumRows()
    {
-      return rows;
+      return impl.rows();
    }
 
    /**
@@ -1254,7 +1171,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
    @Override
    public int getNumCols()
    {
-      return cols;
+      return impl.cols();
    }
 
    /**
