@@ -130,6 +130,19 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       }
    }
 
+   public void scaleColumn(int column, double alpha)
+   {
+      scaleBlock(0, column, getNumRows(), 1, alpha);
+   }
+
+   public void scaleBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double alpha)
+   {
+      if (!impl.scaleBlock(startRow, startCol, numberOfRows, numberOfCols, alpha))
+      {
+         throw new IllegalArgumentException("Incompatible Matrix Dimensions.");
+      }
+   }
+
    /**
     * Copies the given matrix into this.
     * <p>

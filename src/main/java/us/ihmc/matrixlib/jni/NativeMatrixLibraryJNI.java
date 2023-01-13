@@ -60,6 +60,7 @@ public class NativeMatrixLibraryJNI {
   public final static native void NativeMatrixImpl_zero(long jarg1, NativeMatrixImpl jarg1_);
   public final static native boolean NativeMatrixImpl_containsNaN(long jarg1, NativeMatrixImpl jarg1_);
   public final static native boolean NativeMatrixImpl_scale__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, double jarg2, long jarg3, NativeMatrixImpl jarg3_);
+  public final static native boolean NativeMatrixImpl_scaleBlock(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, double jarg6);
   public final static native boolean NativeMatrixImpl_isAprrox(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, double jarg3);
   public final static native boolean NativeMatrixImpl_set__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4);
   public final static native boolean NativeMatrixImpl_get__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, double[] jarg2, int jarg3, int jarg4);

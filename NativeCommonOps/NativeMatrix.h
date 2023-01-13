@@ -110,6 +110,8 @@ public:
 
     bool scale(double scale, NativeMatrixImpl* src);
 
+    bool scaleBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value);
+
     bool isAprrox(NativeMatrixImpl* other, double precision);
 
     bool set(double* data, int rows, int cols);

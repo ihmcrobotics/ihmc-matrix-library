@@ -1415,6 +1415,31 @@ SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_Na
 }
 
 
+SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1scaleBlock(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3, jint jarg4, jint jarg5, jdouble jarg6) {
+  jboolean jresult = 0 ;
+  NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  double arg6 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(NativeMatrixImpl **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  arg4 = (int)jarg4; 
+  arg5 = (int)jarg5; 
+  arg6 = (double)jarg6; 
+  result = (bool)(arg1)->scaleBlock(arg2,arg3,arg4,arg5,arg6);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jboolean JNICALL Java_us_ihmc_matrixlib_jni_NativeMatrixLibraryJNI_NativeMatrixImpl_1isAprrox(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jdouble jarg3) {
   jboolean jresult = 0 ;
   NativeMatrixImpl *arg1 = (NativeMatrixImpl *) 0 ;

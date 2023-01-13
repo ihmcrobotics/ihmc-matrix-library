@@ -943,6 +943,18 @@ bool NativeMatrixImpl::scale(double scale, NativeMatrixImpl *src)
     return true;
 }
 
+bool NativeMatrixImpl::scaleBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value)
+{
+    if(startRow < 0 || this->rows() < startRow + numberOfRows || this->cols() < startCol + numberOfCols || startCol < 0 || numberOfRows < 1 || numberOfCols < 1)
+    {
+        return false;
+    }
+
+    matrix.block(startRow, startCol, numberOfRows, numberOfCols) *= value;
+
+    return true;
+}
+
 bool NativeMatrixImpl::isAprrox(NativeMatrixImpl *other, double precision)
 {
     return matrix.isApprox(other->matrix, precision);
