@@ -63,4 +63,35 @@ public class NativeMatrixTools
          dst.setElement(i, 0, src, indexes[i], 0);
       }
    }
+
+   /**
+    * Extracts columns from {@code src} and copy them into {@code dst}.
+    * <p>
+    * The columns are written in consecutive order from {@code src} regardless of whether the given column
+    * indices are ordered or successive.
+    * </p>
+    *
+    * @param src          any N-by-M matrix.
+
+    * @param dst            the matrix in which the columns are to be copied over, it should have a
+    *                        number of columns at least equal to
+    *                        {@code dstColumns.length} and a number of rows at least
+    *                        equal to {@code source}'s number of rows.
+    * @param dstColumns      the set of columns indices to write to.
+    */
+   public static void extractColumns(NativeMatrix src, NativeMatrix dst, int[] dstColumns)
+   {
+      int cols = src.getNumCols();
+      int rows = src.getNumRows();
+
+      if (dstColumns.length != cols)
+         throw new MatrixDimensionException("dstColumns must have the same length as the number of cols in src.");
+      if (dst.getNumRows() < rows)
+         throw new MatrixDimensionException("dst must have at least as many rows as src.");
+
+      for (int i = 0; i < cols; i++)
+      {
+         dst.insert(src, 0, rows, i, i + 1, 0, dstColumns[i]);
+      }
+   }
 }
