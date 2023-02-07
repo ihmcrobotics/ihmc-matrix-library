@@ -272,6 +272,57 @@ public class NativeMatrixTest
    }
 
    @Test
+   public void testGrowRos()
+   {
+      Random random = new Random(1738L);
+
+      System.out.println("Testing matrix grow rows with random matrices...");
+
+
+      for (int i = 0; i < iterations; i++)
+      {
+         int rows = random.nextInt(maxSize) + 1;
+         int newRows = random.nextInt(maxSize) + 1;
+         int cols = random.nextInt(maxSize) + 1;
+
+         DMatrixRMaj A = RandomMatrices_DDRM.rectangle(rows, cols, random);
+         DMatrixRMaj AResized = new DMatrixRMaj(rows + newRows, cols);
+         CommonOps_DDRM.insert(A, AResized, 0, 0);
+
+         DMatrixRMaj expected = new DMatrixRMaj(AResized);
+         DMatrixRMaj actual = new DMatrixRMaj(rows + newRows, cols);
+
+         NativeMatrix nativeA = new NativeMatrix(rows, cols);
+
+         nativeA.set(A);
+         nativeA.growRows(newRows);
+         nativeA.get(actual);
+
+         MatrixTestTools.assertMatrixEquals(expected, actual, epsilon);
+
+         for (int row = 0; row < rows; row++)
+         {
+            for (int col = 0; col < cols; col++)
+            {
+               assertEquals(A.get(row, col), nativeA.get(row, col), 1e-12);
+            }
+         }
+
+         for (int row = rows; row < newRows; row++)
+         {
+            for (int col = 0; col < cols; col++)
+            {
+               assertEquals(0.0, nativeA.get(row, col), 1e-12);
+            }
+         }
+      }
+
+      System.out.println("Test A:");
+
+
+   }
+
+   @Test
    public void testMult()
    {
       Random random = new Random(40L);

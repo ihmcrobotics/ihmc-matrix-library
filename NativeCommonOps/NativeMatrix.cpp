@@ -23,6 +23,17 @@ void NativeMatrixImpl::resize(int numRows, int numCols)
     updateView(numRows, numCols);
 }
 
+void NativeMatrixImpl::growRows(int numRowsToGrow)
+{
+    int numRows = rows();
+    int numCols = cols();
+
+    storage.conservativeResize(numRows + numRowsToGrow, Eigen::NoChange);
+    updateView(numRows + numRowsToGrow, numCols);
+
+    matrix.block(numRows, 0, numRowsToGrow, numCols).setZero();
+}
+
 bool NativeMatrixImpl::set(NativeMatrixImpl *a)
 {
     resize(a->rows(), a->cols());

@@ -15,6 +15,8 @@ public:
 
     void resize(int numRows, int numCols);
 
+    void growRows(int numRowsToGrow);
+
     bool set(NativeMatrixImpl* a);
 
     bool add(NativeMatrixImpl* a, NativeMatrixImpl* b);

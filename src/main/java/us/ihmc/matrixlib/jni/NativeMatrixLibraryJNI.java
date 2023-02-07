@@ -13,6 +13,7 @@ public class NativeMatrixLibraryJNI {
   public final static native double NativeMatrixImpl_nan_get(long jarg1, NativeMatrixImpl jarg1_);
   public final static native long new_NativeMatrixImpl(int jarg1, int jarg2);
   public final static native void NativeMatrixImpl_resize(long jarg1, NativeMatrixImpl jarg1_, int jarg2, int jarg3);
+  public final static native void NativeMatrixImpl_growRows(long jarg1, NativeMatrixImpl jarg1_, int jarg2);
   public final static native boolean NativeMatrixImpl_set__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_);
   public final static native boolean NativeMatrixImpl_add__SWIG_0(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, long jarg3, NativeMatrixImpl jarg3_);
   public final static native boolean NativeMatrixImpl_add__SWIG_1(long jarg1, NativeMatrixImpl jarg1_, long jarg2, NativeMatrixImpl jarg2_, double jarg3, long jarg4, NativeMatrixImpl jarg4_);
