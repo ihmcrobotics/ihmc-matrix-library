@@ -98,6 +98,10 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
       impl.resize(rows, cols);
    }
 
+   /**
+    * Grows the matrix by a specified number of rows while preserving the current values. The new values are initialized to zero.
+    * @param rowsToGrow rows to add.
+    */
    public void growRows(int rowsToGrow)
    {
       impl.growRows(rowsToGrow);
