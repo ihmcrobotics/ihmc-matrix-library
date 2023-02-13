@@ -1,5 +1,6 @@
 package us.ihmc.matrixlib;
 
+import gnu.trove.list.array.TIntArrayList;
 import org.ejml.MatrixDimensionException;
 import org.ejml.dense.row.MatrixFeatures_DDRM;
 
@@ -79,19 +80,21 @@ public class NativeMatrixTools
     *                        equal to {@code source}'s number of rows.
     * @param dstColumns      the set of columns indices to write to.
     */
-   public static void extractColumns(NativeMatrix src, NativeMatrix dst, int[] dstColumns)
+   public static void extractColumns(NativeMatrix src, TIntArrayList srcColumns, NativeMatrix dst, int[] dstColumns)
    {
       int cols = src.getNumCols();
       int rows = src.getNumRows();
 
-      if (dstColumns.length != cols)
-         throw new MatrixDimensionException("dstColumns must have the same length as the number of cols in src.");
+      if (dstColumns.length > cols)
+         throw new MatrixDimensionException("dstColumns must have the less than the number of cols in src.");
       if (dst.getNumRows() < rows)
          throw new MatrixDimensionException("dst must have at least as many rows as src.");
+      if (srcColumns.size() != dstColumns.length)
+         throw new MatrixDimensionException("src columns should be the same size as dst columns");
 
-      for (int i = 0; i < cols; i++)
+      for (int i = 0; i < dstColumns.length; i++)
       {
-         dst.insert(src, 0, rows, i, i + 1, 0, dstColumns[i]);
+         dst.insert(src, 0, rows, srcColumns.get(i), srcColumns.get(i) + 1, 0, dstColumns[i]);
       }
    }
 }
