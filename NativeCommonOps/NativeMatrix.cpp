@@ -23,6 +23,17 @@ void NativeMatrixImpl::resize(int numRows, int numCols)
     updateView(numRows, numCols);
 }
 
+void NativeMatrixImpl::growRows(int numRowsToGrow)
+{
+    int numRows = rows();
+    int numCols = cols();
+
+    storage.conservativeResize(numRows + numRowsToGrow, Eigen::NoChange);
+    updateView(numRows + numRowsToGrow, numCols);
+
+    matrix.block(numRows, 0, numRowsToGrow, numCols).setZero();
+}
+
 bool NativeMatrixImpl::set(NativeMatrixImpl *a)
 {
     resize(a->rows(), a->cols());
@@ -943,6 +954,18 @@ bool NativeMatrixImpl::scale(double scale, NativeMatrixImpl *src)
     return true;
 }
 
+bool NativeMatrixImpl::scaleBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value)
+{
+    if(startRow < 0 || this->rows() < startRow + numberOfRows || this->cols() < startCol + numberOfCols || startCol < 0 || numberOfRows < 1 || numberOfCols < 1)
+    {
+        return false;
+    }
+
+    matrix.block(startRow, startCol, numberOfRows, numberOfCols) *= value;
+
+    return true;
+}
+
 bool NativeMatrixImpl::isAprrox(NativeMatrixImpl *other, double precision)
 {
     return matrix.isApprox(other->matrix, precision);
@@ -999,6 +1022,12 @@ bool NativeMatrixImpl::addDiagonal(int startRow, int startCol, int rows, int col
     return true;
 }
 
+bool NativeMatrixImpl::fill(double value)
+{
+    matrix.fill(value);
+
+    return true;
+}
 
 bool NativeMatrixImpl::fillDiagonal(int startRow, int startCol, int rows, int cols, double value)
 {
@@ -1020,6 +1049,71 @@ bool NativeMatrixImpl::fillBlock(int startRow, int startCol, int numberOfRows, i
     }
 
     matrix.block(startRow, startCol, numberOfRows, numberOfCols).fill(value);
+
+    return true;
+}
+
+bool NativeMatrixImpl::zeroRow(int rowToZero)
+{
+    if (rowToZero < 0 || this->rows() < rowToZero)
+    {
+        return false;
+    }
+
+    matrix.row(rowToZero).setZero();
+
+    return true;
+}
+
+bool NativeMatrixImpl::zeroCol(int colToZero)
+{
+    if (colToZero < 0 || this->cols() < colToZero)
+    {
+        return false;
+    }
+
+    matrix.col(colToZero).setZero();
+
+    return true;
+}
+
+bool NativeMatrixImpl::setElement(int dstRow, int dstCol, NativeMatrixImpl* src, int srcRow, int srcCol)
+{
+    if(dstRow >= this->rows() || dstCol >= this->cols() || dstRow < 0 || dstCol < 0)
+    {
+        return false;
+    }
+
+    if(srcRow >= src->rows() || srcCol >= src->cols() || srcRow < 0 || srcCol < 0)
+    {
+        return false;
+    }
+
+    matrix(dstRow, dstCol) = src->matrix(srcRow, srcCol);
+
+    return true;
+}
+
+bool NativeMatrixImpl::zeroBlock(int srcY0, int srcY1, int srcX0, int srcX1)
+{
+    if(srcY0 < 0 || srcY1 < 0 || srcX0 < 0 || srcX1 < 0)
+    {
+        return false;
+    }
+
+    if( srcY1 < srcY0 || srcY0 < 0 || srcY1 > rows() )
+    {
+        return false;
+    }
+    if( srcX1 < srcX0 || srcX0 < 0 || srcX1 > cols() )
+    {
+        return false;
+    }
+
+    int w = srcX1-srcX0;
+    int h = srcY1-srcY0;
+
+    matrix.block(srcY0, srcX0, h, w).setZero();
 
     return true;
 }
