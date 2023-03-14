@@ -15,6 +15,8 @@ public:
 
     void resize(int numRows, int numCols);
 
+    void growRows(int numRowsToGrow);
+
     bool set(NativeMatrixImpl* a);
 
     bool add(NativeMatrixImpl* a, NativeMatrixImpl* b);
@@ -110,6 +112,8 @@ public:
 
     bool scale(double scale, NativeMatrixImpl* src);
 
+    bool scaleBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value);
+
     bool isAprrox(NativeMatrixImpl* other, double precision);
 
     bool set(double* data, int rows, int cols);
@@ -118,9 +122,15 @@ public:
 
     bool addDiagonal(int startRow, int startCol, int rows, int cols, double value);
 
+    bool fill(double value);
+
     bool fillDiagonal(int startRow, int startCol, int rows, int cols, double value);
 
     bool fillBlock(int startRow, int startCol, int numberOfRows, int numberOfCols, double value);
+
+    bool setElement(int dstRow, int dstCol, NativeMatrixImpl* src, int srcRow, int srcCol);
+
+    bool zeroBlock(int srcY0, int srcY1, int srcX0, int srcX1);
 
     inline bool addDiagonal(int startRow, int startCol, int size, double value)
     {
@@ -206,6 +216,9 @@ public:
         return matrix.size();
     }
 
+    bool zeroRow(int rowToZero);
+
+    bool zeroCol(int colToZero);
 
     void print();
 
