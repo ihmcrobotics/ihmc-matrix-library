@@ -13,20 +13,29 @@ public class NativeMatrixTools
     * indices are ordered or successive.
     * </p>
     *
-    * @param source       any N-by-M matrix.
-    * @param srcRows      the set of rows indices to be extracted.
-    * @param dest         the matrix in which the rows are to be copied over, it should have a number
-    *                     of rows at least equal to {@code srcRows.length + destStartRow} and a number
-    *                     of columns at least equal to {@code source}'s number of columns.
-    * @param destStartRow the index of the first row to start writing at.
+    * @param source           any N-by-M matrix.
+    * @param srcRows          the set of rows indices to be extracted.
+    * @params srcRowsLength   the length of srcRows (to allow the re-use of arrays without new allocations if the length changes)
+    * @param dest             the matrix in which the rows are to be copied over, it should have a number
+    *                         of rows at least equal to {@code srcRows.length + destStartRow} and a number
+    *                         of columns at least equal to {@code source}'s number of columns.
+    * @param destStartRow     the index of the first row to start writing at.
     */
-   public static void extractRows(NativeMatrix source, int[] srcRows, NativeMatrix dest, int destStartRow)
+   public static void extractRows(NativeMatrix source, int[] srcRows, int srcRowsLength, NativeMatrix dest, int destStartRow)
    {
-      for (int srcRow : srcRows)
+      for (int i = 0; i < srcRowsLength; i++)
       {
+         int srcRow = srcRows[i];
          dest.insert(source, srcRow, srcRow + 1, 0, source.getNumCols(), destStartRow, 0);
          destStartRow++;
       }
+   }
+   /**
+    * @see NativeMatrixTools.extractRows(source, srcRows, srcRowsLength, dest, destStartRow)
+    */
+   public static void extractRows(NativeMatrix source, int[] srcRows, NativeMatrix dest, int destStartRow)
+   {
+      extractRows(source, srcRows, srcRows.length, dest, destStartRow);
    }
 
    /**
@@ -36,21 +45,31 @@ public class NativeMatrixTools
     * indices are ordered or successive.
     * </p>
     *
-    * @param source          any N-by-M matrix.
-    * @param srcColumns      the set of columns indices to be extracted.
-    * @param dest            the matrix in which the columns are to be copied over, it should have a
-    *                        number of columns at least equal to
-    *                        {@code srcColumns.length + destStartColumn} and a number of rows at least
-    *                        equal to {@code source}'s number of rows.
+    * @param source              any N-by-M matrix.
+    * @param srcColumns          the set of columns indices to be extracted.
+    * @params srcColumnsLength   the length of srcRows (to allow the re-use of arrays without new allocations if the length changes)
+    * @param dest                the matrix in which the columns are to be copied over, it should have a
+    *                            number of columns at least equal to
+    *                            {@code srcColumns.length + destStartColumn} and a number of rows at least
+    *                            equal to {@code source}'s number of rows.
     * @param destStartColumn the index of the first column to start writing at.
     */
-   public static void extractColumns(NativeMatrix source, int[] srcColumns, NativeMatrix dest, int destStartColumn)
+   public static void extractColumns(NativeMatrix source, int[] srcColumns, int srcColumnsLength, NativeMatrix dest, int destStartColumn)
    {
-      for (int srcColumn : srcColumns)
+      for (int i = 0; i < srcColumnsLength; i++)
       {
+         int srcColumn = srcColumns[i];
          dest.insert(source, 0, source.getNumRows(), srcColumn, srcColumn + 1, 0, destStartColumn);
          destStartColumn++;
       }
+   }
+   
+   /**
+    * @see NativeMatrixTools.extractColumns(source, srcColumns, srcColumnsLength, dest, destStartColumn)
+    */
+   public static void extractColumns(NativeMatrix source, int[] srcColumns, NativeMatrix dest, int destStartColumn)
+   {
+      extractColumns(source, srcColumns, srcColumns.length, dest, destStartColumn);
    }
 
    public static void extract(NativeMatrix src, int indexes[] , int length , NativeMatrix dst ) {
@@ -97,4 +116,5 @@ public class NativeMatrixTools
          dst.insert(src, 0, rows, srcColumns.get(i), srcColumns.get(i) + 1, 0, dstColumns[i]);
       }
    }
+
 }
