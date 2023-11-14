@@ -19,12 +19,12 @@ mainDependencies {
    api("org.ejml:ejml-ddense:0.39")
 
    api("us.ihmc:ihmc-commons:0.32.0")
-   api("us.ihmc:euclid:0.20.0")
+   api("us.ihmc:euclid:0.21.0")
    api("us.ihmc:ihmc-native-library-loader:2.0.2")
    api("net.sf.trove4j:trove4j:3.0.3")
 }
 
 testDependencies {
-   api("us.ihmc:euclid-frame:0.20.0")
+   api("us.ihmc:euclid-frame:0.21.0")
    api("org.ejml:ejml-simple:0.39")
 }
