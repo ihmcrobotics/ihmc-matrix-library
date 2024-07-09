@@ -40,8 +40,6 @@ else
         ..
 fi
 cmake --build . --config Release -j $(nproc)
-ls -al # TODO DEBUG
-ls -al Release # TODO DEBUG
 cd $REPO_ROOT
 
 #### Copy shared libs to resources ####
