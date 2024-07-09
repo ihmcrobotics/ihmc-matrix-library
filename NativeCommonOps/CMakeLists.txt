@@ -11,7 +11,6 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 include(${SWIG_USE_FILE})
 
 set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -s -mavx")
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,8 +22,6 @@ set(CMAKE_C_VISIBILITY_PRESET hidden)
 
 set(SOURCE_FILES NativeCommonOps.cpp NativeMatrix.cpp NativeNullspaceProjector.cpp NativeKalmanFilter.cpp)
 
-
-
 set_source_files_properties(NativeMatrix.i PROPERTIES CPLUSPLUS ON)
 set_property(SOURCE NativeMatrix.i PROPERTY SWIG_FLAGS "-package" "us.ihmc.matrixlib.jni")
 set(SWIG_OPT_LINKER_FLAGS "")
@@ -32,9 +29,3 @@ set(SWIG_OPT_LINKER_FLAGS "")
 set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_SOURCE_DIR}/../src/main/java/us/ihmc/matrixlib/jni")
 swig_add_module(NativeCommonOps java NativeMatrix.i ${SOURCE_FILES})
 target_link_libraries(NativeCommonOps Eigen3::Eigen)
-
-
-
-
-
-install(TARGETS NativeCommonOps RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/../src/main/resources LIBRARY DESTINATION ${PROJECT_SOURCE_DIR}/../src/main/resources)

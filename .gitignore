@@ -90,3 +90,5 @@
 **/rebel.xml
 **/generatedTestSuites/*TestSuite.java
 *.user
+
+cppbuild/

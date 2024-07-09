@@ -1,19 +1,17 @@
 package us.ihmc.matrixlib;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.data.Matrix;
 import org.ejml.data.MatrixType;
 import org.ejml.data.ReshapeMatrix;
 import org.ejml.ops.MatrixIO;
-
 import us.ihmc.euclid.matrix.interfaces.Matrix3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.matrixlib.jni.NativeMatrixImpl;
-import us.ihmc.tools.nativelibraries.NativeLibraryLoader;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 /**
  * {@code NativeMatrix} is dense matrix with real elements that are 64-bits floats. Unlike
@@ -41,7 +39,7 @@ public class NativeMatrix implements ReshapeMatrix, DMatrix
 
    static
    {
-      NativeLibraryLoader.loadLibrary("", "NativeCommonOps");
+      MatrixLibNativeLibrary.load();
    }
 
    final NativeMatrixImpl impl;
