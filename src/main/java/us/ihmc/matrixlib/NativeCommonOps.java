@@ -3,29 +3,18 @@ package us.ihmc.matrixlib;
 import org.ejml.data.DMatrix1Row;
 import org.ejml.dense.row.CommonOps_DDRM;
 
-import us.ihmc.tools.nativelibraries.NativeLibraryLoader;
-
 public class NativeCommonOps
 {
    private static final NativeCommonOpsWrapper nativeCommonOpsWrapper = loadNativeOps();
 
    static NativeCommonOpsWrapper loadNativeOps()
    {
-      try
+      if (MatrixLibNativeLibrary.load())
       {
-         NativeLibraryLoader.loadLibrary("", "NativeCommonOps");
+         return new NativeCommonOpsWrapper();
       }
-      catch (UnsatisfiedLinkError e)
-      {
-         System.out.println("See IHMC Matrix Tools README.");
-         throw e; 
-      }
-      return new NativeCommonOpsWrapper();
-   }
 
-   public static void ensureNativeOpsIsLoaded()
-   {
-      // this method is only to preload the class
+      throw new RuntimeException("Unable to load NativeCommonOps");
    }
 
    /**
