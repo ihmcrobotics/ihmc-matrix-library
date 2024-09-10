@@ -8,6 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
+  gradle-test:
+    uses: ihmcrobotics/ihmc-actions/.github/workflows/gradle-test.yml@main
   test-linux:
     runs-on: [ubuntu-20.04]
     steps:
