@@ -1,6 +1,9 @@
 # ihmc-matrix-library
 IHMC Matrix Library gathers utilities to improve experience the matrix library EJML.
 
+![develop, fast](https://github.com/ihmcrobotics/ihmc-matrix-library/actions/workflows/gradle-test-fast.yml/badge.svg?branch=develop) Current develop status
+
+
 # Usage
 Supported platforms:
 - Linux (Ubuntu 20.04+ or similar x86_64, arm64)
